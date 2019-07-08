@@ -1,0 +1,160 @@
+newproject;
+
+simulationObjectSpan = 3*pitch;  # span for monitors and sources
+
+#
+# setup structure
+#
+addobject("trunc_cone");
+setnamed("trunc_cone","name","nanowire");
+setnamed("nanowire","r top",diameter/2);
+setnamed("nanowire","r bottom",diameter/2);
+setnamed("nanowire","z span",height);
+setnamed("nanowire","z",height/2);
+
+#
+#setup simulation
+#
+addfdtd;
+#set the geometry of simulation region
+setnamed("FDTD","x span",pitch);
+setnamed("FDTD","y span",pitch);
+#set the simulation time
+setnamed("FDTD","simulation time",simulationTime);
+
+setnamed("FDTD","z min",-sourceOffset-reflectionMonitorOffset-FDTDzSpace);
+setnamed("FDTD", "z max", height + transmissionMonitorOffset + FDTDzSpace);
+
+# "z span" is set to be 
+setnamed("FDTD", "mesh type", meshType);
+if (meshType == 'uniform') {
+  setnamed("FDTD", "dx", meshSize);
+  setnamed("FDTD", "dy", meshSize);
+  setnamed("FDTD", "dz", meshSize);
+}
+if (meshType == 'auto non-uniform') {
+  setnamed("FDTD","mesh accuracy",meshAccuracy);
+}
+setnamed("FDTD","allow symmetry on all boundaries", 1);
+
+setnamed("FDTD","mesh refinement",meshRefinement);
+setnamed("FDTD","z min bc","PML");
+setnamed("FDTD","z max bc","PML");
+setnamed("FDTD","pml min layers",minPmlLayers);
+setnamed("FDTD","pml max layers",maxPmlLayers);
+#setnamed("FDTD","pml reflection",pmlReflection);
+
+
+# setup source
+# source placed at top,
+addplane;
+setnamed("source","x",0);
+setnamed("source","x span",pitch);
+setnamed("source","y",0);
+setnamed("source","y span",pitch);
+setnamed("source","z", -sourceOffset);
+setnamed("source","wavelength start",wavelengthStart);
+setnamed("source","wavelength stop",wavelengthStop);
+setnamed("source","injection axis",injectionAxis);
+setnamed("source","direction",injectionDirection);
+setnamed("source","plane wave type","BFAST");
+
+# setnamed("source1","angle theta",angleTheta);
+
+
+
+#
+#setup monitors
+#
+addpower;
+set("name","reflection");
+setnamed("reflection","x",0);
+setnamed("reflection","x span",simulationObjectSpan);
+setnamed("reflection","y",0);
+setnamed("reflection","y span",simulationObjectSpan);
+setnamed("reflection","z", -sourceOffset-reflectionMonitorOffset);
+
+addpower;
+set("name","transmission");
+setnamed("transmission","x",0);
+setnamed("transmission","x span",simulationObjectSpan);
+setnamed("transmission","y",0);
+setnamed("transmission","y span",simulationObjectSpan);
+setnamed("transmission","z", height + transmissionMonitorOffset);
+
+
+
+wavelengthDisplayStart = wavelengthStart;
+
+frequencyStart = c/wavelengthStop;
+frequencyDisplayStop = c/wavelengthDisplayStart;
+
+frequencyStep = (frequencyDisplayStop-frequencyStart)/(numFrequencyPoints-1);
+
+setnamed("source","frequency start",frequencyStart);
+wavelengthStart=1/(2/wavelengthDisplayStart - 1/wavelengthStop);
+
+
+# loop over all incidence angles
+
+for (i = 1:numTheta) {
+  angleTheta = thetaArray(i);
+  for (j = 1:numPhi) {
+    switchtolayout;
+    anglePhi = phiArray(j);
+    # set all BC to periodic to avoid mistakes 
+    if (polarizationAngle == 0) { 
+      setnamed("FDTD","x min bc","Periodic");
+      setnamed("FDTD","x max bc","Periodic");
+      setnamed("FDTD","y min bc","Periodic");
+      setnamed("FDTD","y max bc","Periodic");
+    }
+
+    setnamed("source","angle theta",angleTheta);
+    setnamed("source","angle phi",anglePhi);
+    setnamed("source","polarization angle",polarizationAngle);
+
+    if (angleTheta >= steepAngle or anglePhi >= steepAngle) {
+      setnamed("FDTD","pml profile",3);
+    }
+    
+    filename = filenamePrefix + variableStringArray{1} + num2str(angleTheta) + variableUnitsArray{1} + variableStringArray{2} + num2str(anglePhi) + variableUnitsArray{2} + filenameSuffix;
+    save(filename);
+    
+    # run simulation
+    ?thetaArray(i);
+    ?phiArray(i);
+    monitors;
+    
+    
+    
+    run;
+    
+
+    
+
+      
+    #get data; use minimal formatting of data
+    frequencyTransmission = getdata("transmission","f");
+    transmissionData = transmission("transmission");
+    dataTransmission = [transpose(frequencyTransmission); transpose(transmissionData)];
+    if (fileexists(filename+"Transmission.txt")) {
+      rm(filename+"Transmission.txt");
+    }
+    write(filename+"Transmission.txt",num2str(dataTransmission));
+  
+    frequencyReflection = getdata("reflection", "f");
+    reflectionData = -transmission("reflection");
+    dataReflection = [transpose(frequencyReflection); transpose(reflectionData)];
+    if (fileexists(filename+"Reflection.txt")) {
+      rm(filename+"Reflection.txt");
+    }
+    write(filename+"Reflection.txt",num2str(dataReflection));
+
+      
+  }
+}
+
+
+
+

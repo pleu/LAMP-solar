@@ -1,0 +1,46 @@
+# InputVariables for Thin film Angular Dependence
+# with transfer matrix method
+# 
+# Make sure to change working directory to where script files are located
+# Run InputVariables.lsf
+# Run AngledependenceThinFilm.lsf
+#
+# Copyright 2016-17, Paul W. Leu
+# LAMP, University of PIttsburgh
+
+clear;
+
+materialName = 'Si';
+filenamePrefix = materialName + "ThinFilm";
+filmThickness = 2330e-9;
+
+variableStringArray = 'Theta';
+variableUnitsArray = 'deg';
+filenameSuffix = '';
+
+#
+# Film structure
+#
+# all units are in meters
+material = 'Si (Silicon) - Palik';
+
+wavelengthStart=280e-9;
+wavelengthStop=2000e-9;
+
+minTheta=0;
+maxTheta=90;
+thetaStep = 2;
+
+theta = minTheta:thetaStep:maxTheta;
+
+numFrequencyPoints=500;
+
+thetaArray = minTheta:thetaStep:maxTheta;
+numTheta=length(thetaArray);
+filename = filenamePrefix + filenameSuffix;
+
+
+matlabsave("InputVariables");
+
+
+

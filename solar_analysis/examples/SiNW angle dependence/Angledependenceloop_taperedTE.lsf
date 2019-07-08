@@ -1,0 +1,152 @@
+##############################################
+# Angledependenceloop
+# Create two loops of Theta and Phi and
+# save the reflection and transmission
+#
+# Input properties
+# load input variables from InputVariables
+
+# Copyright 2011 LAMP
+# @University of Pittsburgh
+# Baomin Wang
+##############################################
+load("InputVariables.mat");
+switchtolayout;
+selectall;
+delete;
+
+# set up physical structures
+addobject("trunc_cone");
+set("name","circle1");
+setnamed("circle1","x",x_circle1);
+setnamed("circle1","y",y_circle1);
+setnamed("circle1","z",z_circle1);
+setnamed("circle1","rTop",rTop);
+setnamed("circle1","rBot",rBot);
+setnamed("circle1","h",l);
+setnamed("circle1","material","Si (Silicon) - Palik");
+# set up other cylinders use copy
+select("circle1");
+copy(a);
+set("name","circle2");
+select("circle1");
+copy(-a);
+set("name","circle3");
+select("circle1");
+copy(-a,a);
+set("name","circle4");
+select("circle1");
+copy(0,a);
+set("name","circle5");
+select("circle1");
+copy(a,a);
+set("name","circle6");
+select("circle1");
+copy(a,-a);
+set("name","circle7");
+select("circle1");
+copy(0,-a);
+set("name","circle8");
+select("circle1");
+copy(-a,-a);
+set("name","circle9");
+
+#setup simulation
+addfdtd;
+#setup sources
+addplane;
+#setup monitors
+addpower;
+set("name","reflection");
+addpower;
+set("name","transmission");
+#switch to simulation tab
+simulation;
+#set the geometry of simulation region
+setnamed("FDTD","x",0);
+setnamed("FDTD","y",0);
+setnamed("FDTD","z",0);
+setnamed("FDTD","x span",FDTD_span);
+setnamed("FDTD","y span",FDTD_span);
+setnamed("FDTD","z span",FDTD_zspan);
+setnamed("FDTD","mesh type","uniform");
+setnamed("FDTD","dx",gridsize);
+setnamed("FDTD","dy",gridsize);
+setnamed("FDTD","dz",gridsize);
+setnamed("FDTD","min mesh step",gridsize);
+#set the simulation time
+setnamed("FDTD","simulation time",simulationtime);
+#set the bc of simulation
+setnamed("FDTD","x min bc","Bloch");
+setnamed("FDTD","x max bc","Bloch");
+setnamed("FDTD","y min bc","Bloch");
+setnamed("FDTD","y max bc","Bloch");
+setnamed("FDTD","z min bc","PML");
+setnamed("FDTD","z max bc","PML");
+
+#swith to monitors tab
+monitors;
+#set the geometry of monitors
+setnamed("reflection","x span",source_span);
+setnamed("reflection","y span",source_span);
+setnamed("reflection","x",0);
+setnamed("reflection","y",0);
+setnamed("reflection","z",z_reflection);
+setnamed("transmission","x span",source_span);
+setnamed("transmission","y span",source_span);
+setnamed("transmission","x",0);
+setnamed("transmission","y",0);
+setnamed("transmission","z",z_transmission);
+#set the frequency points
+setglobalmonitor("frequency points",numFrequencyPoints);
+
+#switch to sources tab
+sources;
+#set the geometry of source1
+setnamed("source1","x span",source_span);
+setnamed("source1","y span",source_span);
+setnamed("source1","x",0);
+setnamed("source1","y",0);
+setnamed("source1","z",z_source);
+setnamed("source1","polarization angle",polarizationangle);
+#set the wavelength of source1
+setnamed("source1","wavelength start",wavelength_start);
+setnamed("source1","wavelength stop",wavelength_stop);
+#set injection axis and direction
+setnamed("source1","injection axis","z-axis");
+setnamed("source1","direction","Backward");
+
+Theta=linspace(minTheta,maxTheta,numTheta);
+for (i=1: numTheta) {
+switchtolayout;
+setnamed("source1","angle theta",Theta(i));
+Phi=linspace(minPhi,maxPhi,numPhi);
+for (k=1: numPhi) {
+  switchtolayout;
+  setnamed("source1","angle phi",Phi(k));
+# run simulation
+run;
+# get data
+transmissionVector=-transmission("transmission"); 
+reflectionVector=transmission("reflection");
+TransmissionVector =pinch(transmissionVector(1:numFrequencyPoints));
+dataTransmission=transpose(TransmissionVector);
+
+ReflectionVector=pinch(reflectionVector(1:numFrequencyPoints));
+dataReflection=transpose(ReflectionVector);
+
+frequency=getdata("transmission","f");
+lambda=c/frequency*1e9;
+lambdaVector=transpose(lambda);
+# write the data of different diameters into seperate files
+filename = filenamePrefix+"Theta"+num2str(Theta(i))+"Phi"+num2str(Phi(k));
+save(filename);
+write(filename+"Transmission.txt",num2str(lambdaVector));
+write(filename+"Transmission.txt",num2str(dataTransmission));
+write(filename+"Reflection.txt",num2str(lambdaVector));
+write(filename+"Reflection.txt",num2str(dataReflection));
+}
+}
+
+
+

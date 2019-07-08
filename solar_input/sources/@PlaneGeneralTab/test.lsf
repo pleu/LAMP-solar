@@ -1,0 +1,7 @@
+set("source shape", 'Plane wave');
+set("amplitude", 1);
+set("phase", 0);
+set("injection axis", 'z-axis');
+set("angle theta", 0);
+set("angle phi", 0);
+set("polarization angle", 0);

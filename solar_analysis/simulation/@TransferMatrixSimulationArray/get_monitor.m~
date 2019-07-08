@@ -1,0 +1,27 @@
+function [monitor, monitorType] = get_monitor(sa, monitorType)
+  if strncmpi(monitorType, 'TEr', 3)
+    monitor = [sa.FDTDSimulations.ReflectionResults];
+    monitorType = 'Reflection';
+  elseif strncmpi(monitorType, 'TET', 3)
+    monitor = [sa.FDTDSimulations.TransmissionResults];
+    monitorType = 'Transmission';
+  elseif strncmpi(monitorType, 'TEA', 3)
+    for i = 1:size(sa.TransferMatrixSimulations)
+      monitor = [sa.TransferMatrixSimulations(i).SimulationResultsTE.AbsorptionResults];
+      monitorType = 'Absorption';
+    end
+  elseif strncmpi(monitorType, 'TMr', 3)
+    monitor = [sa.FDTDSimulations.ReflectionResults];
+    monitorType = 'Reflection';
+  elseif strncmpi(monitorType, 'TMT', 3)
+    monitor = [sa.FDTDSimulations.TransmissionResults];
+    monitorType = 'Transmission';
+  elseif strncmpi(monitorType, 'TMA', 3)
+    monitor = [sa.TransferMatrixSimulations.AbsorptionResults];
+    monitorType = 'Absorption';
+  else    
+    error('monitor type not recognized');
+  end
+  
+end
+

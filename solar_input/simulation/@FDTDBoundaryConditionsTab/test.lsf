@@ -1,0 +1,6 @@
+set("allow symmetry on all boundaries", 1);
+set("x min bc", 'Periodic');
+set("y min bc", 'Periodic');
+set("z min bc", 'PML');
+set("z max bc", 'PML');
+set("pml reflection", 0.0001);

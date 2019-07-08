@@ -1,0 +1,114 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Grain Reconstruction</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit GrainReconstruction" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Grain Reconstruction</h1>
+         <introduction>
+            <p>Explanation how to create grains from EBSD data.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#5">Grain Reconstruction</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">Grain properties</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#11">Connection between EBSD Data and a Grains</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>Reconstructing grains and grain boundaries is one of the central problems when analyzing EBSD data. It is instrumental for
+            ODF estimation from EBSD data as well as <a href="MisorientationAnalysis.html">misorientation analysis</a>.
+         </p>
+         <p>Let us first import some standard EBSD data with a <a href="matlab:edit loadaachen.m"> script file</a></p><pre class="codeinput">loadaachen;
+</pre><pre class="codeoutput">Undefined function or variable 'loadaachen'.
+
+Error in ==&gt; GrainReconstruction at 18
+loadaachen;
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Grain Reconstruction<a name="5"> </a></h2>
+         <p>Grain reconstruction in MTEX is done via the command <a href="EBSD_segment2d.html">segment2d</a>. As an optional argument the desired threshold angle for missorientations defining a grains boundary can be specified.
+         </p><pre class="codeinput">[grains ebsd] = segment2d(ebsd,<span class="string">'angle'</span>,12.5*degree)
+</pre><p>In order to verify the result let us plot the grain boundaries into the spatial EBSD plot.</p><pre class="codeinput">plot(ebsd)
+hold <span class="string">on</span>
+plotboundary(grains)
+hold <span class="string">off</span>
+</pre><p>When plotting the grains directly the associated color is defined by the mean orientation within each grain.</p><pre class="codeinput">plot(grains)
+</pre><p>The reconstructed grains are stored in the variable <b>grains</b> which is actually a list of single <a href="grain_index.html">grain objects</a> each of which can be adressed and plotted individually.
+         </p><pre class="codeinput">grains(1)
+
+plot(grains([128 201 250]))
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Grain properties<a name="9"> </a></h2>
+         <p>There is a long list of properties that can be computed for each indiviual grain, e.g.</p>
+         <div>
+            <ul type="square">
+               <li>perimeter</li>
+               <li>grain size</li>
+               <li>borderlength</li>
+            </ul>
+         </div>
+         <p>As an example lets plot an histogram of the grain sizes.</p><pre class="codeinput">x = fix(exp(0.5:.5:7.5));
+figure, bar(hist(grainsize(grains),x) );
+</pre><p>One can also use these properties to select specific grains. E.g. to select all grains with perimeter larger then 150 we have
+            to write
+         </p><pre class="codeinput">peri = perimeter(grains);
+
+large_grains = grains(peri &gt; 150)
+
+plot(large_grains)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Connection between EBSD Data and a Grains<a name="11"> </a></h2>
+         <p>The reconstrcuted grains are connected with its underlaying EBSD data by an identification number. The command <a href="grain_link.html">link</a> allows to extract all individuell orientations out of an EBSD data set that correspond to a certain list of grains
+         </p><pre class="codeinput"><span class="comment">% the grain of maximum size</span>
+max_grain = grains(grainsize(grains)==max(grainsize(grains)))
+
+<span class="comment">% the corresponding EBSD data</span>
+ebsd_max_grain = link(ebsd,max_grain)
+
+<span class="comment">% plot the EBSD data for this grain</span>
+plot(ebsd_max_grain)
+</pre><p>The other way round one may also ask for the list of all grains that contain certain EBSD data. Again the command <a href="grain_link.html">link</a> establishes this connection.
+         </p><pre class="codeinput"><span class="comment">% get MAD</span>
+mad = get(ebsd,<span class="string">'mad'</span>);
+
+<span class="comment">% the EBSD data with bad MAD</span>
+bad_ebsd = copy(ebsd,mad&gt;1.2)
+
+<span class="comment">% select grains containing data with bad MAD</span>
+bad_grains = link(grains,bad_ebsd)
+
+<span class="comment">% plot them</span>
+plot(bad_grains)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

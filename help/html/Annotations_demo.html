@@ -1,0 +1,127 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Annotations</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit Annotations_demo" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Annotations</h1>
+         <introduction>
+            <p>Explains how to add annotations to plots. This includes colorbars, legends, specimen directions and crystal directions.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#3">Some sample ODFs</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Adding a Colorbar</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Adding Specimen and Crystal Directions</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">Adding Preferred Orientations</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#11">Adding a Legend</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#12">Adding a Spherical Grid</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>Some sample ODFs<a name="3"> </a></h2>
+         <p>Let us first define some model ODFs to be plotted later on.</p><pre class="codeinput">cs = symmetry(<span class="string">'-3m'</span>); ss = symmetry(<span class="string">'-1'</span>);
+mod1 = orientation(<span class="string">'Euler'</span>,30*degree,40*degree,10*degree);
+mod2 = orientation(<span class="string">'Euler'</span>,10*degree,80*degree,70*degree);
+odf = 0.7*unimodalODF(mod1,cs,ss) + 0.3*unimodalODF(mod2,cs,ss);
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; Annotations_demo at 14
+cs = symmetry('-3m'); ss = symmetry('-1');
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Adding a Colorbar<a name="4"> </a></h2>
+         <p>Adding a colorbar is simply done by clicking the corresponding button in the figure toolbar or using the command <a href="colorbar.html">colorbar</a>. Note that the colorrange is automaticaly set to <b>equal</b> when adding a colorbar to a figure with  more then one plot (see. <a href="ColorCoding_demo.html">Color Coding</a>).
+         </p><pre class="codeinput">plotpdf(odf,[Miller(1,0,0),Miller(1,1,1)],<span class="string">'antipodal'</span>,<span class="string">'gray'</span>)
+colorbar
+</pre><p>Executing the command <a href="colorbar.html">colorbar</a> twice deletes the colorbar. You can also have a horzontal colorbar at the bottom of the figur using the option <b>south</b>.
+         </p><pre class="codeinput">colorbar           <span class="comment">% delete vertical colorbar</span>
+colorbar(<span class="string">'south'</span>)  <span class="comment">% add horizontal colorbar</span>
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Adding Specimen and Crystal Directions<a name="6"> </a></h2>
+         <p>Pole figure and inverse pole figures are much more readable if there are included specimen or crystal directions. Using the
+            MTEX command <a href="annotate.html">annotate</a> one can easily add <a href="vector3d_index.html">specimen coordinate axes</a> to a pole figure plot.
+         </p><pre class="codeinput">annotate([xvector,yvector,zvector],<span class="string">'label'</span>,{<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>},<span class="keyword">...</span>
+  <span class="string">'BackgroundColor'</span>,<span class="string">'w'</span>);
+</pre><p>The command <a href="annotate.html">annotate</a> allows also to plot <a href="Miller_index.html">crystal directions</a> to inverse pole figures.
+         </p><pre class="codeinput">plotipdf(odf,[xvector,zvector],<span class="string">'gray'</span>,<span class="string">'antipodal'</span>,<span class="string">'marginx'</span>,10,<span class="string">'minmax'</span>,<span class="string">'off'</span>)
+annotate([Miller(1,0,0),Miller(1,1,0),Miller(0,0,1),Miller(2,-1,0)],<span class="string">'all'</span>,<span class="string">'labeled'</span>)
+set(gcf,<span class="string">'position'</span>,[139 258 672 266])
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Adding Preferred Orientations<a name="8"> </a></h2>
+         <p>One can also mark specifc orientations in pole figure, inverse pole figures</p><pre class="codeinput">plotipdf(odf,[xvector,zvector],<span class="string">'gray'</span>,<span class="string">'antipodal'</span>,<span class="string">'marginx'</span>,10,<span class="string">'minmax'</span>,<span class="string">'off'</span>)
+annotate(mod1,<span class="keyword">...</span>
+    <span class="string">'marker'</span>,<span class="string">'s'</span>,<span class="string">'MarkerSize'</span>,6,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>,<span class="keyword">...</span>
+    <span class="string">'label'</span>,<span class="string">'A'</span>,<span class="string">'color'</span>,<span class="string">'w'</span>)
+
+annotate(mod2,<span class="keyword">...</span>
+    <span class="string">'marker'</span>,<span class="string">'s'</span>,<span class="string">'MarkerSize'</span>,6,<span class="string">'MarkerFaceColor'</span>,<span class="string">'g'</span>,<span class="keyword">...</span>
+    <span class="string">'label'</span>,<span class="string">'B'</span>,<span class="string">'color'</span>,<span class="string">'w'</span>)
+</pre><p>or ODF plots</p><pre class="codeinput">plot(odf,<span class="string">'sections'</span>,12,<span class="string">'gray'</span>,<span class="string">'position'</span>,[100,100,500,380])
+annotate(mod1,<span class="keyword">...</span>
+    <span class="string">'MarkerSize'</span>,15,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'r'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'none'</span>)
+
+annotate(mod2,<span class="keyword">...</span>
+  <span class="string">'MarkerSize'</span>,15,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'g'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'none'</span>)
+</pre><p>or EBSD scatter plots</p><pre class="codeinput">ebsd = simulateEBSD(odf,200);
+scatter(ebsd,<span class="string">'center'</span>,mod1);
+annotate(mod1,<span class="keyword">...</span>
+  <span class="string">'MarkerSize'</span>,10,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'r'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>)
+annotate(mod2,<span class="keyword">...</span>
+  <span class="string">'MarkerSize'</span>,10,<span class="string">'MarkerEdgeColor'</span>,<span class="string">'g'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'g'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Adding a Legend<a name="11"> </a></h2>
+         <p>If you have multiple data in one plot then it makes sence to add a legend saying which color / symbol correspond to which
+            data set.
+         </p>
+         <p>The following example compares the Fourier coefficients of the fibre ODF with the Fourier co,'margin'}efficients of an unimodal
+            ODF.
+         </p><pre class="codeinput">plotFourier(odf)
+hold <span class="string">all</span>
+plotFourier(fibreODF(Miller(1,0,0),zvector,cs,ss))
+
+legend({<span class="string">'Fibre ODF'</span>,<span class="string">'Unimodal ODF'</span>})
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Adding a Spherical Grid<a name="12"> </a></h2>
+         <p>Sometimes it is usefull to have a spherical grid in your plot to make the projection easier to understand. For this reason
+            there are the option <b>grid</b>, which enables the grid and the option <b>grid_res</b>, which allows to specifiy the spacing of the grid lines.
+         </p><pre class="codeinput">plotpdf(odf,[Miller(1,0,0),Miller(0,0,1)],<span class="string">'grid'</span>,<span class="string">'grid_res'</span>,15*degree,<span class="keyword">...</span>
+  <span class="string">'gray'</span>,<span class="string">'antipodal'</span>);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,4 @@
+set("first axis", 'x');
+set("rotation 1", 10);
+set("second axis", 'none');
+set("third axis", 'none');

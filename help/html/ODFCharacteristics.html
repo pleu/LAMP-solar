@@ -1,0 +1,133 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>ODF Characteristics</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit ODFCharacteristics" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>ODF Characteristics</h1>
+         <introduction>
+            <p>Explains how to analyze ODFs, i.e. how to compute modal orientations, texture index, volume portions, Fourier coefficients
+               and pole figures.
+            </p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Modal Orientations</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#10">Texture Characteristics</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#13">Volume Portions</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#16">Fourier Coefficients</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#19">Pole Figures and Values at Specific Orientations</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#22">Extract Internal Representation</a></td>
+               </tr>
+            </table>
+         </div>
+         <p><b>Some Sample ODFs</b></p>
+         <p>Let us first begin with some constructed ODFs to be analyzed below</p>
+         <p>A bimodal ODF:</p><pre class="codeinput">cs = symmetry(<span class="string">'orthorhombic'</span>);ss = symmetry(<span class="string">'triclinic'</span>);
+odf1 = unimodalODF(orientation(<span class="string">'Euler'</span>,0,0,0,cs,ss)) + <span class="keyword">...</span>
+  unimodalODF(orientation(<span class="string">'Euler'</span>,30*degree,0,0,cs,ss))
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; ODFCharacteristics at 16
+cs = symmetry('orthorhombic');ss = symmetry('triclinic');
+</pre><p>A fibre ODF:</p><pre class="codeinput">odf2 = fibreODF(Miller(0,0,1),xvector,cs,ss)
+</pre><p>An ODF estimated from diffraction data:</p><pre class="codeinput">cs = symmetry(<span class="string">'-3m'</span>,[1.4,1.4,1.5]);
+ss = symmetry(<span class="string">'triclinic'</span>);
+
+fname = {<span class="keyword">...</span>
+  [mtexDataPath <span class="string">'/dubna/Q(10-10)_amp.cnv'</span>],<span class="keyword">...</span>
+  [mtexDataPath <span class="string">'/dubna/Q(10-11)(01-11)_amp.cnv'</span>],<span class="keyword">...</span>
+  [mtexDataPath <span class="string">'/dubna/Q(11-22)_amp.cnv'</span>]};
+h = {Miller(1,0,-1,0,cs),[Miller(0,1,-1,1,cs),Miller(1,0,-1,1,cs)],Miller(1,1,-2,2,cs)};
+c = {1,[0.52 ,1.23],1};
+
+pf = loadPoleFigure(fname,h,cs,ss,<span class="string">'superposition'</span>,c,<span class="keyword">...</span>
+  <span class="string">'comment'</span>,<span class="string">'Dubna Tutorial pole figures'</span>);
+
+odf3 = calcODF(pf,<span class="string">'resolution'</span>,5*degree,<span class="string">'iter_max'</span>,10)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Modal Orientations<a name="7"> </a></h2>
+         <p>The modal orientation of an ODF is the crystallographic prefered orientation of the texture. It is characterized as the maximum
+            of the ODF. In MTEX it can be computed by the command <a href="ODF_modalorientation.html">modalorientation</a>
+         </p>
+         <p>Determine the modalorientation as an <a href="quaternion_index.html">quaternion</a>:</p><pre class="codeinput">center = modalorientation(odf3)
+</pre><p>Lets mark this prefered orientation in the pole figures</p><pre class="codeinput">plotpdf(odf3,h,<span class="string">'antipodal'</span>);
+annotate(center,<span class="string">'marker'</span>,<span class="string">'s'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'black'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Texture Characteristics<a name="10"> </a></h2>
+         <p>Texture characteristics are used for a rough classification of ODF into sharp and weak ones. The two most common texture characteristcs
+            are the <a href="ODF_entropy.html">entropy</a> and the <a href="ODF_textureindex.html">texture index</a>.
+         </p>
+         <p>Compute the texture index:</p><pre class="codeinput">textureindex(odf1)
+</pre><p>Compute the entropy:</p><pre class="codeinput">entropy(odf2)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Volume Portions<a name="13"> </a></h2>
+         <p>Volume portions describes the relative volume of crystals having a certain orientation. The relative volume of crystals having
+            a orientation close to a given orientation is computed by the command <a href="ODF_volume.html">volume</a> and the relative volume of
+            crystals having a orientation close to a given fibre is computed by the command <a href="ODF_fibrevolume.html">fibrevolume</a>
+         </p>
+         <p>The relative volume of crystals with missorientation maximum 30 degree from the modal orientation:</p><pre class="codeinput">volume(odf3,modalorientation(odf3),30*degree)
+</pre><p>The relative volume of crystals with missorientation maximum 20 degree from the prefered fibre:</p><pre class="codeinput">fibrevolume(odf2,Miller(0,0,1),xvector,20*degree)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Fourier Coefficients<a name="16"> </a></h2>
+         <p>The Fourier coefficients allow for a complete characterization of the ODF. The are of particular importance for the calcuation
+            of mean macroscopic properties e.g. the second order Fourier coefficients characterize thermal expansion, optical refraction
+            index, and electrical conductivity whereas the fourth order Fourier coefficients characterize the elastic properties of the
+            specimen. Moreover, the decay of the Fourier coefficients is directly related to the smoothness of the ODF. The decay of the
+            Fourier coefficients might also hint for the presents of a ghost effect. See <a href="ghost_demo.html">ghost effect</a>.
+         </p>
+         <p>The Fourier coefficients of order 2:</p><pre class="codeinput">Fourier(odf2,<span class="string">'order'</span>,2)
+</pre><p>The decay of the Fourier coefficients:</p><pre class="codeinput">close <span class="string">all</span>;
+plotFourier(odf3,<span class="string">'bandwidth'</span>,32)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Pole Figures and Values at Specific Orientations<a name="19"> </a></h2>
+         <p>Using the command <a href="ODF_eval.html">eval</a> any ODF can be evaluated at any (set of) orientation(s).
+         </p><pre class="codeinput">eval(odf1,orientation(<span class="string">'Euler'</span>,0*degree,20*degree,30*degree))
+</pre><p>For a more complex example let us define a fibre and plot the ODF there.</p><pre class="codeinput">fibre = orientation(<span class="string">'fibre'</span>,Miller(1,0,0),yvector);
+
+plot(eval(odf2,fibre));
+</pre><p>Evaluation of the corresponding pole figure or inverse pole figure is done using the command <a href="ODF_pdf.html">pdf</a>.
+         </p><pre class="codeinput">pdf(odf2,Miller(1,0,0),xvector)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Extract Internal Representation<a name="22"> </a></h2>
+         <p>As allway the <a href="ODF_get.html">ODF_get.html</a> and <a href="ODF_set.html">set</a> offers a simple way to addres the internal ODF representation of MTEX.
+         </p><pre class="codeinput">get(odf3,<span class="string">'center'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

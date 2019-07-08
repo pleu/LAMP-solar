@@ -1,0 +1,26 @@
+frequencyStart = c/wavelengthStop;
+frequencyStop = c/wavelengthStart;
+
+frequencies = linspace(frequencyStart, frequencyStop,numFrequencyPoints); 
+
+#
+# setup structure
+#
+
+layerThicknesses = [0; filmThickness; 0];
+
+numFrequencies = length(frequencies);
+numThicknesses = length(layerThicknesses);
+n = matrix(numThicknesses,numFrequencies);
+n(1,1:numFrequencies) = 1; # air
+n(3,1:numFrequencies) = 1; # air
+
+n(2, 1:numFrequencies) = getfdtdindex(material,frequencies,frequencyStart,frequencyStop);
+
+# get RT using non-dispersive index data, and theta=0
+RT = stackrt(n, layerThicknesses, frequencies, theta);
+field = stackfield(n, layerThicknesses, frequencies, theta);
+
+
+matlabsave(filename, RT);
+

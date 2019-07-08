@@ -1,0 +1,233 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Color Coding</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit ColorCoding" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Color Coding</h1>
+         <introduction>
+            <p>
+               <table class="ref" width="90%">
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('ColorCoding_demo_block','ColorCoding_demo_expandable_text');">
+               <img id="ColorCoding_demo_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('ColorCoding_demo_block','ColorCoding_demo_expandable_text');"
+               onDblClick="document.location.href=&#34;ColorCoding_demo.html&#34;">Pole Figure Color Coding</a>
+               </td>
+               <td valign="top">Explains how to control color coding across multiple plots.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="ColorCoding_demo_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="ColorCoding_demo.html#4" style="font-weight:normal">A sample ODFs and Simulated Pole Figure Data</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ColorCoding_demo.html#5" style="font-weight:normal">Setting a Colormap</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ColorCoding_demo.html#9" style="font-weight:normal">Tight Colorcoding</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ColorCoding_demo.html#10" style="font-weight:normal">Equal Colorcoding</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ColorCoding_demo.html#11" style="font-weight:normal">Setting an Explicite Colorrange</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ColorCoding_demo.html#12" style="font-weight:normal">Setting the Contour Levels</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ColorCoding_demo.html#13" style="font-weight:normal">Modifying the Colorrange After Plotting</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ColorCoding_demo.html#15" style="font-weight:normal">Logarithmic Plots</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('ColorCodingEBSD_demo_block','ColorCodingEBSD_demo_expandable_text');">
+               <img id="ColorCodingEBSD_demo_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('ColorCodingEBSD_demo_block','ColorCodingEBSD_demo_expandable_text');"
+               onDblClick="document.location.href=&#34;ColorCodingEBSD_demo.html&#34;">EBSD Color Coding</a>
+               </td>
+               <td valign="top">Explains how to control EBSD color coding.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="ColorCodingEBSD_demo_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="ColorCodingEBSD_demo.html#4" style="font-weight:normal">IPDF Colorcoding</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ColorCodingEBSD_demo.html#11" style="font-weight:normal">IPDF Overview</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ColorCodingEBSD_demo.html#22" style="font-weight:normal">Other Colorcodes</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               </table>
+               
+            </p>
+         </introduction>
+         <abstract>
+            <div class="intro">
+               <p>A central issue when interpreting plots is to have a consistent color coding among all plots. In MTEX this can be achieved
+                  in two ways. If the the minimum and maximum value is known then one can specify the colorrange directly using the options
+                  <b>colorrange</b> or <b>contourf</b>, or the command <a href="setcolorrange.html">setcolorrange</a> is used which allows to set the color range afterwards.
+               </p>
+            </div>
+         </abstract>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">A sample ODFs and Simulated Pole Figure Data</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#5">Tight Colorcoding</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Equal Colorcoding</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Setting an Explicite Colorrange</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">Setting the Contour Levels</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">Modifying the Colorrange After Plotting</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#11">Logarithmic Plots</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#12">Monochrome Plots</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>A sample ODFs and Simulated Pole Figure Data<a name="4"> </a></h2>
+         <p>Let us first define some model ODF_index.html ODFs&gt; to be plotted later on.</p><pre class="codeinput">cs = symmetry(<span class="string">'-3m'</span>); ss = symmetry(<span class="string">'-1'</span>);
+odf = fibreODF(Miller(1,1,0),zvector,cs,ss)
+pf = simulatePoleFigure(odf,[Miller(1,0,0),Miller(1,1,1)],<span class="keyword">...</span>
+  S2Grid(<span class="string">'equispaced'</span>,<span class="string">'points'</span>,500,<span class="string">'antipodal'</span>));
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; ColorCoding at 124
+cs = symmetry('-3m'); ss = symmetry('-1');
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Tight Colorcoding<a name="5"> </a></h2>
+         <p>When <a href="PoleFigure_plot.html">plot</a> is called without option the colorcoding of each plot is choosen <b>tight</b> to the range of the data independently from the other plots.
+         </p><pre class="codeinput">close <span class="string">all</span>
+plot(pf)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Equal Colorcoding<a name="6"> </a></h2>
+         <p>The <b>tight</b> colorcoding makes it hard to compare two pole figures. If you want to have one colorcoding for all plots within one figure
+            use the option <b>colorrange</b> to <b>equal</b>.
+         </p><pre class="codeinput">plot(pf,<span class="string">'colorrange'</span>,<span class="string">'equal'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Setting an Explicite Colorrange<a name="7"> </a></h2>
+         <p>If you want to have a unified colorcoding for several figures you can set the colorrange directly in the <a href="ODF_plotpdf.html">plot command</a></p><pre class="codeinput">close <span class="string">all</span>
+plotpdf(odf,[Miller(1,0,0),Miller(1,1,1)],<span class="keyword">...</span>
+  <span class="string">'colorrange'</span>,[0 4],<span class="string">'antipodal'</span>);
+figure
+plotpdf(.5*odf+.5*uniformODF(cs,ss),[Miller(1,0,0),Miller(1,1,1)],<span class="keyword">...</span>
+  <span class="string">'colorrange'</span>,[0 4],<span class="string">'antipodal'</span>);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Setting the Contour Levels<a name="8"> </a></h2>
+         <p>In the case of contor plots you can also specify the <b>contour levels</b> directly
+         </p><pre class="codeinput">close <span class="string">all</span>
+plotpdf(odf,[Miller(1,0,0),Miller(1,1,1)],<span class="keyword">...</span>
+  <span class="string">'contourf'</span>,0:1:5,<span class="string">'antipodal'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Modifying the Colorrange After Plotting<a name="9"> </a></h2>
+         <p>The color range of the figures can also be adjusted afterwards using the command <a href="setcolorrange.html">setcolorrange</a></p><pre class="codeinput">setcolorrange([0.38,3.9])
+</pre><p>The command <a href="setcolorrange.html">setcolorrange</a> also allows to set an equal colorcoding to all open figures.
+         </p><pre class="codeinput">figure(1)
+plotpdf(odf,[Miller(1,0,0),Miller(1,1,1)],<span class="string">'antipodal'</span>)
+figure(2)
+plotpdf(.5*odf+.5*uniformODF(cs,ss),[Miller(1,0,0),Miller(1,1,1)],<span class="string">'antipodal'</span>);
+
+setcolorrange(<span class="string">'equal'</span>,<span class="string">'all'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Logarithmic Plots<a name="11"> </a></h2>
+         <p>Sometimes logarithmic scaled plots are of interest. For this case all plots in MTEX understand the option <b>logarithmic</b>, e.g.
+         </p><pre class="codeinput">close <span class="string">all</span>;
+plotpdf(odf,[Miller(1,0,0),Miller(1,1,1)],<span class="string">'antipodal'</span>,<span class="string">'logarithmic'</span>)
+setcolorrange([0.01 12]);
+colorbar
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Monochrome Plots<a name="12"> </a></h2>
+         <p>Monochrome plots are obtained by the option <b>gray</b>.
+         </p><pre class="codeinput">plotpdf(odf,[Miller(1,0,0),Miller(1,1,1)],<span class="string">'antipodal'</span>,<span class="string">'gray'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

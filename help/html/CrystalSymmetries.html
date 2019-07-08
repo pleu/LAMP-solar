@@ -1,0 +1,109 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Crystal Symmetries</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit CrystalSymmetries" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Crystal Symmetries</h1>
+         <introduction>
+            <p>Explains how to define crystal symmetries.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Defining a Crystal Symmetry by the Name of its Laue Group</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Defining a Crystal Symmetry by the Name of its Point Group or its Space Group</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Defining a Crystal Symmetry by a CIF File</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">The Crystal Coordinate System</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">A and B Configurations</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#11">Calculations</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#12">Plotting symmetries</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>Crystal symmetries are a sets of rotations and mirroring operations that leave the lattice of a crystal invariant. They form
+            so called groups since the concatenation of to symmetry operations is again a symmetry operation. Crystal symmetries are classified
+            in various ways - either according to the corresponding space group, or the corresponding point group, or the corresponding
+            Laue group. In total there are only 11 different Laue groups present in crystallography. All these 11 Laue groups are supported
+            by MTEX. More precisely, in MTEX a Laue group is represented by a variable of the class <a href="symmetry_index.html"><b>symmetry</b></a>.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Defining a Crystal Symmetry by the Name of its Laue Group<a name="4"> </a></h2><pre class="codeinput">cs = symmetry(<span class="string">'m-3m'</span>)
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; CrystalSymmetries at 23
+cs = symmetry('m-3m')
+</pre><p>defines a cubic crystal symmetry using the international notation. Of course MTEX understands also the Schoenflies notation</p><pre class="codeinput">cs = symmetry(<span class="string">'O'</span>);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Defining a Crystal Symmetry by the Name of its Point Group or its Space Group<a name="6"> </a></h2>
+         <p>If not the name of a Laue group was specified but the name of a point group or a space group MTEX auomatically determines
+            the corresponding Laue group and assignes it to the variable.
+         </p><pre class="codeinput">cs = symmetry(<span class="string">'Td'</span>);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Defining a Crystal Symmetry by a CIF File<a name="7"> </a></h2>
+         <p>Finally, MTEX allows to define a crystal symmetry by importing a crystallographic information file (*.cif).</p><pre class="codeinput">cs = symmetry(<span class="string">'quartz.cif'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>The Crystal Coordinate System<a name="8"> </a></h2>
+         <p>In the case of cubic crystal symmetry the crystal coordinate system is allready well defined. However, especialy in the case
+            of low order crystal symmetry the crystal coordinate system has to be specified by the length of the axis and the angle between
+            the axis.
+         </p><pre class="codeinput">cs = symmetry(<span class="string">'triclinic'</span>,[1,2.2,3.1],[80*degree,85*degree,95*degree]);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>A and B Configurations<a name="9"> </a></h2>
+         <p>In the case of trigonal and hexagonal crystal symmetries different conventions are used. One distingueshes between the A and
+            the B configuration depending whether the a axis is aligned parallel to the x axis or parralel to the y axis. In order to
+            specify the concrete configuration to be used one can pass either the option <b>X||a</b> or the option <b>Y||a</b>.
+         </p><pre class="codeinput">cs = symmetry(<span class="string">'-3m'</span>,[1.7,1.7,1.4],<span class="string">'X||a'</span>);
+plot(cs)
+</pre><pre class="codeinput">cs = symmetry(<span class="string">'-3m'</span>,[1.7,1.7,1.4],<span class="string">'Y||a'</span>);
+plot(cs)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Calculations<a name="11"> </a></h2>
+         <p>applaying the specimen symmetry from the left and the crystal symmetry from the right onto a <a href="orientation_index.html">orientation</a>
+            results in a vector containing all crystallographically equivalent orientations.
+         </p><pre class="codeinput">ss = symmetry(<span class="string">'mmm'</span>);   <span class="comment">% specimen symmetry</span>
+ss * orientation(<span class="string">'euler'</span>,0,0,pi/4,cs,ss) * cs  <span class="comment">% all crystallographically equivalent orientations</span>
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Plotting symmetries<a name="12"> </a></h2>
+         <p>Symmetries are visualized by plotting their main axes and the corresponding equivalent directions</p><pre class="codeinput">close; figure(<span class="string">'position'</span>,[50,50,300,300])
+plot(cs,<span class="string">'antipodal'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,69 @@
+# TM mode
+filename = "AgNW_TM_d100nm_p400nm_lambda600nm";
+
+x = getdata("field","x");
+y = getdata("field","y");
+z = getdata("field","z");
+f = getdata("field","f");
+nx = length(x);
+ny = length(y);
+nz = length(z);
+nf = length(f);
+
+indexVectors = [1:1];
+numIndex = length(indexVectors);
+
+numY = length(y); #change z to y
+numX = length(x);
+dataEz = matrix(numIndex, numX, numY);
+dataE2 = matrix(numIndex, numX, numY);
+dataHx = matrix(numIndex, numX, numY);
+dataHy = matrix(numIndex, numX, numY);
+dataH2 = matrix(numIndex, numX, numY);
+
+Ex=getdata("field","Ex");
+Ey=getdata("field","Ey");
+#Ez=getdata("field","Ez");
+#Ez=real(Ez);
+E2=getelectric("field");
+
+Hz=getdata("field","Hz");
+#Hx=real(Hx);
+#Hy=getdata("field","Hy");
+#Hz=getdata("field","Hz");
+
+#Hy=real(Hy);
+H2=getmagnetic("field");
+
+for(i = 1:numIndex){
+  x = x*1e9; 
+  y = y*1e9;
+  z = z*1e9;
+  #dataEz(i, 1:numX, 1:numY) = pinch(Ez, 3, i);
+  image(x,y,pinch(Ex, 3, i),"x (nm)","y (nm)","Ex");	
+  image(x,y,pinch(Ey, 3, i),"x (nm)","y (nm)","Ey");	
+
+  #image(dataX,dataY,pinch(Ez, 3, i),"x (nm)","y (nm)","Ez");	
+  #dataHx(i, 1:numX, 1:numY) = pinch(Hx, 3, i);
+  image(x,y,pinch(Hz, 3, i),"x (nm)","y (nm)","Hz");
+  #dataHy(i, 1:numX, 1:numY) = pinch(Hy, 3, i);
+  #image(dataX,dataY,pinch(Hy, 3, i),"x (nm)","y (nm)","Hy");
+  #dataE2(i, 1:numX, 1:numY) = pinch(E2, 3, i);
+  image(x,y,pinch(E2, 3, i),"x (nm)","y (nm)","|E|^2");	
+  #dataH2(i, 1:numX, 1:numY) = pinch(H2, 3, i);
+  image(x,y,pinch(H2, 3, i),"x (nm)","y (nm)","|H|^2");	
+}
+
+
+matlabsave(filename+"X", x);
+matlabsave(filename+"Y", y);
+matlabsave(filename+"Z", z);
+matlabsave(filename+"f", f);
+
+matlabsave(filename+"Ex", Ex);
+matlabsave(filename+"Ey", Ey);
+matlabsave(filename+"E2", E2);
+
+matlabsave(filename+"Hz", Hz);
+matlabsave(filename+"H2", H2);
+

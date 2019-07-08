@@ -1,0 +1,46 @@
+set("Script", 'deleteall; 
+ radius = %pile radius%; 
+ pile_a = %pile a%; 
+n_high = %n high%; 
+ addcircle; 
+ set("name","wood"); 
+ set("material",material); 
+ if(get("material")=="<Object defined dielectric>")  {set("index",index); } 
+setnamed("wood","radius",radius); 
+ setnamed("wood","z",0); 
+ setnamed("wood","z span", pile_a); 
+setnamed("wood","first axis","x"); setnamed("wood","rotation 1",90); 
+ setnamed("wood","x",-pile_a/2); 
+setnamed("wood","y",0); 
+ select("wood"); 
+ copy(pile_a); 
+ addstructuregroup; 
+ set("name","row1"); 
+ setnamed("row1","z",0); 
+select("wood"); 
+ addtogroup("row1"); 
+ select("row1"); 
+ copy(0, 0, 2*radius); 
+ set("first axis", "z"); 
+set("rotation 1", 90); 
+ set("name", "row2"); 
+ select("row1"); 
+ copy(pile_a/2,0,4*radius); 
+  set("name","row3"); 
+select("row2"); 
+ copy(0, pile_a/2, 4*radius); 
+ set("name","row4"); 
+ addstructuregroup; 
+set("name","layer0"); 
+ selectpartial("row"); 
+ addtogroup("layer0"); 
+ setnamed("layer0","z",0); 
+for (i=1:n_high) { 
+ select("layer0"); 
+ copy(0, 0, 8*(i-1)*radius); 
+ filename = "layer"+num2str(i); 
+set("name",filename); 
+ } 
+ select("layer0"); 
+ delete; 
+ set("z", 0);');

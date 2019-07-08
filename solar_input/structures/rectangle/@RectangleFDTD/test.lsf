@@ -1,0 +1,17 @@
+addrect; 
+set("x", 0);
+set("x span", 6.1091e-06);
+set("y", 0);
+set("y span", 6.1091e-06);
+set("z", 0);
+set("z span", 6.1091e-06);
+set("material", 'Si (Silicon) - Palik');
+set("override mesh order from material database", 0);
+set("grid attribute name", '');
+set("first axis", 'none');
+set("second axis", 'none');
+set("third axis", 'none');
+set("render type", 'detailed');
+set("detail", 0.5);
+set("override color opacity from material database", 1);
+set("alpha", 0.9);

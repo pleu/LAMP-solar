@@ -1,0 +1,84 @@
+FDTD Solutions Version 8.17.1157 (Mac 64bit)
+ expires (month/day/year): 5/26/2017
+using config file: /Users/pleu/.config/Lumerical/FDTD Solutions.ini
+license host: <a href=http://coco.sam.pitt.edu:8095>coco.sam.pitt.edu:8095</a>
+current time: Mon Apr 24 15:00:58 2017
+Running on host: Pauls-MacBook-Pro-8.local
+All processes are communicating and ready to proceed to simulation...
+Running fsp file: /Applications/Lumerical/FDTD Solutions/FDTD Solutions.app/Contents/MacOS/fdtd-engine -remote /Users/pleu/Documents/LAMP-solar/solar_analysis/examples/nanowire angle dependence BFAST/SiNanowireTheta10degPhi0degTE.fsp
+number of processors is 1
+processors are distributed as: 1x1x1
+Running 3D Simulation
+Split-field FDTD is activated with propagation along axis 3, center frequency is 3, n=1
+Starting meshing
+Simulation size in gridpoints: 17 x 17 x 54
+Completed meshing!
+Meshing complete in 0.006235 seconds of CPU time
+0 0
+Starting meshing
+Simulation size in gridpoints: 17 x 17 x 54
+Completed meshing!
+Meshing complete in 0.005676 seconds of CPU time
+0 0
+Starting meshing
+Simulation size in gridpoints: 17 x 17 x 54
+Completed meshing!
+Meshing complete in 0.006345 seconds of CPU time
+0 0
+finished material properties
+Using selected optimization level: 2
+Selecting 3d kernel for splitFieldDirection=3 and optLevel=2
+-----------------------------------------
+Beginning initialization of 3D Simulation
+Starting to add sources to simulation
+Reverted to narrowband source injection
+Using BFAST in the 3d sources! Injection direction: 1, index: 1
+Adding 3D Gaussian Source propagating in Z
+Starting to add boundary conditions to simulation
+Adding 3D Periodic BC
+Adding 3D Periodic BC
+Adding 3D Periodic BC
+Adding 3D Periodic BC
+Adding 3D PML BC
+Adding 3D PML BC
+Starting to add monitors to Simulation
+Adding analysis monitor
+Adding 3D DFT monitor
+Adding 3D DFT monitor
+Finished initialization of 3D Simulation
+-----------------------------------------
+All processes are communicating and ready to proceed to simulation...
+Starting 31878 total iterations
+0% complete. Max time remaining: 28 secs. Auto Shutoff: 1
+2% complete. Max time remaining: 25 secs. Auto Shutoff: 0.190709
+3% complete. Max time remaining: 25 secs. Auto Shutoff: 0.0211062
+6% complete. Max time remaining: 24 secs. Auto Shutoff: 0.0131276
+13% complete. Max time remaining: 22 secs. Auto Shutoff: 0.00878155
+19% complete. Max time remaining: 21 secs. Auto Shutoff: 0.00694246
+26% complete. Max time remaining: 20 secs. Auto Shutoff: 0.008695
+32% complete. Max time remaining: 18 secs. Auto Shutoff: 0.012695
+38% complete. Max time remaining: 16 secs. Auto Shutoff: 0.0225997
+45% complete. Max time remaining: 15 secs. Auto Shutoff: 0.040612
+51% complete. Max time remaining: 13 secs. Auto Shutoff: 0.0752668
+58% complete. Max time remaining: 11 secs. Auto Shutoff: 0.146307
+64% complete. Max time remaining: 10 secs. Auto Shutoff: 0.278534
+71% complete. Max time remaining: 8 secs. Auto Shutoff: 0.533155
+77% complete. Max time remaining: 6 secs. Auto Shutoff: 1.01769
+83% complete. Max time remaining: 4 secs. Auto Shutoff: 2.02384
+90% complete. Max time remaining: 3 secs. Auto Shutoff: 3.88029
+96% complete. Max time remaining: 1 secs. Auto Shutoff: 7.46125
+100% complete. Max time remaining: 0 secs. Auto Shutoff: 11.1099
+Completed 31878 iterations, or 1.000013e-12s of Simulation Time
+Process 0 starting to collect data
+    collecting monitor data
+    collecting source data
+Reverted to narrowband source injection
+Using BFAST in the 3d sources! Injection direction: 1, index: 1
+Finished collecting data
+Simulation completed successfully at: Mon Apr 24 15:01:25 2017
+Overall wall time measurements in seconds:
+    time to mesh and initialize: 0
+    time to run FDTD simulation: 27
+    time to finalize data and save to files: 0
+    FDTD solver speed: 18.4255 Mnodes/s
+    total FDTD solver speed on 1 processes: 18.4255 Mnodes/s

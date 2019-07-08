@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<demos>
+   <name>MTEX</name>
+   <type>toolbox</type>
+   <icon>mtex_icon.gif</icon>
+   <description isCdata="no">
+      <p>The MTEX Toolbox software provides a comprehensive set of functions for exploring, processing and understanding Quantitative Texture Analysis (QTA)</p>
+   </description>
+   <demoitem>
+      <label>Orientation Density Functions</label>
+      <type>M-file</type>
+      <source>ODF_demo</source>
+   </demoitem>
+</demos>

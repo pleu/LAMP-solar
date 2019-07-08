@@ -1,0 +1,8 @@
+FDTD Solutions Version 8.5.4 (Mac 64bit)
+ expires (month/day/year): 10/23/2013
+current time: Sat Aug 17 12:04:30 2013
+Running on host: Pauls-MacBook-Pro-2.local
+All processes are communicating and ready to proceed to simulation...
+Running fsp file: filename.fsp
+The file could not be found. The simulation cannot proceed.
+Error: parallel error, at least one process could not read the designated file. Process number: 0 had this error

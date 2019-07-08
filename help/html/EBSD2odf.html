@@ -1,0 +1,98 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>ODF Estimation from EBSD data</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit EBSD2odf" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>ODF Estimation from EBSD data</h1>
+         <introduction>
+            <p>How to estimate an ODF from single orientation measurements.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#3">ODF Estimation</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Automatic halfwidth selection</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Effect of halfwidth selection</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>ODF Estimation<a name="3"> </a></h2>
+         <p>The function <a href="EBSD_calcODF.html">calcODF</a> implements ODF estimation from EBSD data in MTEX. The underlaying statistical method is called as kernel density estimation,
+            which can be interpreted as a generalized histogram. To be more precise, let <img vspace="5" hspace="5" src="EBSD2odf_eq34125.png">  be a radially symmetric, unimodal model ODF. Then the kernel density estimator for the individual orientation data <img vspace="5" hspace="5" src="EBSD2odf_eq29416.png">  is defined as
+         </p>
+         <p><img vspace="5" hspace="5" src="EBSD2odf_eq18135.png"> </p>
+         <p>The choise of the model ODF <img vspace="5" hspace="5" src="EBSD2odf_eq46646.png">  and in particular its halfwidth has a great impact in the resulting ODF. The following line computes the kernel density estimator
+            for the first phase with kernel halfwidth set to 10*degree.
+         </p><pre class="codeinput">odf = calcODF(ebsd,<span class="string">'phase'</span>,1,<span class="string">'halfwidth'</span>,10*degree)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Automatic halfwidth selection<a name="4"> </a></h2>
+         <p>MTEX includes an automatic halfwidth selection algorithm which is called by the command <a href="EBSD_calcKernel.html">calcKernel</a>. A neccesary condition that this algorithm works is that the ebsd data are spatialy independend, as it is the case for very
+            rough EBSD meassurements, i.e. only one measurement per grain.
+         </p><pre class="codeinput"><span class="comment">% try to compute an optimal kernel</span>
+psi = calcKernel(ebsd,<span class="string">'phase'</span>,1)
+</pre><p>The above example the EBSD measurements are spatial dependend and the resulting halfwidth is to small. To avoid this problem
+            we have to perfrom grain reconstruction first and then to estimate the halfwidth from the grains.
+         </p><pre class="codeinput"><span class="comment">% grains reconstruction</span>
+[grains ebsd] = segment2d(ebsd);
+
+<span class="comment">% correct for to small grains</span>
+grains = grains(grainsize(grains)&gt;5);
+
+<span class="comment">% compute optimal halfwidth from grains</span>
+psi = calcKernel(grains,<span class="string">'phase'</span>,1)
+
+<span class="comment">% compute the ODF with the kernel psi</span>
+odf = calcODF(ebsd,<span class="string">'phase'</span>,1,<span class="string">'kernel'</span>,psi)
+</pre><p>Once an ODF is estimated all the functionallity MTEX offers for <a href="ODFCalculations.html">ODF analysis</a> and <a href="ODFPlot.html">ODF visualisation</a> is available.
+         </p><pre class="codeinput">plotpdf(odf,[Miller(1,0,0),Miller(1,1,0),Miller(1,1,1)],<span class="string">'antipodal'</span>,<span class="string">'silent'</span>,<span class="string">'position'</span>,[10 10 600 200])
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Effect of halfwidth selection<a name="7"> </a></h2>
+         <p>As mentioned above a propper halfwidth selection is crucial for ODF estimation. The following simple numerical experiment
+            illustrates the dependency between the kernel halfwidth and the estimation error.
+         </p>
+         <p>Lets start with a model ODF and simulate some EBSD data.</p><pre class="codeinput">ebsd = simulateEBSD(SantaFe,10000)
+</pre><p>Next we define a list of kernel halfwidth ,</p><pre class="codeinput">hw = [1*degree, 2*degree, 4*degree, 8*degree, 16*degree, 32*degree];
+</pre><p>estimate for each halfwidth an ODF and compare it to the original ODF.</p><pre class="codeinput"><span class="keyword">for</span> i = 1:length(hw)
+
+  odf = calcODF(ebsd,<span class="string">'halfwidth'</span>,hw(i),<span class="string">'silent'</span>);
+  e(i) = calcerror(SantaFe, odf);
+
+<span class="keyword">end</span>
+</pre><p>After visualizing the estimation error with observe that the estimation error is large if the halfwidth is chosen to small
+            or to large. In this specific example the optimal halfwidth seems to be about 4 degree
+         </p><pre class="codeinput">plot(hw/degree,e)
+xlabel(<span class="string">'halfwidth in degree'</span>)
+ylabel(<span class="string">'esimation error'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,1 @@
+obj = BoundaryCondition('Periodic', 'Periodic');

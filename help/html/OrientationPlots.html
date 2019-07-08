@@ -1,0 +1,103 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Plotting Individual Orientations</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit OrientationPlots" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Plotting Individual Orientations</h1>
+         <introduction>
+            <p>Basics to the plot types for individual orientations data</p>
+         </introduction>
+         <p>This sections gives you an overview over the functionality MTEX offers to visualize orientation data. Generally they are all
+            <a href="PlotTypes_demo.html#5"> Scatter plots</a> of <a href="SphericalProjection_demo.html">spherical projections</a>
+         </p>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Scatter Pole Figure Plot</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Scatter (Inverse) Pole Figure Plot</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">Scatter Plot in ODF Sections</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">Scatter Plot in Axis Angle or Rodrigues Space</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#10">Orientation plots for EBSD and grains</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>Let us first import some EBSD data with a <a href="matlab:edit loadaachen.m"> script file</a></p><pre class="codeinput">loadaachen;
+</pre><pre class="codeoutput">Undefined function or variable 'loadaachen'.
+
+Error in ==&gt; OrientationPlots at 17
+loadaachen;
+</pre><p>and take the individual orientation measurements (IOM) of one phase</p><pre class="codeinput">o = get(ebsd,<span class="string">'orientations'</span>,<span class="string">'phase'</span>,1)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Scatter Pole Figure Plot<a name="6"> </a></h2>
+         <p>First we would like to plot a scatter plot of IOMs in an pole point figure. This is done via the commands <a href="orientation_plotpdf.html">plotpdf</a>.
+         </p><pre class="codeinput">plotpdf(o,Miller(1,0,0))
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Scatter (Inverse) Pole Figure Plot<a name="7"> </a></h2>
+         <p>We also would like to plot a scatter plot IOMs in an (inverse) pole point figure. This is done via the command <a href="orientation_plotpdf.html">plotipdf</a> respectively.
+         </p><pre class="codeinput">plotipdf(o,xvector)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Scatter Plot in ODF Sections<a name="8"> </a></h2>
+         <p>In order to plot IOM data as a scatter plot in ODF sections one has to use the command <a href="orientation_plotodf.html">plotodf</a>. In above examples the number of plotted orientations was always automatically <b>antipodal</b> such that the plot does not become to full. The number of randomly chosen orientations can be explicetly specified by the
+            option <b>points</b>.
+         </p><pre class="codeinput">close <span class="string">all</span>;figure(<span class="string">'position'</span>,[100 100 700 400])
+plotodf(o,<span class="string">'points'</span>,1000,<span class="string">'antipodal'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Scatter Plot in Axis Angle or Rodrigues Space<a name="9"> </a></h2>
+         <p>Another posibility is to plot the single orientations directly into the orientation space - either in axis/angle parameterization
+            or in Rodrigues parameterization.
+         </p><pre class="codeinput">scatter(o,<span class="string">'phase 1'</span>,<span class="string">'center'</span>,idquaternion)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Orientation plots for EBSD and grains<a name="10"> </a></h2>
+         <p>Since EBSD and grain data involves single orientations above plotting commands are applicable onto those objects.</p>
+         <p>therefore let us first <a href="EBSD_segment2d.html">regionalize</a> some EBSD Data</p><pre class="codeinput">[grains ebsd] = segment2d(ebsd);
+</pre><p>Since in generale EBSD data can have multiple <b>phases</b> (e.g. because of different crystal symmetry), we specify the one we would like to plot explicitly. Furthermore we specify
+            some additional plotting options
+         </p><pre class="codeinput">plotipdf(ebsd,xvector,<span class="string">'phase'</span>,1,<span class="string">'complete'</span>,<span class="string">'antipodal'</span>,<span class="string">'points'</span>,100, <span class="string">'MarkerSize'</span>,3);
+</pre><p>it also works for grains in the same way</p><pre class="codeinput">plotipdf(grains,xvector,<span class="string">'phase'</span>,1,<span class="string">'complete'</span>,<span class="string">'antipodal'</span>,<span class="string">'points'</span>,100, <span class="string">'MarkerSize'</span>,3);
+</pre><p>also some <a href="EBSD_get.html">EBSD properties</a> or <a href="grain_get.html">grain properties</a> can be visualized</p><pre class="codeinput">close <span class="string">all</span>;
+plotpdf(ebsd,[Miller(1,0,0),Miller(1,1,0)],<span class="string">'property'</span>,<span class="string">'bc'</span>,<span class="string">'phase'</span>,1,<span class="string">'antipodal'</span>,<span class="string">'MarkerSize'</span>,3)
+</pre><p>or some abitrary data vector</p><pre class="codeinput">close <span class="string">all</span>;figure(<span class="string">'position'</span>,[100 100 500 500])
+plotodf(grains,<span class="string">'property'</span>,shapefactor(grains),<span class="string">'phase'</span>,1,<span class="string">'antipodal'</span>,<span class="string">'sections'</span>,9,<span class="string">'MarkerSize'</span>,3);
+</pre><p>However, one can supperpose two scatter plots using the commands <b>hold on</b> and <b>hold off</b>.
+         </p><pre class="codeinput">close <span class="string">all</span>
+plotipdf(ebsd,xvector,<span class="string">'MarkerSize'</span>,3,<span class="string">'phase'</span>,1,<span class="string">'complete'</span>,<span class="string">'antipodal'</span>,<span class="string">'points'</span>,100)
+hold <span class="string">on</span>
+plotipdf(ebsd,xvector,<span class="string">'MarkerSize'</span>,3,<span class="string">'phase'</span>,2,<span class="string">'MarkerColor'</span>,<span class="string">'r'</span>,<span class="string">'complete'</span>,<span class="string">'points'</span>,100)
+hold <span class="string">off</span>
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,123 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Modify EBSD Data</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit ModifyEBSDData" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Modify EBSD Data</h1>
+         <introduction>
+            <p>How to use MTEX to correct EBSD data for measurement errors.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Realign / Rotate the data</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Restricting to a region of interest</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">Remove Inaccurate Orientation Measurements</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>and plot the raw data</p><pre class="codeinput">close <span class="string">all</span>,plot(ebsd)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Realign / Rotate the data<a name="4"> </a></h2>
+         <p>Sometimes its required to realign the EBSD data, e.g. by rotating, shifting or flipping them. This is done by the commands
+            <a href="EBSD_rotate.html">rotate</a>, <a href="EBSD_fliplr.html">fliplr</a>, <a href="EBSD_flipud.html">flipud</a> and <a href="EBSD_shift.html">shift</a>.
+         </p><pre class="codeinput"><span class="comment">% define a rotation</span>
+rot = rotation(<span class="string">'axis'</span>,zvector,<span class="string">'angle'</span>,5*degree);
+
+<span class="comment">% rotate the EBSD data</span>
+ebsd_rot = rotate(ebsd,rot);
+
+<span class="comment">% plot the rotated EBSD data</span>
+close <span class="string">all</span>, plot(ebsd_rot)
+</pre><p>It should be stressed, that the rotation does not only effect the spatial data, i.e. the x, y values, but also the crystal
+            orientations are rotated accordingly. This is true as well for the flipping commands <a href="EBSD_rotate.html">rotate</a> and <a href="EBSD_fliplr.html">fliplr</a>. Observe, how not only the picture is flipped but also the color of the grains chages!
+         </p><pre class="codeinput">ebsd_flip = fliplr(ebsd_rot);
+close <span class="string">all</span>, plot( ebsd_flip )
+</pre><h3 class="seealso">See also</h3>
+         <p><a href="EBSD_rotate.html">EBSD/rotate</a>,
+            
+            <a href="EBSD_fliplr.html">EBSD/fliplr</a>,
+            
+            <a href="EBSD_flipud.html">EBSD/flipud</a>,
+            
+            <a href="EBSD_shift.html">EBSD/shift</a>,
+            
+            <a href="EBSD_affinetrans.html">EBSD/affinetrans</a></p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Restricting to a region of interest<a name="7"> </a></h2>
+         <p>If one is not interested in the whole data set but only in those measurements inside a certain polygon, the restriction can
+            be constructed as follows. Lets start by defining a polygon.
+         </p><pre class="codeinput"><span class="comment">% the polygon</span>
+p = polygon([120 130; 120 100; 200 100; 200 130; 120 130]);
+
+<span class="comment">% plot the ebsd data</span>
+plot(ebsd)
+
+<span class="comment">% plot the polygon on top</span>
+hold <span class="string">on</span>
+plot(p,<span class="string">'color'</span>,<span class="string">'r'</span>,<span class="string">'linewidth'</span>,2)
+hold <span class="string">off</span>
+</pre><p>In order to restrict the ebsd data to the polygon we use the command <a href="EBSD_inpolygon.html">inpolygon</a>.
+         </p><pre class="codeinput"><span class="comment">% restrict</span>
+ebsd = inpolygon(ebsd,p)
+
+<span class="comment">% plot</span>
+plot(ebsd)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Remove Inaccurate Orientation Measurements<a name="9"> </a></h2>
+         <p><b>By MAD</b></p>
+         <p>Most EBSD measurements contain quantities indicating inaccurate measurements. Here we will use the MAD value to identify and
+            eliminate inaccurate measurements.
+         </p><pre class="codeinput"><span class="comment">% extract the quantity mad</span>
+mad = get(ebsd,<span class="string">'mad'</span>);
+
+<span class="comment">% plot a histogram</span>
+hist(mad)
+</pre><pre class="codeinput"><span class="comment">% eliminate all meassurements with MAD larger then one</span>
+ebsd_corrected = delete(ebsd,mad&gt;1)
+</pre><pre class="codeinput">plot(ebsd_corrected)
+</pre><p><b>By grain size</b></p>
+         <p>Sometimes measurements that belongs to grains consisting of only very few measurements can be regarded as inaccurate. In order
+            to detect such measuremens we have first to reconstruct grains from the EBSD measurements using the command <a href="EBSD_segment2d.html">segment2d</a></p><pre class="codeinput">[grains,ebsd_corrected] = segment2d(ebsd_corrected,10*degree)
+</pre><p>The histogram of the grainsize shows that there a lot of grains consisting only of very few measurements.</p><pre class="codeinput">hist(grainsize(grains),50)
+</pre><p>Lets find all grains containing at least 5 measurements</p><pre class="codeinput">large_grains = grains(grainsize(grains) &gt;= 5)
+</pre><p>and remove all orientation measurements not belonging to these grains</p><pre class="codeinput">ebsd_corrected = link(ebsd_corrected,large_grains)
+
+plot(ebsd_corrected)
+</pre><p>Now reconstruct again grains in our reduced EBSD data set</p><pre class="codeinput">[grains_corrected,ebsd_corrected] = segment2d(ebsd_corrected,10*degree)
+
+plot(grains_corrected)
+</pre><p>we observe that there are no small grains anymore</p><pre class="codeinput">hist(grainsize(grains_corrected),50)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,79 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>The class kernel</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div>
+         <table class="nav" summary="Navigation aid" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline"><b>LAMP-solar</b> - A MATLAB Toolbox for Solar Cell Analysis
+               </td>
+            </tr>
+         </table>
+         <p style="font-size:1px;"></p>
+      </div>
+      <div class="content">
+         <h1>The class kernel</h1>
+         <introduction>
+            <p>standard distributions on SO(3)</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#2">Description</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#3">Defining a kernel function</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Plotting the kernel</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>Description<a name="2"> </a></h2>
+         <p>The class <b>kernel</b> is needed in MTEX to define the specific form of unimodal and fibre symmetric ODFs. It has to be passed as an argument when
+            calling the methods <a href="uniformODF.html">uniformODF</a> and <a href="fibreODF.html">fibreODF</a>.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Defining a kernel function<a name="3"> </a></h2>
+         <p>A kernel is defined by specifying its name and its free parameter. Alternatively one can also specify the halfwidth of the
+            kernel. Below you find a list of all kernel functions supported by MTEX.
+         </p><pre class="codeinput">demok(1) = kernel(<span class="string">'Abel Poisson'</span>,0.79);
+demok(2) = kernel(<span class="string">'de la Vallee Poussin'</span>,13);
+demok(3) = kernel(<span class="string">'von Mises Fisher'</span>,7.5);
+demok(4) = kernel(<span class="string">'bump'</span>,35*degree);
+demok(5) = kernel(<span class="string">'Square Singularity'</span>,0.72);
+demok(6) = kernel(<span class="string">'fibre von Mises Fisher'</span>,7.2);
+demok(7) = kernel(<span class="string">'Gauss Weierstrass'</span>,0.07);
+demok(8) = kernel(<span class="string">'Dirichlet'</span>,3);
+<span class="comment">%demok(4) = kernel('local',0.85);</span>
+</pre><pre class="codeoutput">Undefined function or method 'kernel' for input arguments of type 'char'.
+
+Error in ==&gt; script_MaterialData_index at 19
+demok(1) = kernel('Abel Poisson',0.79);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Plotting the kernel<a name="4"> </a></h2>
+         <p>Using the plot command you can plot the kernel as a function on SO(3) as well as the corresponding PDF, or its Fourier coefficients</p><pre class="codeinput"><span class="comment">% the kernel on SO(3)</span>
+close; figure(<span class="string">'position'</span>,[100,100,500,450])
+plot(demok,<span class="string">'K'</span>,<span class="string">'legend'</span>);
+</pre><p>the corresponding PDF</p><pre class="codeinput">plot(demok,<span class="string">'RK'</span>,<span class="string">'legend'</span>);
+ylim([-5,20])
+</pre><p>the Fourrier coefficients of the kernels</p><pre class="codeinput">plot(demok,<span class="string">'Fourier'</span>,<span class="string">'bandwidth'</span>,32,<span class="string">'legend'</span>);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

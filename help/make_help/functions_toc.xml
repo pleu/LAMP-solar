@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<item name="Functions">
+  <description>Functions in LAMP-solar</description>
+
+  
+  <item name="Simulation Analysis Functions">
+    <description>Miller indice, rotations, orientations, symmetries</description>
+    <item name="FDTD Simulation Results">
+      <description>class FDTDSimulationResults</description>
+      <folder>{LAMPsolar_path 'solar_analysis' '@FDTDSimulationResults'}</folder>
+    </item>
+  </item>
+    
+  <!-- ################################################################ -->
+  <item name="Auxiliary Functions">
+    <description>Helper functions making life easier</description>
+    
+    <item name="Plotting">
+        <folder>{LAMPsolar_path 'tools' 'plot_tools'}</folder>
+    </item>
+    <item name="Statistics">
+        <folder>{LAMPsolar_path 'tools' 'statistic_tools'}</folder>
+    </item>
+    <item name="Math">
+        <folder>{LAMPsolar_path 'tools' 'math_tools'}</folder>
+    </item>
+  </item>
+</item>
+

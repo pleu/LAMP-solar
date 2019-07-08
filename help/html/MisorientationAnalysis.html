@@ -1,0 +1,110 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Misorientation Analysis</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit MisorientationAnalysis" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Misorientation Analysis</h1>
+         <introduction>
+            <p>Analyse interior misorientation and misorientation between neighboured grains.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Intergranular Misorientation</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#13">Boundary Misorientation</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>Beside the influence of the choosen high-angle theshold (see <a href="influence_demo.html">demo</a>) on misorientation there are manifold ways to explain boundary and intergranular grain properties and its texture.
+         </p>
+         <p>One could explain misorientation as the orientation needed to rotate <img vspace="5" hspace="5" src="MisorientationAnalysis_eq33874.png">  uppon <img vspace="5" hspace="5" src="MisorientationAnalysis_eq35885.png">  modulo crystal symmetry,
+         </p>
+         <p><img vspace="5" hspace="5" src="MisorientationAnalysis_eq25515.png"> </p>
+         <p>or the other way round depending on the point of view.</p>
+         <p>Let us first import some EBSD data by a <a href="matlab:edit loadaachen.m"> script file</a></p><pre class="codeinput">loadaachen;
+</pre><pre class="codeoutput">Undefined function or variable 'loadaachen'.
+
+Error in ==&gt; MisorientationAnalysis at 23
+loadaachen;
+</pre><p>and <a href="EBSD_segment2d.html">regionalize</a> our investigation area into grains
+         </p><pre class="codeinput">[grains ebsd] = segment2d(ebsd,<span class="string">'angle'</span>,15*degree);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Intergranular Misorientation<a name="7"> </a></h2>
+         <p>Let us inspect the <a href="grain_misorientation.html">misorientation</a> from the assigned <a href="EBSD_mean.html">mean orientation</a> of each grain to its corresponding ebsd data
+         </p><pre class="codeinput">ebsd_mis_m = misorientation(grains,ebsd)
+</pre><p>The function returns an new EBSD object holding the misorientation. We can inspect the angular misorientation distribution
+            by the command <a href="EBSD_hist.html">hist</a>.
+         </p><pre class="codeinput">hist(ebsd_mis_m,30)
+</pre><p>Since we know each location, we can plot it spatially, and see where it differs</p><pre class="codeinput">close <span class="string">all</span>;
+plotspatial(ebsd_mis_m,<span class="string">'r'</span>,vector3d(<span class="string">'polar'</span>,pi/6,pi/8))
+hold <span class="string">on</span>, plotboundary(grains)
+</pre><p>Since it is a new ebsd object holding the calculations, we can calulate an orientation density function out using the <a href="EBSD_calcODF.html">calcODF</a> command, hence we can name it as misorientation density function.
+         </p><pre class="codeinput">odf_mis_m = calcODF(ebsd_mis_m,<span class="string">'halfwidth'</span>,5*degree,<span class="string">'phase'</span>,1);
+</pre><p>thereinafter the retrieve misorientation data set could be used to estimate a misorientation density function for each grain.</p><pre class="codeinput">k = kernel(<span class="string">'de la Vallee Poussin'</span>,<span class="string">'halfwidth'</span>,2*degree);
+
+grains = calcODF(grains,ebsd_mis_m,<span class="string">'kernel'</span>,k,<span class="string">'exact'</span>,<span class="keyword">...</span>
+           <span class="string">'property'</span>,<span class="string">'ODF_mis_mean'</span>)
+</pre><p>the calculated ODFs are stored as a property in each grain, here as field 'ODF_mis_mean', so it can be accessed and manipulated
+            by the function <a href="grain_grainfun.html">grainfun</a></p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Boundary Misorientation<a name="13"> </a></h2>
+         <p>Futhermore we can use the orientation of each grain to calculate the orientation needed to be its neighbour grain, since we
+            have crystal symmetrie this is currently only done for neighbourd grains of the same phase
+         </p><pre class="codeinput">ebsd_mis_n = misorientation(grains)
+</pre><p>and again take a look on the angular misorientation histogram</p><pre class="codeinput">close <span class="string">all</span>;
+hist(ebsd_mis_n(1),63)
+</pre><p>Now let us plot those two kinds of misorientation together, the misorientation to mean and the misorientation to neighbours.
+            As one can see, the frequency decrease in the near of the choosen threshold
+         </p><pre class="codeinput">hist([ebsd_mis_n,ebsd_mis_m])
+legend(<span class="string">'phase(1) to neighbour'</span>,<span class="string">'phase(2) to neighbour'</span>,<span class="string">'phase(1) to mean'</span>,<span class="string">'phase(2) to mean'</span>)
+line([12.5 12.5],[0 1],<span class="string">'color'</span>,<span class="string">'k'</span>,<span class="string">'linestyle'</span>,<span class="string">'--'</span>)
+text(13.5,0.9,<span class="string">'threshold'</span>,<span class="string">'rotation'</span>,-90)
+</pre><p>the <a href="influence_demo.html">influence</a> may be a criteria for the selection of the misorientation threshold when <a href="EBSD_segment2d.html">segmenting</a>.
+         </p>
+         <p>The misorientation between neighboured grains could be visualised with the <a href="SpatialPlots.html#12">plotboundary</a> command
+         </p><pre class="codeinput">close <span class="string">all</span>;
+plotboundary(grains,<span class="string">'property'</span>,<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>)
+</pre><p>As spoken to above we have calculated a new ebsd object holding the misorientation to neighbours, we can use it to calcutate
+            a boundary misorientation density function
+         </p><pre class="codeinput">odf_mis_n = calcODF(ebsd_mis_n,<span class="string">'phase'</span>,2,<span class="string">'exact'</span>)
+
+plotipdf(odf_mis_n,vector3d(0,0,1))
+</pre><p>the mode may be in terms of <a href="CSL.html">CSL</a> (coincidence site lattice) a <img vspace="5" hspace="5" src="MisorientationAnalysis_eq76642.png">  boundary
+         </p><pre class="codeinput">annotate( CSL(3) )
+</pre><p>and it is possible to select pairs of grains with such a common boundary</p><pre class="codeinput">close <span class="string">all</span>;
+grain_selection = find(grains,CSL(3),2*degree,<span class="string">'misorientation'</span>)
+plotboundary(grain_selection,<span class="string">'property'</span>,CSL(3))
+</pre><p>and so we can take a look on (a not after volume portion weighted) the ODF of these neighboured grains</p><pre class="codeinput">odf_selection = calcODF(grain_selection,<span class="string">'phase'</span>,1,<span class="string">'silent'</span>);
+plotpdf(odf_selection,[Miller(1,0,0) Miller(1,1,0) Miller(1,1,1)],<span class="string">'antipodal'</span>,<span class="keyword">...</span>
+  <span class="string">'position'</span>,[100 100 600 300])
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

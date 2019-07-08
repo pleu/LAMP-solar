@@ -1,0 +1,16 @@
+addplane; 
+set("source shape", 'Plane wave');
+set("amplitude", 1);
+set("phase", 0);
+set("injection axis", 'z-axis');
+set("angle theta", 0);
+set("angle phi", 0);
+set("polarization angle", 0);
+set("x", 0);
+set("x span", 6.1091e-06);
+set("y", 0);
+set("y span", 6.1091e-06);
+set("z", 0);
+set("wavelength start", -3.0545e-06);
+set("wavelength stop", 3.0545e-06);
+set("beam profile", 'E field intensity');

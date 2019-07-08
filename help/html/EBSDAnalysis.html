@@ -1,0 +1,372 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>EBSD Data Analysis</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div>
+         <table class="nav" summary="Navigation aid" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline"><b>LAMP-solar</b> - A MATLAB Toolbox for Solar Cell Analysis
+               </td>
+            </tr>
+         </table>
+         <p style="font-size:1px;"></p>
+      </div>
+      <div class="content">
+         <h1>EBSD Data Analysis</h1>
+         <introduction>
+            <p>Data Import of Electron Backscatter Diffraction Data, Correct Data, Estimeate Orientation Density Functions out of EBSD Data,
+               Model Grains and Misorientation Density Functions
+            </p>
+            <p>
+               <table class="ref" width="90%">
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('ImportEBSDData_block','ImportEBSDData_expandable_text');">
+               <img id="ImportEBSDData_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('ImportEBSDData_block','ImportEBSDData_expandable_text');" onDblClick="document.location.href=&#34;ImportEBSDData.html&#34;">Import
+               EBSD Data</a>
+               </td>
+               <td valign="top">How to import EBSD Data</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="ImportEBSDData_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#3" style="font-weight:normal">Importing EBSD data using the import wizard</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#5" style="font-weight:normal">Features of the import wizard</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#6" style="font-weight:normal">Supported Interfaces</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#7" style="font-weight:normal">The generic cnterface</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#8" style="font-weight:normal">The Import Script</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#9" style="font-weight:normal">Writing your own interface</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('ModifyEBSDData_block','ModifyEBSDData_expandable_text');">
+               <img id="ModifyEBSDData_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('ModifyEBSDData_block','ModifyEBSDData_expandable_text');" onDblClick="document.location.href=&#34;ModifyEBSDData.html&#34;">Modify
+               EBSD Data</a>
+               </td>
+               <td valign="top">How to use MTEX to correct EBSD data for measurement errors.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="ModifyEBSDData_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="ModifyEBSDData.html#4" style="font-weight:normal">Realign / Rotate the data</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ModifyEBSDData.html#7" style="font-weight:normal">Restricting to a region of interest</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ModifyEBSDData.html#9" style="font-weight:normal">Remove Inaccurate Orientation Measurements</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('EBSD2odf_block','EBSD2odf_expandable_text');">
+               <img id="EBSD2odf_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('EBSD2odf_block','EBSD2odf_expandable_text');" onDblClick="document.location.href=&#34;EBSD2odf.html&#34;">ODF
+               Estimation from EBSD data</a>
+               </td>
+               <td valign="top">How to estimate an ODF from single orientation measurements.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="EBSD2odf_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="EBSD2odf.html#3" style="font-weight:normal">ODF Estimation</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="EBSD2odf.html#4" style="font-weight:normal">Automatic halfwidth selection</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="EBSD2odf.html#7" style="font-weight:normal">Effect of halfwidth selection</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('GrainReconstruction_block','GrainReconstruction_expandable_text');">
+               <img id="GrainReconstruction_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('GrainReconstruction_block','GrainReconstruction_expandable_text');"
+               onDblClick="document.location.href=&#34;GrainReconstruction.html&#34;">Grain Reconstruction</a>
+               </td>
+               <td valign="top">Explanation how to create grains from EBSD data.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="GrainReconstruction_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="GrainReconstruction.html#5" style="font-weight:normal">Grain Reconstruction</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="GrainReconstruction.html#9" style="font-weight:normal">Grain properties</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="GrainReconstruction.html#11" style="font-weight:normal">Connection between EBSD Data and a Grains</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('GrainStatistics_block','GrainStatistics_expandable_text');">
+               <img id="GrainStatistics_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('GrainStatistics_block','GrainStatistics_expandable_text');" onDblClick="document.location.href=&#34;GrainStatistics.html&#34;">Grain
+               Statistics</a>
+               </td>
+               <td valign="top">Access properties of grains to perfom statistics.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="GrainStatistics_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="GrainStatistics.html#5" style="font-weight:normal">Grain-size Analysis</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="GrainStatistics.html#9" style="font-weight:normal">Spatial Dependencies</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('MisorientationAnalysis_block','MisorientationAnalysis_expandable_text');">
+               <img id="MisorientationAnalysis_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('MisorientationAnalysis_block','MisorientationAnalysis_expandable_text');"
+               onDblClick="document.location.href=&#34;MisorientationAnalysis.html&#34;">Misorientation Analysis</a>
+               </td>
+               <td valign="top">Analyse interior misorientation and misorientation between neighboured grains.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="MisorientationAnalysis_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="MisorientationAnalysis.html#7" style="font-weight:normal">Intergranular Misorientation</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="MisorientationAnalysis.html#13" style="font-weight:normal">Boundary Misorientation</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('OrientationPlots_block','OrientationPlots_expandable_text');">
+               <img id="OrientationPlots_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('OrientationPlots_block','OrientationPlots_expandable_text');"
+               onDblClick="document.location.href=&#34;OrientationPlots.html&#34;">Plotting Individual Orientations</a>
+               </td>
+               <td valign="top">Basics to the plot types for individual orientations data</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="OrientationPlots_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="OrientationPlots.html#6" style="font-weight:normal">Scatter Pole Figure Plot</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="OrientationPlots.html#7" style="font-weight:normal">Scatter (Inverse) Pole Figure Plot</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="OrientationPlots.html#8" style="font-weight:normal">Scatter Plot in ODF Sections</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="OrientationPlots.html#9" style="font-weight:normal">Scatter Plot in Axis Angle or Rodrigues Space</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="OrientationPlots.html#10" style="font-weight:normal">Orientation plots for EBSD and grains</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('SpatialPlots_block','SpatialPlots_expandable_text');">
+               <img id="SpatialPlots_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('SpatialPlots_block','SpatialPlots_expandable_text');" onDblClick="document.location.href=&#34;SpatialPlots.html&#34;">Plotting
+               Spatial Orientation Data</a>
+               </td>
+               <td valign="top">Howto plot spatially indexed orientations</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="SpatialPlots_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="SpatialPlots.html#6" style="font-weight:normal">Coloring spatially orientation data</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="SpatialPlots.html#12" style="font-weight:normal">Visualising Grain Boundaries</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="SpatialPlots.html#17" style="font-weight:normal">Coloring other properties</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               </table>
+               
+            </p>
+         </introduction>
+         <p>EBSD Data is stored in the class <a href="EBSD_index.html">EBSD</a> and in the latter the class <a href="grain_index.html">grain</a> holds modelled grains. The following mindmap may induce an general idea analysing EBSD Data with MTEX.
+         </p>
+         <p><img vspace="5" hspace="5" src="grain.png"> </p>
+         <p><b><a href="GrainModelling.html">Grains</a></b>  are a basic concept for spatially indexed EBSD Data. With grain modelling comes up the possebility getting more information
+            out of EBSD Data - e.g. fabric analysis, characterisation of misorientation
+         </p>
+         <p><b><a href="EBSDPlot.html">Visualizing EBSD Data</a></b> is a central to understand a specimen. The most naive way is plotting of the individual orientations as pole point plots
+            or spatially indexed in some map with colorcoded orientations. Moreover one gets with grains the possibility to take a closer
+            look on grain boundaries.
+         </p>
+         <p><b><a href="EBSD2odf.html">Estimating ODFs from EBSD Data</a></b> is as well of interest, furthermore selecting the optimal halfwidth is a difficult question, in particular in matters of
+            grains.
+         </p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

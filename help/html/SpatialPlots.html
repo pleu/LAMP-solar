@@ -1,0 +1,109 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Plotting Spatial Orientation Data</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit SpatialPlots" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Plotting Spatial Orientation Data</h1>
+         <introduction>
+            <p>Howto plot spatially indexed orientations</p>
+         </introduction>
+         <p>This sections gives you an overview over the functionality MTEX offers to visualize spatial orientation data.</p>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Coloring spatially orientation data</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#12">Visualising Grain Boundaries</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#17">Coloring other properties</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>Let us first import some EBSD data with a <a href="matlab:edit loadaachen.m"> script file</a></p><pre class="codeinput">loadaachen;
+</pre><pre class="codeoutput">Undefined function or variable 'loadaachen'.
+
+Error in ==&gt; SpatialPlots at 16
+loadaachen;
+</pre><p>and model some grains</p><pre class="codeinput">[grains, ebsd] = segment2d(ebsd);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Coloring spatially orientation data<a name="6"> </a></h2>
+         <p>If the EBSD data are provided with spatial coordinates, one can assign a color to each orientation and <a href="EBSD_plotspatial.html">plots</a>
+            a map of these colors.
+         </p><pre class="codeinput">plot(ebsd,<span class="string">'phase'</span>,1)
+</pre><p>The orientations are mapped to a color, by a <a href="ColorCodingEBSD_demo.html">colorcoding</a>, as a standard way according to its
+            inverse polefigure
+         </p><pre class="codeinput">colorbar
+set(gcf,<span class="string">'Position'</span>,[100 100 400 200])
+</pre><p>the <a href="orientation2color.html"> colorcoding</a> could be choose by specifing it as an option</p><pre class="codeinput">close <span class="string">all</span>;
+plot(ebsd,<span class="string">'phase'</span>,1,<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>)
+</pre><pre class="codeinput">colorbar
+set(gcf,<span class="string">'Position'</span>,[100 100 230 200])
+</pre><p>and of course there an equivallent command for <a href="grain_plotgrains.html">plotting grains</a></p><pre class="codeinput">close <span class="string">all</span>;
+plot(grains,<span class="string">'phase'</span>,1,<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>)
+</pre><p>In order to understand the colorcoding better one can plot the coloring of the corresponding inverse pole figure and the orientations
+            together
+         </p><pre class="codeinput">colorbar
+hold <span class="string">on</span>
+plotipdf(grains,xvector,<span class="string">'phase'</span>,1,<span class="string">'points'</span>,500,<span class="keyword">...</span>
+  <span class="string">'markerSize'</span>,3,<span class="string">'marker'</span>,<span class="string">'+'</span>,<span class="string">'markerfacecolor'</span>,<span class="string">'k'</span>,<span class="string">'markeredgecolor'</span>,<span class="string">'w'</span>)
+hold <span class="string">off</span>
+set(gcf,<span class="string">'renderer'</span>,<span class="string">'opengl'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Visualising Grain Boundaries<a name="12"> </a></h2>
+         <p>Plotting grain boundaries may be a usefull task, e.g. marking special grain boundaries, generally this is done by the <a href="grain_plotboundary.html">plotboundary</a>
+            command.
+         </p><pre class="codeinput">close <span class="string">all</span>
+plotboundary(grains)
+</pre><p>The <b>hold on</b> and  <b>hold off</b> command allows us to plot various information together, e.g. we want to see where are all one pixel grains
+         </p><pre class="codeinput">grains_selection = grains( grainsize(grains) == 1) ;
+hold <span class="string">on</span>
+plotboundary(grains_selection,<span class="string">'color'</span>,<span class="string">'r'</span>,<span class="string">'linewidth'</span>,2)
+</pre><p>by specifing a <b>property</b> we can mark special boundaries, e.g phase boundaries
+         </p><pre class="codeinput">close <span class="string">all</span>
+plotboundary(grains,<span class="string">'property'</span>,<span class="string">'phase'</span>)
+colormap(hsv)
+</pre><p>or visualise the misorientation between neighboured grains of the same phase</p><pre class="codeinput">plotboundary(grains,<span class="string">'property'</span>,<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>)
+</pre><p>or mark really special misorientations between neighbours</p><pre class="codeinput">rot = rotation(<span class="string">'axis'</span>,vector3d(1,1,1),<span class="string">'angle'</span>,60*degree);
+plotboundary(grains,<span class="string">'property'</span>,rot)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Coloring other properties<a name="17"> </a></h2>
+         <p>Often the individual orientation measurements come along with some other properties, maybe something called background contrast,
+            stored in our EBSD as <b>property</b> bc, we can plot it easily by specifing it as a plotting option
+         </p><pre class="codeinput">close <span class="string">all</span>
+plot(ebsd,<span class="string">'property'</span>,<span class="string">'bc'</span>)
+</pre><p>also modelled grains could be colored according to a property, by <a href="grain_copyproperty.html">copying</a> it form the corresponding
+            EBSD object.
+         </p><pre class="codeinput">grains = copyproperty(grains,ebsd)
+plot(grains,<span class="string">'property'</span>,<span class="string">'bc'</span>)
+</pre><p>futhermore as property a data vector can be given</p><pre class="codeinput">plot(grains,<span class="string">'property'</span>,shapefactor(grains))
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

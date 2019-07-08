@@ -1,0 +1,115 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Crystal Directions</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit CrystalDirections" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Crystal Directions</h1>
+         <introduction>
+            <p>Explains how to define crystal directions by Miller indices and how to compute crystallographic equivalent directions.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Definition</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">Plotting Miller indece</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#10">Symmetrically Equivalent Crystal Directions</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#14">Angles</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#16">Conversations</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#18">Calculations</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>Crystal directions are represented in MTEX by variables of type <a href="Miller_index.html">Miller</a> which represent a direction with respect to the crystal coordinate system a, b, c. Alternatively, a crystal direction may
+            also be defined in reciprocel space, i.e. with respect to the axes a*, b*, c*. Essentially all operations defined for general
+            directions, i.e. for variables of type <a href="vector3d_index.html">vector3d</a> are also available for Miller indece.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Definition<a name="4"> </a></h2>
+         <p>Since crystal directions are alway subject to a certain crystal reference frame, the starting for any crystal direction is
+            the definition of a variable of type <a href="symmetry_index.html">symmetry</a>
+         </p><pre class="codeinput">cs = symmetry(<span class="string">'triclinic'</span>,[5.29,9.18,9.42],[90.4,98.9,90.1]*degree,<span class="keyword">...</span>
+  <span class="string">'X||a*'</span>,<span class="string">'Z||c'</span>,<span class="string">'mineral'</span>,<span class="string">'Talc'</span>);
+</pre><pre class="codeoutput">Undefined function or variable 'degree'.
+
+Error in ==&gt; CrystalDirections at 24
+cs = symmetry('triclinic',[5.29,9.18,9.42],[90.4,98.9,90.1]*degree,...
+</pre><p>Now a crystal direction can be defined either by its coordinates u, v, w with respect to the crystal coordinate system a,
+            b, c,
+         </p><pre class="codeinput">m = Miller(1,0,1,cs,<span class="string">'uvw'</span>)
+</pre><p>or in reciprocle space, by its coordinates h, k, l with respect to axis a*, b*, c*</p><pre class="codeinput">m = Miller(1,0,1,cs,<span class="string">'hkl'</span>)
+</pre><p>In the case of trigonal and hexagonal crystal symmetry, the convention of using four Miller indices h, k, i, l, is also supported</p><pre class="codeinput">cs = symmetry(<span class="string">'quartz.cif'</span>)
+m = Miller(2,1,-3,1,cs,<span class="string">'hkl'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Plotting Miller indece<a name="8"> </a></h2>
+         <p>Miller indece are plotted as spherical projections. The specific projection as well as wheter to plot all equivalent directions
+            can be specified by options.
+         </p><pre class="codeinput">plot(m,<span class="string">'Grid'</span>)   <span class="comment">% plot Miller indece</span>
+</pre><p>By providing the options <b>all</b> and <b>labeled</b> all symmetrically equivalent crystal directions are plotted together with there correct Miller indice.
+         </p><pre class="codeinput">plot(m,cs,<span class="string">'all'</span>,<span class="string">'labeled'</span>,<span class="string">'grid'</span>)   <span class="comment">% plot Miller indece</span>
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Symmetrically Equivalent Crystal Directions<a name="10"> </a></h2>
+         <p>A simple way to compute all symmetrically equivalent directions to a given crystal direction is provided by the command <a href="Miller_symmetrise.html">symmetrise</a></p><pre class="codeinput">symmetrise(m)
+</pre><p>As allways the keyword <a href="AxialDirectional.html">antipodal</a> adds antipodal symmetry to this computation
+         </p><pre class="codeinput">symmetrise(m,<span class="string">'antipodal'</span>)
+</pre><p>The command <a href="vector3d_eq.html">eq or ==</a> can be used to check whether two crystal directions are symmetrically equivalent. Compare
+         </p><pre class="codeinput">Miller(1,1,-2,0,cs) == Miller(-1,-1,2,0,cs)
+</pre><p>and</p><pre class="codeinput">eq(Miller(1,1,-2,0,cs),Miller(-1,-1,2,0,cs),<span class="string">'antipodal'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Angles<a name="14"> </a></h2>
+         <p>The angle between two crystall directions m1 and m2 is defined as the smallest angle between m1 and all symmetrically equivalent
+            directions to m2. This angle in radiand is calculated by the funtion <a href="vector3d_angle.html">angle</a></p><pre class="codeinput">angle(Miller(1,1,-2,0,cs),Miller(-1,-1,2,0,cs)) / degree
+</pre><p>As allways the keyword <a href="AxialDirectional.html">antipodal</a> adds antipodal symmetry to this computation
+         </p><pre class="codeinput">angle(Miller(1,1,-2,0,cs),Miller(-1,-1,2,0,cs),<span class="string">'antipodal'</span>) / degree
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Conversations<a name="16"> </a></h2>
+         <p>Converting a crystal direction which is represented by its coordinates with respect to the crystal coordinate system a, b,
+            c into a representation with respect to the associated Euclidean coordinate system is done by the command <a href="Miller_vector3d.html">vectord3d</a>.
+         </p><pre class="codeinput">vector3d(m)
+</pre><p>Conversion into spherical coordinates requires the function <a href="vector3d_polar.html">polar</a></p><pre class="codeinput">[theta,rho] = polar(m)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Calculations<a name="18"> </a></h2>
+         <p>Given a crystal orientation</p><pre class="codeinput">o = orientation(<span class="string">'Euler'</span>,10*degree,20*degree,30*degree,cs)
+</pre><p>one can apply it to a crystal direction to find its coordinates with respect to the specimen coordinate system</p><pre class="codeinput">o * m
+</pre><p>By applying a <a href="symmetry_index.html">crystal symmetry</a> one obtains the coordinates with respect to the specimen coordinate system of all crystallographically equivalent specimen
+            directions.
+         </p><pre class="codeinput">p = o * symmetrise(m);
+plot(p)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

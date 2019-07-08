@@ -1,0 +1,242 @@
+#
+# setup structure
+#
+selectall;
+deleteall;
+#
+#add structure
+#
+addring;
+set("name", materialName+num2str(1));
+setnamed(materialName+num2str(1),"inner radius",innerRadius);
+setnamed(materialName+num2str(1),"z",0);
+setnamed(materialName+num2str(1),"material",material);
+setnamed(materialName+num2str(1),"first axis","x");
+setnamed(materialName+num2str(1),"rotation 1",90);
+
+addring;
+set("name", materialName+num2str(2));
+setnamed(materialName+num2str(2),"inner radius",innerRadius);
+setnamed(materialName+num2str(2),"z",0);
+setnamed(materialName+num2str(2),"material",material);
+setnamed(materialName+num2str(2),"first axis","x");
+setnamed(materialName+num2str(2),"rotation 1",90);
+
+addring;
+set("name", materialName+num2str(3));
+setnamed(materialName+num2str(3),"inner radius",innerRadius);
+setnamed(materialName+num2str(3),"z",0);
+setnamed(materialName+num2str(3),"material",material);
+setnamed(materialName+num2str(3),"first axis","y");
+setnamed(materialName+num2str(3),"rotation 1",90);
+
+addring;
+set("name", materialName+num2str(4));
+setnamed(materialName+num2str(4),"inner radius",innerRadius);
+setnamed(materialName+num2str(4),"z",0);
+setnamed(materialName+num2str(4),"material",material);
+setnamed(materialName+num2str(4),"first axis","y");
+setnamed(materialName+num2str(4),"rotation 1",90);
+
+addmesh;
+set("name","mesh1");
+addmesh;
+set("name","mesh2");
+addmesh;
+set("name","mesh3");
+addmesh;
+set("name","mesh4");
+
+#
+#add FDTD
+#
+addfdtd;
+setnamed("FDTD","x",0);
+#
+#add reflection monitor
+#
+addpower;
+set("name","reflection");
+setnamed("reflection","x",0);
+#
+#add transmission monitor
+#
+addpower;
+set("name","transmission");
+setnamed("transmission","x",0);
+#
+#add source
+#
+addplane;
+setnamed("source","x",0);
+setnamed("source","wavelength start",wavelengthStart);
+setnamed("source","wavelength stop",wavelengthStop);
+#
+numPitches = 1 + (maxPitch - minPitch) / incrementPitch;
+pitchArray = linspace(minPitch,maxPitch,numPitches);
+#
+#changing parameters and running simulations
+#
+for(i=1:numPitches){
+  numSimulations = 1 + (2 * maxOuterRadius - 2 * minOuterRadius) / (2 * incrementRadius);
+  outerRadiusArray = linspace(minOuterRadius,maxOuterRadius,numSimulations);
+    for(j=1:numSimulations){
+    switchtolayout;
+    structures;
+
+    FDTDxSpan = pitchArray(i);
+    FDTDySpan = pitchArray(i);
+    FDTDzSpan = 2*outerRadiusArray(j)+FDTDyOffset;
+
+    setnamed(materialName+num2str(1),"outer radius",outerRadiusArray(j));
+    setnamed(materialName+num2str(1),"z span",pitchArray(i));
+    setnamed(materialName+num2str(1),"x",-pitchArray(i)/2);
+    
+    setnamed(materialName+num2str(2),"outer radius",outerRadiusArray(j));
+    setnamed(materialName+num2str(2),"z span",pitchArray(i));
+    setnamed(materialName+num2str(2),"x",pitchArray(i)/2);
+
+    setnamed(materialName+num2str(3),"outer radius",outerRadiusArray(j));
+    setnamed(materialName+num2str(3),"z span",pitchArray(i));
+    setnamed(materialName+num2str(3),"y",pitchArray(i)/2);
+
+    setnamed(materialName+num2str(4),"outer radius",outerRadiusArray(j));
+    setnamed(materialName+num2str(4),"z span",pitchArray(i));
+    setnamed(materialName+num2str(4),"y",-pitchArray(i)/2);
+
+    setnamed("mesh1","x",-pitchArray(i)/2);
+    setnamed("mesh2","x",pitchArray(i)/2);
+    setnamed("mesh3","y",pitchArray(i)/2);
+    setnamed("mesh4","y",-pitchArray(i)/2);
+    setnamed("mesh1","x span",4*outerRadiusArray(j));
+    setnamed("mesh1","y span",pitchArray(i));
+    setnamed("mesh1","z span",4*outerRadiusArray(j));
+
+    setnamed("mesh2","x span",4*outerRadiusArray(j));
+    setnamed("mesh2","y span",pitchArray(i));
+    setnamed("mesh2","z span",4*outerRadiusArray(j));
+
+    setnamed("mesh3","x span",pitchArray(i));
+    setnamed("mesh3","y span",4*outerRadiusArray(j));
+    setnamed("mesh3","z span",4*outerRadiusArray(j));
+
+    setnamed("mesh4","x span",pitchArray(i));
+    setnamed("mesh4","y span",4*outerRadiusArray(j));
+    setnamed("mesh4","z span",4*outerRadiusArray(j));
+
+    setnamed("mesh1","override x mesh",1);
+    setnamed("mesh1","override y mesh",1);
+    setnamed("mesh1","override z mesh",1);
+    setnamed("mesh2","override x mesh",1);
+    setnamed("mesh2","override y mesh",1);
+    setnamed("mesh2","override z mesh",1);
+    setnamed("mesh3","override x mesh",1);
+    setnamed("mesh3","override y mesh",1);
+    setnamed("mesh3","override z mesh",1);
+    setnamed("mesh4","override x mesh",1);
+    setnamed("mesh4","override y mesh",1);
+    setnamed("mesh4","override z mesh",1);
+    setnamed("mesh1","dx",dx);
+    setnamed("mesh1","dy",dy);
+    setnamed("mesh1","dz",dz);
+    setnamed("mesh2","dx",dx);
+    setnamed("mesh2","dy",dy);
+    setnamed("mesh2","dz",dz);
+    setnamed("mesh3","dx",dx);
+    setnamed("mesh3","dy",dy);
+    setnamed("mesh3","dz",dz);
+    setnamed("mesh4","dx",dx);
+    setnamed("mesh4","dy",dy);
+    setnamed("mesh4","dz",dz);
+
+    
+    
+
+    setnamed("FDTD","x",0);
+    setnamed("FDTD","x span",FDTDySpan);
+    setnamed("FDTD","y",0);
+    setnamed("FDTD","y span",FDTDySpan);  
+    setnamed("FDTD","z",0);
+    setnamed("FDTD","z span",FDTDzSpan);
+  
+    setnamed("FDTD","min mesh step",minMeshStep);
+    setnamed("FDTD", "mesh type", meshType);
+    setnamed("FDTD","pml reflection",1e-7);
+    #select mesh type
+    if (meshType == 'uniform') {
+    setnamed("FDTD", "dx", meshSizeX);
+    setnamed("FDTD", "dy", meshSizeY);
+    setnamed("FDTD", "dz", meshSizeZ);
+    }  
+    if (meshType == 'auto non-uniform') {
+    setnamed("FDTD","mesh accuracy",meshAccuracy);
+    }
+    #for normal angle incidence
+    #set the bc of simulation
+    if (angleTheta == 0 & anglePhi == 0 & polarizationAngle == 0){
+    setnamed("FDTD","allow symmetry on all boundaries", 1);
+    setnamed("FDTD","x min bc","Symmetric");
+    setnamed("FDTD","x max bc","Symmetric");
+    setnamed("FDTD","y min bc","Anti-Symmetric");
+    setnamed("FDTD","y max bc","Anti-Symmetric");
+    } 
+    else {
+    setnamed("FDTD","x min bc","Periodic");
+    setnamed("FDTD","x max bc","Periodic");
+    }
+    setnamed("FDTD","z min bc","PML");
+    setnamed("FDTD","z max bc","PML");
+    #
+    #setup source
+    # source placed at bottom,
+    # so source and reflection monitor do not have to change every time
+    sourceXspan = pitchArray(i);
+    sourceYspan = pitchArray(i);
+    setnamed("source","x span",sourceXspan);
+    setnamed("source","y span",sourceYspan);
+    setnamed("source","z",-outerRadiusArray(j)-sourceOffset);
+    setnamed("source","polarization angle",90);
+    #
+    #setup monitors  
+    #
+    #setup reflection monitors
+    #
+    setnamed("reflection","z",-outerRadiusArray(j)-reflectionMonitorOffset);   
+    setnamed("reflection","x span",FDTDxSpan);
+    setnamed("reflection","y span",FDTDySpan);
+ #
+    #setup transmission monitors
+    #
+    setnamed("transmission","z",outerRadiusArray(j)+transmissionMonitorOffset);
+    setnamed("transmission","x span",FDTDxSpan);
+    setnamed("transmission","y span",FDTDySpan);
+    #set the frequency points
+    setglobalmonitor("frequency points",numFrequencyPoints);
+    #save the files
+    filename = filenamePrefix + variableStringArray + num2str(2 * outerRadiusArray(j) * 1e9) + variableUnitsArray + pitchStringArray + num2str(pitchArray(i)*1e9) + variableUnitsArray + filenameSuffix;
+    save(filename);
+    #switch to simulation tab
+    simulation;
+    #run simulation
+    run;
+    #get data; use minimal formatting of data
+    frequencyTransmission = getdata("transmission","f");
+    transmissionData = transmission("transmission");
+    dataTransmission = [transpose(frequencyTransmission); transpose(transmissionData)];
+    # rm(filename+"Transmission.txt");
+    if (fileexists(filename+"Transmission.txt")) {
+    rm(filename+"Transmission.txt");
+    }
+    write(filename+"Transmission.txt",num2str(dataTransmission));
+    # transmissionFile = filename+"Transmission";
+    # matlabsave(transmissionFile, frequencyTransmission, transmissionData); 
+    frequencyReflection = getdata("reflection", "f");
+    reflectionData = -transmission("reflection");
+    dataReflection = [transpose(frequencyReflection); transpose(reflectionData)];
+    # rm(filename+"Reflection.txt");
+    if (fileexists(filename+"Reflection.txt")) {
+    rm(filename+"Reflection.txt");
+    }
+    write(filename+"Reflection.txt",num2str(dataReflection));
+  }
+}

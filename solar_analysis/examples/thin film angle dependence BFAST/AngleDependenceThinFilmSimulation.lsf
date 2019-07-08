@@ -1,0 +1,169 @@
+newproject;
+#
+# setup structure
+#
+addrect;
+set("name", materialName);
+setnamed(materialName,"x span",filmXSpan);
+setnamed(materialName,"y span",filmYSpan);
+setnamed(materialName,"x",0);
+setnamed(materialName,"y",0);
+setnamed(materialName,"z min",0); 
+setnamed(materialName,"z max",filmThickness);
+setnamed(materialName,"material",material);
+setnamed(materialName,"z span",filmThickness);
+
+#
+#setup simulation
+#
+addfdtd;
+#set the geometry of simulation region
+setnamed("FDTD","x",0);
+setnamed("FDTD","x span",FDTDxSpan);
+setnamed("FDTD","y",0);
+setnamed("FDTD","y span",FDTDySpan);
+#set the simulation time
+setnamed("FDTD","simulation time",simulationTime);
+setnamed("FDTD","z min",-sourceOffset-reflectionMonitorOffset-FDTDzSpace);
+setnamed("FDTD", "z max", filmThickness + transmissionMonitorOffset + FDTDzSpace);
+
+
+
+# "z span" is set to be 
+setnamed("FDTD", "mesh type", meshType);
+if (meshType == 'uniform') {
+  setnamed("FDTD", "dx", meshSize);
+  setnamed("FDTD", "dy", meshSize);
+  setnamed("FDTD", "dz", meshSize);
+}
+if (meshType == 'auto non-uniform') {
+  setnamed("FDTD","mesh accuracy",meshAccuracy);
+}
+setnamed("FDTD","mesh refinement",meshRefinement);
+#for normal angle incidence
+#set the bc of simulation
+#if (angleTheta == 0 & anglePhi == 0 & polarizationAngle == 0){
+
+#  setnamed("FDTD","x min bc","Anti-Symmetric");
+#  setnamed("FDTD","x max bc","Anti-Symmetric");
+#  setnamed("FDTD","y min bc","Symmetric");
+#  setnamed("FDTD","y max bc","Symmetric");
+#} else {
+setnamed("FDTD","allow symmetry on all boundaries", 1);
+#}
+setnamed("FDTD","z min bc","PML");
+setnamed("FDTD","z max bc","PML");
+setnamed("FDTD","pml min layers",minPmlLayers);
+setnamed("FDTD","pml max layers",maxPmlLayers);
+#setnamed("FDTD","pml reflection",pmlReflection);
+
+
+
+#
+#setup source
+# source placed at bottom,
+# so source and reflection monitor do not have to change every time
+addplane;
+setnamed("source","x",0);
+setnamed("source","x span",filmXSpan);
+setnamed("source","y",0);
+setnamed("source","y span",filmYSpan);
+setnamed("source","z", -sourceOffset);
+setnamed("source","wavelength start",wavelengthStart);
+setnamed("source","wavelength stop",wavelengthStop);
+setnamed("source","injection axis",injectionAxis);
+setnamed("source","direction",injectionDirection);
+# setnamed("source1","angle theta",angleTheta);
+setnamed("source","angle phi",anglePhi);
+setnamed("source","polarization angle",polarizationAngle);
+setnamed("source","plane wave type","BFAST");
+
+
+#
+#setup monitors
+#
+addpower;
+set("name","reflection");
+setnamed("reflection","x",0);
+setnamed("reflection","x span",filmXSpan);
+setnamed("reflection","y",0);
+setnamed("reflection","y span",filmYSpan);
+setnamed("reflection","z", -sourceOffset-reflectionMonitorOffset);
+
+addpower;
+set("name","transmission");
+setnamed("transmission","x",0);
+setnamed("transmission","x span",filmXSpan);
+setnamed("transmission","y",0);
+setnamed("transmission","y span",filmYSpan);
+setnamed("transmission","z",filmThickness + transmissionMonitorOffset);
+
+#
+# setup angle 
+# 
+
+wavelengthDisplayStart = wavelengthStart;
+
+frequencyStart = c/wavelengthStop;
+frequencyDisplayStop = c/wavelengthDisplayStart;
+
+frequencyStep = (frequencyDisplayStop-frequencyStart)/(numFrequencyPoints-1);
+
+setnamed("source","frequency start",frequencyStart);
+wavelengthStart=1/(2/wavelengthDisplayStart - 1/wavelengthStop);
+
+
+for (i=1:numTheta) {
+  switchtolayout;
+  angleTheta = thetaArray(i);
+  # TM 
+  if (polarizationAngle == 0) { 
+    setnamed("FDTD","x min bc","Anti-symmetric");
+    setnamed("FDTD","x max bc","Anti-symmetric");
+    setnamed("FDTD","y min bc","Symmetric");
+    setnamed("FDTD","y max bc","Symmetric");
+  }
+  # TE; BC will be overriden by BFAST when angleTheta
+  # ~=0 
+  if (polarizationAngle == 90) { 
+    setnamed("FDTD","x min bc","Symmetric");
+    setnamed("FDTD","x max bc","Symmetric");
+    setnamed("FDTD","y min bc","Anti-symmetric");
+    setnamed("FDTD","y max bc","Anti-symmetric");
+  }
+   
+
+  #save the project
+  filename = filenamePrefix + variableStringArray + num2str(thetaArray(i)) + variableUnitsArray + filenameSuffix;
+  save(filename);
+
+  #change the source angle
+  setnamed("source","angle theta",angleTheta);
+  if (thetaArray(i) >= steepAngle) {
+    setnamed("FDTD","pml profile",3);
+  }
+  #set the frequency points
+  monitors;
+
+  #run simulation
+  ?thetaArray(i);
+  run;
+
+  #get data; use minimal formatting of data
+  frequencyTransmission = getdata("transmission","f");
+  transmissionData = transmission("transmission");
+  dataTransmission = [transpose(frequencyTransmission); transpose(transmissionData)];
+  if (fileexists(filename+"Transmission.txt")) {
+    rm(filename+"Transmission.txt");
+  }
+  write(filename+"Transmission.txt",num2str(dataTransmission));
+  
+  frequencyReflection = getdata("reflection", "f");
+  reflectionData = -transmission("reflection");
+  dataReflection = [transpose(frequencyReflection); transpose(reflectionData)];
+  if (fileexists(filename+"Reflection.txt")) {
+    rm(filename+"Reflection.txt");
+  }
+  write(filename+"Reflection.txt",num2str(dataReflection));
+}
+

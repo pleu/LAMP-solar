@@ -1,0 +1,107 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>EBSD Color Coding</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit ColorCodingEBSD_demo" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>EBSD Color Coding</h1>
+         <introduction>
+            <p>Explains how to control EBSD color coding.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">IPDF Colorcoding</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#11">IPDF Overview</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#22">Other Colorcodes</a></td>
+               </tr>
+            </table>
+         </div>
+         <h3 class="seealso">See also</h3>
+         <p><a href="EBSD_plotspatial.html">EBSD/plotspatial</a>,
+            
+            <a href="grain_plotgrains.html">grain/plotgrains</a>,
+            
+            <a href="ebsdColorbar.html">ebsdColorbar</a>,
+            
+            <a href="orientation2color.html">orientation2color</a></p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>IPDF Colorcoding<a name="4"> </a></h2>
+         <p><b>IPDF</b>. the standard way of plotting EBSD data spatial is based on an inverse polfigure, looking onto the specime we see crystal
+            directions
+         </p><pre class="codeinput">plotspatial(ebsd,<span class="string">'phase'</span>,1)
+</pre><pre class="codeinput">pos = {<span class="string">'position'</span>,[100 100 400 250]};
+colorbar(pos{:})
+</pre><p><b>HKL</b>. Another inverse Polefigure colorcoding
+         </p><pre class="codeinput">close <span class="string">all</span>; plotspatial(ebsd,<span class="string">'phase'</span>,1,<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>)
+</pre><pre class="codeinput">colorbar(pos{:})
+
+odf = calcODF(ebsd,<span class="string">'phase'</span>,1,<span class="string">'silent'</span>);
+figure, plotipdf(odf,xvector,<span class="string">'antipodal'</span>,<span class="string">'silent'</span>,pos{:})
+</pre><p>We can change the default view onto the specime (xvector) by setting the option <b>r</b></p><pre class="codeinput">close <span class="string">all</span>, plotspatial(ebsd,<span class="string">'phase'</span>,1,<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'r'</span>,zvector)
+</pre><pre class="codeinput">colorbar(pos{:})
+figure, plotipdf(odf,zvector,<span class="string">'antipodal'</span>,<span class="string">'silent'</span>,pos{:})
+</pre><pre class="codeinput">close <span class="string">all</span>
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>IPDF Overview<a name="11"> </a></h2>
+         <p>standard colorcoding and the so called (antipodal) oxford colorcoding</p>
+         <p><b>triclinic symmetry</b></p><pre class="codeinput">ebsdColorbar(symmetry(<span class="string">'-1'</span>),pos{:})
+ebsdColorbar(symmetry(<span class="string">'-1'</span>),<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'position'</span>,[100 100 400 210])
+</pre><p><b>monoclinic symmetry</b></p><pre class="codeinput">ebsdColorbar(symmetry(<span class="string">'2/m'</span>),pos{:})
+ebsdColorbar(symmetry(<span class="string">'2/m'</span>),<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'position'</span>,[100 100 250 250])
+</pre><p><b>orthorhombic symmetry</b></p><pre class="codeinput">ebsdColorbar(symmetry(<span class="string">'mmm'</span>),pos{:})
+ebsdColorbar(symmetry(<span class="string">'mmm'</span>),<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'position'</span>,[100 100 211 211])
+</pre><p><b>tetragonal symmetry</b></p><pre class="codeinput">ebsdColorbar(symmetry(<span class="string">'4/m'</span>),pos{:})
+ebsdColorbar(symmetry(<span class="string">'4/m'</span>),<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'position'</span>,[100 100 211 211])
+</pre><p><b>trigonal symmetry</b></p><pre class="codeinput">ebsdColorbar(symmetry(<span class="string">'-3'</span>),pos{:})
+ebsdColorbar(symmetry(<span class="string">'-3'</span>),<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'position'</span>,[100 100 300 148])
+</pre><pre class="codeinput">ebsdColorbar(symmetry(<span class="string">'-3m'</span>),pos{:})
+ebsdColorbar(symmetry(<span class="string">'-3m'</span>),<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'position'</span>,[100 100 250 250])
+</pre><pre class="codeinput">ebsdColorbar(symmetry(<span class="string">'4/mmm'</span>),pos{:})
+ebsdColorbar(symmetry(<span class="string">'4/mmm'</span>),<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'position'</span>,[100 100 250 250])
+</pre><p><b>hexagonal symmetry</b></p><pre class="codeinput">ebsdColorbar(symmetry(<span class="string">'6/m'</span>),pos{:})
+ebsdColorbar(symmetry(<span class="string">'6/m'</span>),<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'position'</span>,[100 100 211 211])
+</pre><pre class="codeinput">ebsdColorbar(symmetry(<span class="string">'6/mmm'</span>),pos{:})
+ebsdColorbar(symmetry(<span class="string">'6/mmm'</span>),<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'position'</span>,[100 100 285 250])
+</pre><p><b>cubic symmetry</b></p><pre class="codeinput">ebsdColorbar(symmetry(<span class="string">'m-3m'</span>),pos{:})
+ebsdColorbar(symmetry(<span class="string">'m-3m'</span>),<span class="string">'colorcoding'</span>,<span class="string">'hkl'</span>,<span class="string">'position'</span>,[100 100 285 197])
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Other Colorcodes<a name="22"> </a></h2>
+         <p>there are many other ways to  <a href="orientation2color.html"> colorize</a> orientations</p><pre class="codeinput">figure
+plotspatial(ebsd,<span class="string">'colorcoding'</span>,<span class="string">'bunge'</span>)
+plotspatial(ebsd,<span class="string">'colorcoding'</span>,<span class="string">'bunge2'</span>)
+plotspatial(ebsd,<span class="string">'colorcoding'</span>,<span class="string">'ihs'</span>)
+plotspatial(ebsd,<span class="string">'colorcoding'</span>,<span class="string">'rodrigues'</span>)
+plotspatial(ebsd,<span class="string">'colorcoding'</span>,<span class="string">'euler'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

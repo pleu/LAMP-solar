@@ -1,0 +1,224 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Import and Export of Data</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div>
+         <table class="nav" summary="Navigation aid" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline"><b>LAMP-solar</b> - A MATLAB Toolbox for Solar Cell Analysis
+               </td>
+            </tr>
+         </table>
+         <p style="font-size:1px;"></p>
+      </div>
+      <div class="content">
+         <h1>Import and Export of Data</h1>
+         <introduction>
+            <p>How to import and to export Pole Figure Data, EBSD Data and ODFs</p>
+            <p>
+               <table class="ref" width="90%">
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('ImportPoleFigureData_block','ImportPoleFigureData_expandable_text');">
+               <img id="ImportPoleFigureData_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('ImportPoleFigureData_block','ImportPoleFigureData_expandable_text');"
+               onDblClick="document.location.href=&#34;ImportPoleFigureData.html&#34;">Importing Pole Figure Data</a>
+               </td>
+               <td valign="top">How to import Pole Figure Data</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="ImportPoleFigureData_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="ImportPoleFigureData.html#3" style="font-weight:normal">Import pole figure data using the import wizard</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportPoleFigureData.html#5" style="font-weight:normal">List of automatically detected interfaces</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportPoleFigureData.html#6" style="font-weight:normal">Importing pole figure data using the method loadPoleFigure</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportPoleFigureData.html#8" style="font-weight:normal">Importing pole figure data from general ascii files</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportPoleFigureData.html#9" style="font-weight:normal">Importing pole figure data from unknown formats</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportPoleFigureData.html#10" style="font-weight:normal">Writing your own interface</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('ImportEBSDData_block','ImportEBSDData_expandable_text');">
+               <img id="ImportEBSDData_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('ImportEBSDData_block','ImportEBSDData_expandable_text');" onDblClick="document.location.href=&#34;ImportEBSDData.html&#34;">Import
+               EBSD Data</a>
+               </td>
+               <td valign="top">How to import EBSD Data</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="ImportEBSDData_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#3" style="font-weight:normal">Importing EBSD data using the import wizard</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#5" style="font-weight:normal">Features of the import wizard</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#6" style="font-weight:normal">Supported Interfaces</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#7" style="font-weight:normal">The generic cnterface</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#8" style="font-weight:normal">The Import Script</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ImportEBSDData.html#9" style="font-weight:normal">Writing your own interface</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('ODFImportExport_block','ODFImportExport_expandable_text');">
+               <img id="ODFImportExport_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('ODFImportExport_block','ODFImportExport_expandable_text');" onDblClick="document.location.href=&#34;ODFImportExport.html&#34;">Import
+               and Export of ODF Data</a>
+               </td>
+               <td valign="top">Read and write ODFs to a Data file</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="ODFImportExport_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="ODFImportExport.html#4" style="font-weight:normal">Define an Model ODF</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ODFImportExport.html#5" style="font-weight:normal">Export an ODF to an MTEX ASCII File</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ODFImportExport.html#6" style="font-weight:normal">Export as an generic ASCII file</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ODFImportExport.html#8" style="font-weight:normal">Import ODF Data using the import wizard</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ODFImportExport.html#10" style="font-weight:normal">Importing EBSD data using the method loadODF</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('Templates_block','Templates_expandable_text');">
+               <img id="Templates_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('Templates_block','Templates_expandable_text');" onDblClick="document.location.href=&#34;Templates.html&#34;">Templates</a>
+               </td>
+               <td valign="top">Templates for import_wizard</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="Templates_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr/>
+               </table>
+               </div>
+               </th>
+               </tr>
+               </table>
+               
+            </p>
+         </introduction>
+         <h2>Introduction<a name="1"> </a></h2>
+         <p>The central way getting any kind of experimental data into MTEX is the <a href="import_wizard.html">import wizard</a></p><pre class="codeinput">import_wizard(<span class="string">'PoleFigure'</span>)
+</pre><pre class="codeoutput">Undefined function or method 'import_wizard' for input arguments of type 'char'.
+
+Error in ==&gt; DataImportExport at 186
+import_wizard('PoleFigure')
+</pre><p>The import wizard is able either to create a workspace variable or to generate a script, then one has the possebility to choose
+            a predefined <a href="Templates.html">Template</a> appending a code snippeds.
+         </p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

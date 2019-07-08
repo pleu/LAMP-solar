@@ -1,0 +1,32 @@
+# Define InputVariables
+a=0.6e-6; # the length of pitch
+l=2.33e-6; # the length of cones
+rBot=0.3e-6; # the top radius of the cones
+rTop=0.18e-6; # the bottom radius of the cones
+x_circle1=0; 
+y_circle1=0; # center of circle1 on plane xy
+z_circle1=0;
+polarizationangle=90; # the poliraztion angle of source
+minTheta=0; # min value of Theta
+maxTheta=55;
+minPhi=0;  # min value of Phi
+maxPhi=0;
+numTheta=2;
+numPhi=1; # num of the loops of angles
+wavelength_start=280e-9; 
+wavelength_stop=4000e-9;
+z_source=1205e-9; # the z distance of source
+z_reflection=1465e-9; # the z distance of refleciton monitor
+z_transmission=-1465e-9; # the z distance of transmission monitor
+source_span=4.8e-6; # the x and y span of source & monitors
+FDTD_span=0.6e-6; # the x and y span of FDTD
+FDTD_zspan=3.01e-6; # the z span of FDTD
+simulationtime=500e-15; # unit (s)
+numFrequencyPoints=1000;
+gridsize=20e-9;
+materialName='Si';
+filenamePrefix=materialName+'NW';
+#variableStringArray = 'Theta' 'Phi';
+#variableUnitsArray = '' '';
+filenameSuffix = '';
+matlabsave("InputVariables");

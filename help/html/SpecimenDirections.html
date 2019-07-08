@@ -1,0 +1,92 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Specimen Directions</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit SpecimenDirections" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Specimen Directions</h1>
+         <introduction>
+            <p>Explains how to define and calculate with specimen directions.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Defining Specimen Directions</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Calculating with Specimen Directions</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#11">Plotting three dimensionl vectors</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>Specimen directions are three dimensional vectors in the Euclidean space represented by coordinates with respect to a outer
+            specimen coordinate system x, y, z. Im MTEX Specimen directions are represented by variables of the class <a href="vector3d_index.html"><b>vector3d</b></a>.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Defining Specimen Directions<a name="4"> </a></h2>
+         <p>The standard way to define a specimen directions is by its coordinates.</p><pre class="codeinput">v = vector3d(1,1,0);
+</pre><pre class="codeoutput">Undefined function or method 'vector3d' for input arguments of type 'double'.
+
+Error in ==&gt; SpecimenDirections at 18
+v = vector3d(1,1,0); 
+</pre><p>This gives a single vector with coordinates (1,1,0) with respect to the x, y , z coordinate system. A second way to define
+            a specimen directions is by its spherical coordinates, i.e. by its polar angle and its azimuth angle. This is done by the
+            option <b>polar</b>.
+         </p><pre class="codeinput">polar_angle = 60*degree;
+azimuth_angle = 45*degree;
+v = vector3d(<span class="string">'polar'</span>,polar_angle,azimuth_angle);
+</pre><p>Finally one can also define a vector as a linear combination of the predefined vectors <a href="xvector.html">xvector</a>, <a href="yvector.html">yvector</a>, and <a href="zvector.html">zvector</a></p><pre class="codeinput">v = xvector + 2*yvector;
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Calculating with Specimen Directions<a name="7"> </a></h2>
+         <p>As we have seen in the last example. One can calculate with specimen directions as with ordinary number. Moreover, all basic
+            vector operation as <a href="vector3d_plus.html">"+"</a>, <a href="vector3d_minus.html">"-"</a>, <a href="vector3d_times.html">"*"</a>, [[vector3d_dot.html,inner
+            product]], <a href="vector3d_cross.html">cross product</a> are implemented.
+         </p><pre class="codeinput">u = dot(v,xvector) * yvector + 2 * cross(v,zvector);
+</pre><p>Using the brackets <tt>v = [v1,v2]</tt> two specimen directions can be concatened. Now each single vector is accesable via <tt>v(1)</tt> and <tt>v(2)</tt>.
+         </p><pre class="codeinput">w = [v,u];
+w(1)
+w(2)
+</pre><p>When calculating with concatenated specimen directions all operations are performed componentwise for each specimen direction.</p><pre class="codeinput">w = w + v;
+</pre><p>Beside the standard linear algebra operations there are also the following functions available in MTEX.</p><pre><a href="vector3d_angle.html">angle(v1,v2)</a> % angle between two specimen  directions
+<a href="vector3d_dot.html">dot(v1,v2)</a>   % inner product
+<a href="vector3d_cross.html">cross(v1,v2)</a> % cross product
+<a href="vector3d_norm.html">norm(v)</a>      % length of the specimen directions
+<a href="vector3d_sum.html">sum(v)</a>       % sum over all specimen directions in v
+<a href="vector3d_mean.html">mean(v)</a>      % mean over all specimen directions in v
+<a href="vector3d_polar.html">polar(v)</a>   % conversion to spherical coordinates</pre><p>A simple example for apply the norm function is to normalize a set of specimen directions</p><pre class="codeinput">w = w ./ norm(w)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Plotting three dimensionl vectors<a name="11"> </a></h2>
+         <p>The <a href="vector3d_plot.html">plot</a> function allows you to visualize an arbitrary number of specimen directions in a spherical
+            projection
+         </p><pre class="codeinput">cla <span class="string">reset</span>;set(gcf,<span class="string">'position'</span>,[43   362   200   200])
+plot([zvector,xvector+yvector+zvector],<span class="string">'labeled'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

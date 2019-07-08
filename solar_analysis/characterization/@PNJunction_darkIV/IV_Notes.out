@@ -1,0 +1,8 @@
+\BOOKMARK [1][-]{section.1}{With Series Resistance}{}% 1
+\BOOKMARK [1][-]{section.2}{With Series Resistance and Shunt Resistance}{}% 2
+\BOOKMARK [1][-]{section.3}{Matlab Code}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Guessing the Series Resistance}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Guessing the Shunt Resistance}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{Guessing the Saturation Current}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.4}{Guessing the Ideality Factor}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.5}{Bounds on Fitted Values}{section.3}% 8

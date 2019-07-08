@@ -1,0 +1,41 @@
+
+# read in new optical constants
+n_k = readdata(opticalConstantFile); 
+#dimension = size(n_k);
+#length = dimension(1);
+#lambda = n_k(1:length,1);
+#n = n_k(1:length,2);
+#k = n_k(1:length,3);
+
+lambda = pinch(n_k,2,1);
+f = (c * 1e9) /lambda;
+n = pinch(n_k,2,2);
+k = pinch(n_k,2,3);
+refractive = n + 1i * k;
+permittivity = refractive^2;
+sampledData = [f,permittivity];
+
+
+temp = addmaterial("Sampled data");
+setmaterial(temp,"name",newMaterialName);   
+# load the sampled data matrix
+setmaterial(newMaterialName,"sampled data",sampledData); 
+#setmaterial(materialName, "Anisotropy", 0); # put "1" to enable diagonal anisotropy
+
+# set the number of coefficients
+setmaterial(newMaterialName,"max coefficients",6); 
+setmaterial(newMaterialName,"tolerance",0.1);
+
+# use getindex command for comparison
+#f2  = linspace(2.5e12,1e12,100);
+#nk2 = getindex(newMaterialName,f2);
+
+#plotxy(c/f*1e6,real(refractive),
+#      c/f*1e6,imag(refractive),
+#      c/f2*1e6,real(nk2),
+#      c/f2*1e6,imag(nk2),
+#      "wavelength (um)","refractive index");
+#legend("n - getmaterial",
+#      "k - getmaterial",
+#      "n - getindex",
+#      "k - getindex");

@@ -1,0 +1,40 @@
+<productinfo
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="optional">
+<?xml-stylesheet type="text/xsl" href="optional"?>
+
+<matlabrelease>14</matlabrelease>
+<name>LAMP-Solar</name>
+<type>toolbox</type>
+<icon>$toolbox/matlab/icons/matlabicon.gif</icon>
+<help_location>help/LAMP-Solar</help_location>
+
+<list>
+
+<listitem>
+<label>Start</label>
+<callback>startup_LAMPsolar</callback>
+<icon>$toolbox/matlab/icons/greenarrowicon.gif</icon>
+</listitem>
+
+<listitem>
+<label>Help</label>
+<callback>doc LAMP-Solar/</callback>
+<icon>$toolbox/matlab/icons/helpicon.gif</icon>
+</listitem>
+
+<listitem>
+<label>Configure</label>
+<callback>edit LAMPsolar_settings.m</callback>
+<icon>$toolbox/matlab/icons/boardicon.gif</icon>
+</listitem>
+
+<listitem>
+<label>LAMP-Solar Web Site</label>
+<callback>web http://lamp-solar.googlecode.com -browser;</callback>
+<icon>$toolbox/matlab/icons/webicon.gif</icon>
+</listitem>
+
+</list>
+
+</productinfo>

@@ -1,0 +1,16 @@
+L = 50 nm;
+UE = 0.1376, rTop = 250 nm, a = 500 nm;
+
+
+L = 100 nm;
+UE = 0.217, rTop = 250 nm, a = 500 nm;
+
+L = 150 nm;
+UE = 0.2595, rTop = 250 nm, a = 500 nm;
+
+L = 200 nm;
+UE = 0.2997 rTop = 200 nm, a = 500 nm;
+
+
+L = 300 nm;
+UE = 0.3 rTop = 300 nm, a = 700 nm;

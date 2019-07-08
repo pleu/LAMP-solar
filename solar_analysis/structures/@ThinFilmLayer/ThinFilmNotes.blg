@@ -1,0 +1,69 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: ThinFilmNotes.aux
+The style file: IEEEtran.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: ../../../help/BibFiles/Photodetector.bib
+Database file #2: ../../../help/BibFiles/SiliconPV.bib
+Database file #3: ../../../help/BibFiles/Nanosphere.bib
+Repeated entry---line 1599 of file ../../../help/BibFiles/Nanosphere.bib
+ : @article{Pala:09
+ :                 ,
+I'm skipping whatever remains of this entry
+Database file #4: ../../../help/BibFiles/Plasmonics.bib
+Database file #5: ../../../help/BibFiles/PDOS.bib
+Repeated entry---line 344 of file ../../../help/BibFiles/PDOS.bib
+ : @article{Tikhodeev:02
+ :                      ,
+I'm skipping whatever remains of this entry
+-- IEEEtran.bst version 1.13 (2008/09/30) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+
+Done.
+You've used 3 entries,
+            4039 wiz_defined-function locations,
+            843 strings with 8161 characters,
+and the built_in function-call counts, 3223 in all, are:
+= -- 278
+> -- 73
+< -- 31
++ -- 46
+- -- 18
+* -- 187
+:= -- 494
+add.period$ -- 6
+call.type$ -- 3
+change.case$ -- 3
+chr.to.int$ -- 66
+cite$ -- 3
+duplicate$ -- 211
+empty$ -- 206
+format.name$ -- 15
+if$ -- 715
+int.to.chr$ -- 0
+int.to.str$ -- 3
+missing$ -- 33
+newline$ -- 38
+num.names$ -- 3
+pop$ -- 58
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 240
+stack$ -- 0
+substring$ -- 185
+swap$ -- 208
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 3
+warning$ -- 0
+while$ -- 12
+width$ -- 4
+write$ -- 64
+(There were 2 error messages)

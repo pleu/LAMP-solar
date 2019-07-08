@@ -1,0 +1,65 @@
+FDTD Solutions Version 8.5.4 (Mac 64bit)
+ expires (month/day/year): 10/23/2013
+current time: Mon Jun 10 11:39:00 2013
+Running on host: Pauls-MacBook-Pro-2.local
+All processes are communicating and ready to proceed to simulation...
+Running fsp file: /Users/pleu/Documents/LAMP-solar/solar_analysis/examples/thin film/LinyouThinFilmt800nmBackMetal.fsp
+number of processors is 1
+processors are distributed as: 1x1x1
+Running 3D Simulation
+Starting meshing
+Simulation size in gridpoints: 3 x 3 x 110
+Refined 18 mesh cells (1.81818%)
+Completed meshing!
+Meshing complete in 0.001612 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 3 x 3 x 110
+Refined 18 mesh cells (1.81818%)
+Completed meshing!
+Meshing complete in 0.00092 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 3 x 3 x 110
+Refined 18 mesh cells (1.81818%)
+Completed meshing!
+Meshing complete in 0.000837 seconds of CPU time
+finished material properties
+using standard PML
+-----------------------------------------
+Beginning initialization of 3D Simulation
+Starting to add sources to simulation
+Adding 3D Gaussian Source propagating in Z
+Starting to add boundary conditions to simulation
+Adding 3D Anti-Symmetric BC
+Adding 3D Anti-Symmetric BC
+Adding 3D Symmetric BC
+Adding 3D Symmetric BC
+Adding 3D PML BC
+Adding 3D metal BC
+Starting to add monitors to Simulation
+Adding analysis monitor
+Adding 3D DFT monitor
+Adding 3D DFT monitor
+Finished initialization of 3D Simulation
+-----------------------------------------
+All processes are communicating and ready to proceed to simulation...
+Starting 5245 total iterations
+1% complete. Max time remaining: 1 secs. Auto Shutoff: 1
+2% complete. Max time remaining: 1 secs. Auto Shutoff: 1
+5% complete. Max time remaining: 1 secs. Auto Shutoff: 1
+9% complete. Max time remaining: 0 secs. Auto Shutoff: 1
+19% complete. Max time remaining: 0 secs. Auto Shutoff: 0.659656
+39% complete. Max time remaining: 0 secs. Auto Shutoff: 0.249144
+78% complete. Max time remaining: 0 secs. Auto Shutoff: 0.0117355
+100% complete. Max time remaining: 0 secs. Auto Shutoff: 0.0028556
+Completed 5245 iterations, or 9.99999e-14s of Simulation Time
+Process 0 starting to collect data
+    collecting monitor data
+    collecting source data
+Finished collecting data
+Simulation completed successfully at: Mon Jun 10 11:39:01 2013
+Overall wall time measurements in seconds:
+    time to mesh and initialize: 0
+    time to run FDTD simulation: 1
+    time to finalize data and save to files: 0
+    FDTD solver speed: 5.19255 Mnodes/s
+    total FDTD solver speed on 1 processes: 5.19255 Mnodes/s

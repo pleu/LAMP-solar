@@ -1,0 +1,100 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Plotting of Pole Figures</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit PlotPoleFigures" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Plotting of Pole Figures</h1>
+         <introduction>
+            <p>Described various possibilities to visualize pole figure data.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#3">Import of Pole Figures</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Visualize the Data</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Contour Plots</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">Plotting Recalculated Pole Figures</a></td>
+               </tr>
+            </table>
+         </div>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Import of Pole Figures<a name="3"> </a></h2>
+         <p>Let us start by importing some pole figures.</p><pre class="codeinput"><span class="comment">% crystal and specimen symmetry</span>
+CS = symmetry(<span class="string">'mmm'</span>);
+SS = symmetry(<span class="string">'-1'</span>);
+
+<span class="comment">% file names</span>
+pname = [mtexDataPath <span class="string">'/ptx/'</span>];
+fname = {<span class="keyword">...</span>
+  [pname <span class="string">'gt9104.ptx'</span>], <span class="keyword">...</span>
+  [pname <span class="string">'gt9110.ptx'</span>], <span class="keyword">...</span>
+  [pname <span class="string">'gt9202.ptx'</span>], <span class="keyword">...</span>
+  };
+
+<span class="comment">% create a Pole Figure variable containing the data</span>
+pf = loadPoleFigure(fname,CS,SS);
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; PlotPoleFigures at 13
+CS = symmetry('mmm');
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Visualize the Data<a name="4"> </a></h2>
+         <p>By default MTEX plots pole figures by drawing a circly at every measurement position of a pole figure an coloring it corresponding
+            to the measured intensity.
+         </p><pre class="codeinput">plot(pf,<span class="string">'position'</span>,[100 100 600 300])
+</pre><p>MTEX tries to guess the right size of circle in order to produce a pleasing result. However, you can adjust this size using
+            the option <b>MarkerSize</b>.
+         </p><pre class="codeinput">plot(pf,<span class="string">'MarkerSize'</span>,5)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Contour Plots<a name="6"> </a></h2>
+         <p>Some people like to have there raw pole figures to be drawn as contour plots. This feature is not yet generally supported
+            by MTEX. Note that measured pole figure may be given at a very irregular grid which would make it necessary to interpolate
+            before drawing contours. In this case, however, it seems to be more reasonable to first compute an ODF and than to draw contour
+            plots of the recalculated pole figures.
+         </p>
+         <p>Nevertheless, MTEX offers basic contour plots in the case of regular measurement grids.</p><pre class="codeinput">plot(pf,<span class="string">'contourf'</span>)
+</pre><p>Sometimes, it is desirable to draw all regions below or equal to zero white. This can be done using the command <a href="setcolorrange.html">setcolorrange</a>.
+         </p><pre class="codeinput">setcolorrange(<span class="string">'zero2white'</span>);
+</pre><p>When drawing a colorbar next to the pole figure plots it is necessary to have the same color coding in all plots. This can
+            be done as following
+         </p><pre class="codeinput">setcolorrange(<span class="string">'equal'</span>);
+colorbar
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Plotting Recalculated Pole Figures<a name="9"> </a></h2>
+         <p>In order to draw recalculated one first needs to compute an ODF.</p><pre class="codeinput">odf = calcODF(pf,<span class="string">'silent'</span>)
+</pre><p>Now smooth pole figures can be plotted for arbitrary crystallographic directions.</p><pre class="codeinput">plotpdf(odf,get(pf,<span class="string">'Miller'</span>),<span class="string">'antipodal'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

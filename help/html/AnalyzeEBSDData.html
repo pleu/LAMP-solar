@@ -1,0 +1,82 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Analyze EBSD Data</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit AnalyzeEBSDData" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Analyze EBSD Data</h1>
+         <introduction></introduction>
+         <abstract>
+            <div class="intro">
+               <p>EBSD Data analysis is not yet complete in MTEX. However most main functionalities are already implemented. First of all one
+                  can estimate an ODF from EBSD data. This is explained in detail in the section <a href="EBSD2odf.html">EBSD estimation from EBSD data</a>. Further posibilities are to compute volume fractions directly from EBSD data, compute the mean orientation and to estimate
+                  the Fourier coefficients.
+               </p>
+            </div>
+         </abstract>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Syntax</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#5">Mean Orientation</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Volume</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>Syntax<a name="4"> </a></h2>
+         <p>Let us first import some EBSD data:</p><pre class="codeinput">cs = { symmetry(<span class="string">'cubic'</span>), <span class="keyword">...</span>
+       symmetry(<span class="string">'cubic'</span>) };
+ss = symmetry(<span class="string">'triclinic'</span>);
+ebsd = loadEBSD([mtexDataPath,<span class="string">'/aachen_ebsd/85_829grad_07_09_06.txt'</span>],cs,ss,<span class="keyword">...</span>
+                <span class="string">'interface'</span>,<span class="string">'generic'</span>,<span class="string">'Bunge'</span>,<span class="keyword">...</span>
+                 <span class="string">'ColumnNames'</span>, { <span class="string">'Phase'</span> <span class="string">'x'</span> <span class="string">'y'</span> <span class="string">'Euler 1'</span> <span class="string">'Euler 2'</span> <span class="string">'Euler 3'</span>},<span class="keyword">...</span>
+                 <span class="string">'Columns'</span>, [2 3 4 5 6 7]);
+
+plot(ebsd,<span class="string">'phase'</span>,1)
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; AnalyzeEBSDData at 20
+cs = { symmetry('cubic'), ...
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Mean Orientation<a name="5"> </a></h2>
+         <p>Next we are going to determine the mean orientation of the first phase</p><pre class="codeinput">m = mean(ebsd,<span class="string">'phase'</span>,1);
+
+<span class="comment">% and plot it within a pole figure plot</span>
+
+plotpdf(ebsd,[Miller(1,0,0),Miller(0,0,1)],<span class="string">'antipodal'</span>,<span class="string">'phase'</span>,1)
+annotate(m,<span class="string">'Marker'</span>,<span class="string">'s'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'red'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Volume<a name="6"> </a></h2>
+         <p>Lets next compute the volume close to the mean orientation.</p><pre class="codeinput">volume(ebsd,m,10*degree,<span class="string">'phase'</span>,1)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

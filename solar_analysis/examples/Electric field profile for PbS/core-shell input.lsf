@@ -1,0 +1,91 @@
+
+# InputVariables for Thin film
+# 
+# Make sure to change working directory to where script files are located
+# Run InputVariables.lsf
+# Run ThinFilmSimulation.lsf
+#
+# Copyright 2010-11, Baomin Wang, Paul W. Leu
+# LAMP, University of Pittsburgh
+clear;
+# fileName
+silicaCoreName = 'SilicaCore';
+goldLayerName = 'Au';
+silicaShellName = 'SilicaShell';
+
+newMaterialName = "PbS_QD (2nd)";
+
+analysisName = 'Pabs';
+
+totalAnalysisName = 'Pabs_tot';
+
+opticalConstantFile = 'PbS_constant_2nd.txt';
+
+
+materialName = 'Core-shell';
+
+filenamePrefix = materialName + "Nanosphere";
+
+add_new_material;
+
+
+# filename is filePrefix + variableStringArray + num2str(filmThicknessArray(i)*1e9) + 
+# variableUnitsArray + filenameSuffix
+#
+# Film structure
+#
+# all units are in meters
+maxPitch = 200e-9; 
+minPitch = 200e-9;
+incrementPitch = 50e-9;
+
+thicknessPbS = 120e-9;
+
+thicknessAu = 5e-9;
+thicknessSilicaShell = 10e-9;
+coreRadius = 50e-9;
+
+
+variableStringArray = 'p'; # "p" for "pitch"
+unitStringArray = 'nm';
+
+
+# material from the database
+SiO2Material = 'SiO2 (Glass) - Palik';
+silicaCoreMaterial = 'SiO2 (Glass) - Palik';
+silicaShellMaterial = 'SiO2 (Glass) - Palik';
+goldLayerMaterial = 'Au (Gold) - CRC';
+PbSMaterial = newMaterialName;
+
+#
+# Simulation cell
+#
+FDTDOffset = 50e-9;
+monitorOffset = 50e-9;
+sourceOffset = 25e-9;
+
+simulationTime = 100e-15; # in seconds
+
+meshType = 'auto non-uniform'; # 'auto non-uniform', 'custom non-uniform', or 'uniform'
+meshSizeX = 1e-9;
+meshSizeY = 1e-9;
+meshAccuracy = 8; # for auto non-uniform mesh, a number from 1 (least accurate) to 8
+#
+dx = 2e-9;
+dy = 2e-9;
+dz = 2e-9;
+
+#geometry of source and monitor
+#
+wavelengthStart = 834e-9;
+wavelengthStop = 834e-9;
+
+injectionAxis = 'z-axis';
+injectionDirection = 'Forward';
+angleTheta = 0;
+anglePhi = 0;
+polarizationAngle = 0;
+# for monitor 
+numFrequencyPoints = 1;
+
+matlabsave("InputVariables");

@@ -1,0 +1,146 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Visualising ODFs</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit ODFPlot" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Visualising ODFs</h1>
+         <introduction>
+            <p>Explains all possibilities to visualize ODfs, i.e. pole figure plots, inverse pole figure plots, ODF sections, fibre sections.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#5">Pole Figures</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Inverse Pole Figures</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">ODF Sections</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#14">3D Euler Space</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#15">One Dimensional ODF Sections and Fibres</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#17">Fourier Coefficients</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#18">Axis / Angle Distribution</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>Let us first define some model ODFs to be plotted later on.</p><pre class="codeinput">cs = symmetry(<span class="string">'-3m'</span>); ss = symmetry(<span class="string">'-1'</span>);
+mod1 = orientation(<span class="string">'euler'</span>,30*degree,40*degree,10*degree,<span class="string">'ZYZ'</span>);
+mod2 = orientation(<span class="string">'euler'</span>,10*degree,80*degree,70*degree,<span class="string">'ZYZ'</span>);
+odf = 0.7*unimodalODF(mod1,cs,ss) + 0.3*unimodalODF(mod2,cs,ss);
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; ODFPlot at 12
+cs = symmetry('-3m'); ss = symmetry('-1');
+</pre><p>and lets switch to the LaboTex colormap</p><pre class="codeinput">set_mtex_option(<span class="string">'defaultColorMap'</span>,LaboTeXColorMap);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Pole Figures<a name="5"> </a></h2>
+         <p>Plotting some pole figures of an <a href="ODF_index.html">ODF</a> is straight forward using the <a href="ODF_plotpdf.html">plotpdf</a> command. The only mandatory arguments are the ODF to be plotted and the <a href="Miller_index.html">Miller indice</a> of the crystal directions you want to have pole figures for.
+         </p><pre class="codeinput">close; figure(<span class="string">'position'</span>,[100,100,800,200])
+plotpdf(odf,[Miller(1,0,-1,0),Miller(0,0,0,1)])
+</pre><p>By default the <a href="ODF_plotpdf.html">plotpdf</a> command plots the upper as well a the lower hemisphere of each pole sphere. In order to superpose antipodal directions you
+            have to use the option <b>antipodal</b>.
+         </p><pre class="codeinput">plotpdf(odf,[Miller(1,0,-1,0),Miller(0,0,0,1)],<span class="string">'antipodal'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Inverse Pole Figures<a name="7"> </a></h2>
+         <p>Plotting inverse pole figures is analogously to plotting pole figures with the only difference that you have to use the command
+            <a href="ODF_plotipdf.html">plotipdf</a> and you to specify specimen directions and not crystal directions.
+         </p><pre class="codeinput">plotipdf(odf,[xvector,zvector],<span class="string">'antipodal'</span>)
+</pre><p>By default MTEX alway plots only the Fundamental region with respect to the crystal symmetry. In order to plot the complete
+            inverse pole figure you have to use the option <b>complete</b>.
+         </p><pre class="codeinput">close; figure(<span class="string">'position'</span>,[100,100,400,200])
+plotipdf(odf,[xvector,zvector],<span class="string">'antipodal'</span>,<span class="string">'complete'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>ODF Sections<a name="9"> </a></h2>
+         <p>Plotting an ODF in two dimensional sections through the orientation space is done using the command <a href="ODF_plotodf.html">plot</a>.
+         </p><pre class="codeinput">close; figure(<span class="string">'position'</span>,[46 171 752 486]);
+plot(odf,<span class="string">'sections'</span>,12,<span class="string">'silent'</span>)
+</pre><p>By default ODFs are plotted in sigma sections. One can plot ODF sections along any of the Euler angles</p>
+         <div>
+            <ul type="square">
+               <li>SIGMA (alpha+gamma)</li>
+               <li>ALPHA</li>
+               <li>GAMMA</li>
+               <li>PHI1</li>
+               <li>PHI2</li>
+            </ul>
+         </div>
+         <p>It is also possible to section along the rotation angle of a rotation axis</p>
+         <div>
+            <ul type="square">
+               <li>axisangle</li>
+            </ul>
+         </div>
+         <p>Adapting <a href="SphericalProjection_demo.html">spherical projection</a> and <a href="ColorCoding_demo">color coding</a> one can produce any standard ODF plot.
+         </p><pre class="codeinput">close; figure(<span class="string">'position'</span>,[46 171 752 486]);
+plot(odf,<span class="string">'alpha'</span>,<span class="string">'sections'</span>,12,<span class="keyword">...</span>
+     <span class="string">'projection'</span>,<span class="string">'plain'</span>,<span class="string">'gray'</span>,<span class="string">'contourf'</span>,<span class="string">'FontSize'</span>,10,<span class="string">'silent'</span>)
+</pre><pre class="codeinput"><span class="comment">%One can also specify the sectioning angles direct</span>
+
+plot(odf,<span class="string">'alpha'</span>,[25 30 35]*degree,<span class="keyword">...</span>
+     <span class="string">'projection'</span>,<span class="string">'plain'</span>,<span class="string">'gray'</span>,<span class="string">'contourf'</span>,<span class="string">'FontSize'</span>,10,<span class="string">'silent'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>3D Euler Space<a name="14"> </a></h2>
+         <p>Instead of Sectioning one could plot the Euler Angles in 3D</p>
+         <div>
+            <ul type="square">
+               <li>contour3</li>
+               <li>surf3</li>
+               <li>slice3</li>
+            </ul>
+         </div><pre class="codeinput">plot(odf,<span class="string">'sigma'</span>,<span class="string">'surf3'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>One Dimensional ODF Sections and Fibres<a name="15"> </a></h2>
+         <p>In the case you have a simple ODF it might be helpfull to plot one dimensional ODF sections.</p><pre class="codeinput">plot(odf,<span class="string">'radially'</span>,<span class="string">'LineWidth'</span>,2)
+</pre><p>actually on can specify the one dimensional ODF section along a fibre</p><pre class="codeinput">plotfibre(odf,Miller(1,2,2),vector3d(2,1,1),<span class="string">'LineWidth'</span>,2);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Fourier Coefficients<a name="17"> </a></h2>
+         <p>A last way to visualize an ODF is to plot its Fourier coefficients</p><pre class="codeinput">close <span class="string">all</span>;
+plotFourier(odf,<span class="string">'bandwidth'</span>,32)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Axis / Angle Distribution<a name="18"> </a></h2>
+         <p>Let us consider the uncorrelated missorientation ODF corresponding to our model ODF.</p><pre class="codeinput">modf = calcMODF(odf)
+</pre><p>Then we can plot the distribution of the rotation axes of this missorienation ODF</p><pre class="codeinput">plotAxisDistribution(modf)
+</pre><p>and the distribution of the missorientation angles and compare them to a uniform ODF</p><pre class="codeinput">plotAngleDistribution(modf)
+hold <span class="string">all</span>
+plotAngleDistribution(uniformODF(cs,cs))
+hold <span class="string">off</span>
+legend(<span class="string">'model ODF'</span>,<span class="string">'uniform ODF'</span>)
+</pre><p>Finally, lets set back the default colormap.</p><pre class="codeinput">set_mtex_option(<span class="string">'defaultColorMap'</span>,WhiteJetColorMap);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

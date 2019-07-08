@@ -1,0 +1,62 @@
+# InputVariables for Thin film
+# 
+# Make sure to change working directory to where script files are located
+# Run InputVariables.lsf
+# Run ThinFilmSimulation.lsf
+#
+# Copyright 2010-11, Baomin Wang, Paul W. Leu
+# LAMP, University of Pittsburgh
+
+clear;
+# fileName 
+materialName = 'Linyou';
+filenamePrefix = materialName + "ThinFilm";
+# filename is filePrefix + variableStringArray + num2str(filmThicknessArray(i)*1e9) + 
+# variableUnitsArray + filenameSuffix
+#
+# Film structure
+#
+# all units are in meters
+minThickness=400e-9; 
+maxThickness=400e-9;
+variableStringArray = 't';
+variableUnitsArray = 'nm';
+filenameSuffix = '';
+
+numThicknesses=1;
+
+
+
+filmXSpan=500e-9;
+filmYSpan=500e-9;
+
+#
+# Simulation cell
+#
+FDTDxSpan=20e-9;
+FDTDySpan=20e-9;
+simulationTime=100e-15; # in seconds
+meshType = 'uniform'; # `auto non-uniform', 'custom non-uniform', or 'uniform'
+meshSize = 10e-9; 
+meshAccuracy = 8; # for auto non-uniform mesh, a number from 1 (least accurate) to 8
+FDTDzSpace = 30e-9; # distance to edge of simulation cell from monitors
+
+#
+#geometry of source and monitor
+# xspan of source and monitor is set to filmXSpan 
+#
+sourceOffset=50e-9;
+wavelengthStart=280e-9;
+wavelengthStop=4000e-9;
+injectionAxis = 'z-axis';
+injectionDirection = 'Forward';
+angleTheta = 0;
+anglePhi = 0;
+polarizationAngle = 0;
+
+# for monitor 
+numFrequencyPoints=1000;
+reflectionMonitorOffset=50e-9;
+transmissionMonitorOffset=50e-9;
+
+matlabsave("InputVariables");

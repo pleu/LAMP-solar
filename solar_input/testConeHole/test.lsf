@@ -1,0 +1,11 @@
+addobject("trunc_cone"); 
+set("x", 0);
+set("y", 0);
+set("z", 0);
+set("material", 'Si (Silicon) - Palik');
+set("r top", 1e-07);
+set("r bottom", 2e-07);
+set("z span", 5e-07);
+set("Script", 'r_top = set("first axis", 'none');
+set("second axis", 'none');
+set("third axis", 'none');

@@ -1,0 +1,108 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>The Elasticity Tensor</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit ElasticityTensor" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>The Elasticity Tensor</h1>
+         <introduction>
+            <p>how to calculate the elasticity properties</p>
+         </introduction>
+         <abstract>
+            <div class="intro">
+               <p>MTEX offers a very simple way to compute elasticity properties of materials. This includes Young's modulus, linear compressibility,
+                  Cristoffel tensor, and elastic wave velocities.
+               </p>
+            </div>
+         </abstract>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Import an Elasticity Tensor</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#5">Young's Modulus</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Linear Compressibility</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">Cristoffel Tensor</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#10">Elastic Wave Velocity</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>Import an Elasticity Tensor<a name="4"> </a></h2>
+         <p>Let us start by importing the elastic stiffness tensor of an Olivin crystal in reference orientation from a file.</p><pre class="codeinput">fname = fullfile(mtexDataPath,<span class="string">'tensor'</span>,<span class="string">'Olivine1997PC.GPa'</span>);
+
+cs = symmetry(<span class="string">'mmm'</span>,[4.7646 10.2296 5.9942],<span class="string">'mineral'</span>,<span class="string">'Olivin'</span>);
+
+C = loadTensor(fname,cs,<span class="string">'name'</span>,<span class="string">'ellastic stiffness'</span>,<span class="string">'unit'</span>,<span class="string">'Pa'</span>,<span class="string">'interface'</span>,<span class="string">'generic'</span>)
+</pre><pre class="codeoutput">Undefined function or variable 'mtexDataPath'.
+
+Error in ==&gt; ElasticityTensor at 18
+fname = fullfile(mtexDataPath,'tensor','Olivine1997PC.GPa');
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Young's Modulus<a name="5"> </a></h2>
+         <p>Young's modulus is .... It is computed for a specific direction x by the command <a href="tensor_YoungsModulus.html">YoungsModulus</a>.
+         </p><pre class="codeinput">x = xvector;
+E = YoungsModulus(C,x)
+</pre><p>It can be plotted by passing the option <b>YoungsModulus</b> to the <a href="tensor_plot.html">plot</a> command.
+         </p><pre class="codeinput">set_mtex_option(<span class="string">'defaultColorMap'</span>,seismicColorMap);
+plot(C,<span class="string">'PlotType'</span>,<span class="string">'YoungsModulus'</span>,<span class="string">'complete'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Linear Compressibility<a name="7"> </a></h2>
+         <p>The linear compressibility is ... It is computed for a specific direction x by the command <a href="tensor_linearCompressibility.html">linearCompressibility</a>.
+         </p><pre class="codeinput">beta = linearCompressibility(C,x)
+</pre><p>It can be plotted by passing the option <b>linearCompressibility</b> to the <a href="tensor_plot.html">plot</a> command.
+         </p><pre class="codeinput">plot(C,<span class="string">'PlotType'</span>,<span class="string">'linearCompressibility'</span>,<span class="string">'complete'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Cristoffel Tensor<a name="9"> </a></h2>
+         <p>The Cristoffel Tensor for a specific direction x is .... It is computed for a specific direction x by the command <a href="tensor_ChristoffelTensor.html">ChristoffelTensor</a>.
+         </p><pre class="codeinput">T = ChristoffelTensor(C,x)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Elastic Wave Velocity<a name="10"> </a></h2>
+         <p>The Cristoffel tensor is the basis for computing the direction dependent wave velocities of the p, s1, and s2 wave, as well
+            as of the polarisation directions. In MTEX this is done by the command <a href="tensor_velocity.html">velocity</a></p><pre class="codeinput">[vp,vs1,vs2,pp,ps1,ps2] = velocity(C,xvector,1)
+</pre><p>In order to visualize these quantities there are several posibilities. Let us first plot the direction depended wave speed
+            of the p-wave
+         </p><pre class="codeinput">plot(C,<span class="string">'PlotType'</span>,<span class="string">'velocity'</span>,<span class="string">'vp'</span>,<span class="string">'complete'</span>)
+</pre><p>Next we plot on the top of this plot the p-wave polarisation direction.</p><pre class="codeinput">hold <span class="string">on</span>
+plot(C,<span class="string">'PlotType'</span>,<span class="string">'velocity'</span>,<span class="string">'pp'</span>,<span class="string">'complete'</span>)
+hold <span class="string">off</span>
+</pre><p>Finally we visuallize the speed difference between the s1 and s2 waves together with the  fast sheer polarization.</p><pre class="codeinput">plot(C,<span class="string">'PlotType'</span>,<span class="string">'velocity'</span>,<span class="string">'vs1-vs2'</span>,<span class="string">'complete'</span>)
+
+hold <span class="string">on</span>
+plot(C,<span class="string">'PlotType'</span>,<span class="string">'velocity'</span>,<span class="string">'ps1'</span>,<span class="string">'complete'</span>)
+hold <span class="string">off</span>
+</pre><p>set back default colormap</p><pre class="codeinput">set_mtex_option(<span class="string">'defaultColorMap'</span>,WhiteJetColorMap)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,365 @@
+
+\documentclass[12pt]{article}
+%\input{preamble}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage[left=1in,top=1.0in,right=1in,headsep=0.25in,footskip=0.3in,bottom=0.7in]{geometry}
+%\usepackage[left=1in,top=1.2in,right=1in,footskip=0.3in,bottom=0.7in,showframe]{geometry}
+%\usepackage[left=1in,top=1in,right=1in,bottom=1in,nohead]{geometry}
+\usepackage{graphicx}
+\renewcommand{\arraystretch}{1} % spacing between table rows
+\usepackage[]{caption}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{-5pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\usepackage[normalem]{ulem}
+\newcounter{Labcounter}
+\newcounter{Taskcounter}
+\numberwithin{equation}{section}
+\fancyhf{}
+\usepackage{hyperref}
+%\usepackage{
+
+
+\usepackage{outlines}
+\renewcommand{\theenumi}{\Roman{enumi}. }
+\renewcommand{\labelenumi}{\theenumi}
+
+\renewcommand{\theenumii}{\Alph{enumii}. }
+\renewcommand{\labelenumii}{\theenumii}
+
+\renewcommand{\theenumiii}{\roman{enumiii}. }
+\renewcommand{\labelenumiii}{\theenumiii}
+
+\renewcommand{\theenumiv}{\alph{enumiv}) }
+\renewcommand{\labelenumiv}{\theenumiv}
+
+
+%\usepackage{enumitem}
+
+%\setenumerate[1]{label=\Roman*.}
+%\setenumerate[2]{label=\Alph*.}
+%\setenumerate[3]{label=\roman*.}
+%\setenumerate[4]{label=\alph*.}
+
+
+
+\usepackage[numbered,framed]{matlab-prettifier}
+
+\lstMakeShortInline[style=Matlab-editor]"
+
+\pagestyle{fancy}
+\fancypagestyle{plain}{ %
+% \fancyhf{} % remove everything
+\renewcommand{\headrulewidth}{0pt} % remove lines as well
+%\renewcommand{\footrulewidth}{0pt}
+%\cfoot{Page \thepage~of \pageref{LastPage}}}
+\cfoot{\thepage}
+}
+
+\newcommand{\blue}[1]{\textcolor{blue}{#1}} %for displaying red texts
+\newcommand{\red}[1]{\textcolor{red}{[#1]}} %for displaying red texts
+
+%\newcommand{\rood}[1]{} %for displaying red texts
+
+
+\lhead{\textit{Non Ideal Diode Equation}}
+%\chead{\Large \textbf{Paul W.~Leu } \vspace{0.3em}}
+%\chead{\Large \textbf{NSF Biographical Sketch: Paul W.~Leu} \vspace{0.3em}}
+\rhead{\textit{Leu}}
+
+
+\newcommand{\vectornorm}[1]{\left|\left|#1\right|\right|}
+%\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage[normalem]{ulem}
+\newenvironment{packed_enum}{
+\begin{enumerate}
+  \setlength{\topsep}{0pt}
+  \setlength{\partopsep}{0pt}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{enumerate}}
+
+%\usepackage[small]{caption}
+\usepackage[draft]{pdfcomment}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\usepackage{paralist}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{textcomp}
+\usepackage{subfig}
+\usepackage{framed}
+\usepackage{setspace}
+\usepackage{here}
+\usepackage[numbers, square, comma, sort&compress]{natbib}
+
+\usepackage{mathtools}
+
+\DeclareMathOperator{\lcm}{lcm}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\usepackage[compact]{titlesec}
+\titlespacing{\section}{0pt}{0ex}{0pt}
+\titlespacing{\subsection}{0pt}{0pt}{0pt}
+\usepackage{xcolor}
+
+\usepackage[]{caption}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{-5pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+
+\defineavatar{Paul}{author=Paul,color=blue}
+\defineavatar{Ziyu}{author=Ziyu,color=green}
+
+
+\usepackage{float}
+\floatstyle{plaintop}
+\newfloat{program}{thp}{lop}
+\floatname{program}{Table}
+
+\newfloat{wrapprogram}{thp}{lop}
+\floatname{wrapprogram}{Table}
+
+%\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+% bold face: highlight keywords, or big ideas
+% italics: inconspicuous stressing of key points
+% underline: hypothesis; avoid
+
+\usepackage{bm}
+
+\date{\today }
+
+\author{
+Paul W. Leu\\
+University of Pittsburgh\\
+Pittsburgh, PA}
+
+
+%\def\myTitle{CAREER: Transforming Solar Energy Harvesting through Nanophotonic Light Trapping}
+%\def\myTitle{CAREER: Characterizing Enhanced Absorption and Carrier Collection Mechanisms in Silicon and Zinc Oxide Nanocone-based Solar Cells}
+%Upper bound
+%   100 hours/year
+%    40 hours
+%
+%\title{Ultimate Limits of Silicon Nanostructures for Photon Management\\
+%\title{Determining Silicon/Metal Nanostructures that Approach the Wave-Optics Light Trapping Limit by Data Mining of Electrodynamic Simulations}
+%\title{CAREER: Characterizing Enhanced Absorption and Carrier Collection Mechanisms in Silicon and Zinc Oxide Nanocone-based Solar Cells}
+%\title{Predicting Wave-Optics Light Trapping in Silicon and Metal Nanostructure by Data Mining of Electrodynamic Simulations}
+%Keywords: ultra thin, light trapping, wave-optics light trapping, coherent light trapping, optimization framework, data mining}
+
+%\title{Modeling and Manufacturing of Three Dimensional Silicon Nanostructures for Photon Management}
+
+
+\begin{document}
+
+\section{With Series Resistance}
+
+The ideal diode equation is
+\begin{equation}
+I = I_0 ( e^{qV_d/kT} - 1)
+\end{equation}
+
+$I_0$ is the reverse saturation current, $q$ is the fundamental charge, $V_d$ is the voltage across the diode, $k$ is the Boltzmann constant, and $T$ is the temperature in Kelvin.
+\\ As $V_d \rightarrow -\infty, I = -I_0$,
+
+The current of a diode with a series resistance is
+\begin{align}
+I &=  I_0 (e^{q (V_a - I R_s)/nkT} - 1) \\
+&=  I_0 (e^{ (V_a - I R_s)/n V_T} - 1)
+\end{align}
+
+where
+\begin{equation}
+V_a - I R_s = V_d
+\end{equation}
+
+and $V_T = k T/q$.
+
+Introduce $w$
+\begin{equation}
+w = \frac{I_0 R_s}{V_T} \left ( \frac{I}{I_0} + 1 \right )
+\end{equation}
+
+Substitute in the ideal diode equation
+\begin{align}
+w &= \frac{I_0 R_s}{n V_T} \left [  (e^{q (V_a - I R_s)/nkT} \right ]
+\end{align}
+
+Now we need to get the equation in the form $w e^w$
+\begin{align}
+w e^{w} &= \frac{I_0 R_s}{n V_T} \left [  (e^{(V_a - I R_s)/n V_T} \right ] e^{\frac{I_0 R_s}{n V_T} \left ( \frac{I}{I_0} + 1 \right )} \\
+&= \frac{I_0 R_s}{n V_T} \left [  (e^{\frac{V_a}{n V_T}-\frac{I R_s}{n V_T}+\frac{I_0 R_s I/I_0}{ n V_T}+\frac{I_0 R_s}{V_T}}) \right]
+\\
+&= \frac{I_0 R_s}{n V_T} \left [  (e^{(V_a + I_0 R_s)/V_T} \right ]
+\end{align}
+
+Using the Lambert $W-$function,
+\begin{align}
+w&= W \left ( w e^{w} \right ) \\
+w &= W \left ( \frac{I_0 R_s}{n V_T} \left [  (e^{(V_a + I_0 R_s)/n V_T} \right ] \right ) \\
+\frac{I_0 R_s}{n V_T} \left ( \frac{I}{I_0} + 1 \right )  &= W \left ( \frac{I_0 R_s}{n V_T} \left [  (e^{(V_a + I_0 R_s)/ n V_T} \right ] \right ) \\
+I &= \frac{n V_T}{R_s} W \left ( \frac{I_0 R_s}{n V_T} \left [  (e^{(V_a + I_0 R_s)/n V_T} \right ] \right )  - I_0
+\end{align}
+
+
+\section{With Series Resistance and Shunt Resistance}
+
+If the shunt resistance across the junction is included into the diode equation while the shunt losses at the periphery of the diode are considered negligible, then the diode equation becomes
+
+\begin{align}
+I &=  I_0 (e^{(V_a - I R_s)/n V_T} - 1) + \frac{V_a - I R_s}{R_{sh}} \\
+&=  \frac{R_{sh}}{R_s + R_{sh}} \left [ I_0 (e^{(V_a - I R_s)/n V_T} - 1) + \frac{V_a}{R_{sh}} \right ]
+\label{eq:current_with_Rs_Rsh}
+\end{align}
+
+We again introduce $w$ \cite{Ortiz:00}.
+
+\begin{align}
+w &= \left (I - \frac{V_a-I_0R_{sh}}{R_{sh}+R_s} \right )\frac{R_s}{n V_T} \\
+\end{align}
+
+Substituting the equation for $I$ (Equation~\ref{eq:current_with_Rs_Rsh}) into the expression for $w$,
+\begin{align}
+w &=  \frac{ I ( R_{sh} + R_s ) - V_a + I_0 R_{sh}}{R_{sh} + R_s}  \frac{R_s}{n V_T} \\
+&= \frac{I_0 R_s R_{sh}}{n V_T (R_s + R_{sh})  } e^{ \frac{V_a - I Rs}{n V_T}}
+\end{align}
+
+Thus,
+\begin{align}
+w e^w &= \frac{I_0 R_s R_{sh}}{n V_T (R_s + R_{sh})  } \exp \left [ \frac{V_a - I Rs}{n V_t} \right ] \exp \left [ \left (I - \frac{V_a-I_0R_{sh}}{R_{sh}+R_s} \right )\frac{R_s}{n V_T} \right ] \\
+&= \frac{I_0 R_s R_{sh}}{n V_T (R_s + R_{sh})  } \exp \left [ \frac{R_{sh} (V_a + I_0 R_s}{n V_T (R_{sh} + R_{s} ) } \right ]
+\end{align}
+
+Then, applying the Lambert W function like before, we are left with an explicit equation for current.
+
+\begin{equation}
+w = W [ w e^w ] \\
+\end{equation}
+
+\begin{align}
+\frac{R_s}{n V_T} \left [ I - \frac{V_a-I_0 R_{sh}}{R_{sh} + R_s}  \right ]
+&= W \left [ \frac{I_0 R_s R_{sh}}{n V_T (R_{sh}+ R_s)}
+e^{ \frac{R_{sh}(V_a+I_0 R_s)}{n V_T (R_{sh}+R_s)}} \right ]
+  \\
+I &= \frac{n V_T}{R_s} W \left [ \frac{I_0  R_s R_{sh}}{n V_T (R_{sh}+ R_s)}
+e^{ \frac{R_{sh}(V_a+I_0 R_s)}{n V_T (R_{sh}+R_s)}} \right ] +
+\left (\frac{V_a-I_0 R_{sh}}{R_{sh} + R_s} \right )
+\end{align}
+
+To get the equation for voltage,
+we introduce
+\begin{equation}
+w = \frac{I (R_{sh} + R_s ) + I_0 R_{sh} - V_a}{n V_T}
+\end{equation}
+
+Substituting $I$ into this expression, we get
+\begin{equation}
+w = \frac{I_0 R_{sh} e^{\frac{V_a - I R_s}{n V_T}}}{n V_T}
+\end{equation}
+
+\begin{equation}
+w e^w = I_0 R_{sh} e^{\frac{R_{sh} (I_0 + I)}{n V_T}}
+\end{equation}
+
+Thus,
+\begin{align}
+w &= W [ w e^w ] \\
+\frac{I (R_{sh} + R_s ) + I_0 R_{sh} - V_a}{n V_T} &= W \left [ I_0 R_{sh} e^{\frac{R_{sh} (I_0 + I)}{n V_T}} \right ] \\
+V_a &= I (R_{sh} + R_s ) + I_0 R_{sh} - V_a - n V_T W \left [ I_0 R_{sh} e^{\frac{R_{sh} (I_0 + I)}{n V_T}} \right ] \\
+\end{align}
+
+
+
+%\begin{equation}
+%I = \frac{n k T}{q R_s} W \left [ \frac{I_0 q R_s R_{sh}}{n k T (R_{sh}+ R_s)}
+%e^{ \frac{q R_{sh}(V_a+I_0 R_s)}{n k T (R_{sh}+R_s)}} \right ] +
+%\left (\frac{V_a-I_0 R_{sh}}{R_{sh} + R_s} \right )
+%\end{equation}
+
+\section{Matlab Code}
+
+Use "iv.fit('Rs')" to do the fit with just a series resistance.
+Use "iv.fit('Rs_Rsh')" to do the fit with both series and shunt resistance.
+
+This code uses "lsqcurvefit()" to fit a curve to the diode equation with series and shunt resistance. "lsqcurvefit()" is a nonlinear least-squares fit, and the parameters by which it fits can be set in "options".
+\\ In order to fit the data using "lsqcurvefit()" it is necessary to have what are called guess parameters. These guess parameters are used as a starting point for each of the fit parameters, and are found using approximations.
+\subsection{Guessing the Series Resistance}
+In order to obtain an approximate value for the series resistance we assume that the shunt resistance is infinite thus causing the diode equation to take the form
+\begin{align}
+I &=  I_0 ( e^{(V_a - I R_s)/n V_T} - 1)\\
+\end{align}
+
+Now taking the derivative with respect to $V_a$
+\begin{align}
+\frac{dI}{dV_a} &=  I_0e^{(V_a - I R_s)/n V_T}(1-\frac{dI}{dV_a}R_s)/(nV_T)
+\end{align}
+
+Rearranging terms,
+\begin{align}
+\frac{dI}{dV_a} \left [1+\frac{R_s}{nV_T}e^{(V_a-IR_s)/(nV_T)} \right ] &= \frac{I_0}{nV_T}e^{(V_a-IR_s)/(nV_T))}
+\end{align}
+\begin{align}
+\frac{dI}{dV_a} &= \frac{\frac{I_0}{V_T}e^{(V_a-IR_s)/(nV_T)}}{1+\frac{I_0R_s}{V_T}e^{(V_a-IR_s)/(nV_T)}}
+\end{align}
+
+Recalling that
+
+\begin{equation}
+V_d = V_a - I R_s
+\end{equation}
+
+We have
+
+\begin{align}
+\frac{dI}{dV_a} &= \frac{\frac{I_0}{V_T}e^{(V_d)/(nV_T)}}{1+\frac{I_0R_s}{V_T}e^{(V_d)/(nV_T)}}
+\end{align}
+
+Finally, we take the limit as $V_d$ goes infinity, which corresponds to the large positive voltage regime. The 1 in the denominator becomes insignificant allowing the exponential terms to cancel and we are left with
+
+\begin{align}
+\frac{dI}{dV_a} &\approx \frac{1}{R_s}
+\end{align}
+
+So we can roughly approximate the series resistance as being the inverse of the slope of the diode curve at large positive voltages.
+
+\subsection{Guessing the Shunt Resistance}
+Using a similar method as in 3.1, we can find an approximate value for the shunt resistance. Starting with the full diode equation with $R_{sh}$ and $R_s$
+
+\begin{align}
+I &=  I_0 (e^{(V_a - I R_s)/n V_T} - 1) + \frac{V_a - I R_s}{R_{sh}} \\
+\end{align}
+
+If we take the limit as $V_a$ goes to minus infinity then exponential term goes to zero, while the $IR_s$ becomes insignificant relative to $V_a$. At large negative $V_a$,
+\begin{align}
+I & \approx -I_0 +\frac{V_a}{R_{sh}}  \\
+\end{align}
+
+Now taking the derivative with respect to $V_a$
+
+\begin{align}
+\frac{dI}{dV_a} &\approx \frac{1}{R_{sh}}
+\end{align}
+
+Thus, the shunt resistance is approximately the inverse of the slope of the diode curve at large negative voltages.\\
+
+\subsection{Guessing the Saturation Current}
+
+From the basic diode equation (Eq. 1.1), the saturation current, $I_0$, can be approximated as the minimum current. If one were to set a very large negative voltage, then the current would just be equal to the saturation current.
+\subsection{Guessing the Ideality Factor}
+
+The ideality factor, n, represents the deviation from an ideal diode, and takes into account all of the second order effects. We use an "n_guess" value of 2.
+
+%The ideality factor, n, represents the deviation from an ideal diode, and takes into account all of the second order effects. Using a sufficiently large ideality factor allows the program to find a minimum effectively, so an "n_guess" value of 1000 is chosen.
+\subsection{Bounds on Fitted Values}
+In order to constrain the fitted values to the real plane and help the program produce feasible results, bounds must be placed on the "lsqcurvefit()" guess values. The bounds for the Saturation current are between 0 and 1 Amps, because the saturation current will be very small in a decent diode. Bounds for the ideality factor are between 0 and 50, so reasonable values are used to fit the ideality factor. The bounds for the series resistance are between 0 and 10000 Ohms since we expect a relatively low series resistance. Whereas the bounds for the shunt resistance are between 0 and 10000000 Ohms since we expect a high shunt resistance.
+\\
+
+\bibliographystyle{IEEEtran}
+\bibliography{SiliconPV}
+
+
+\end{document}

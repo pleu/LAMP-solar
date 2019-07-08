@@ -1,0 +1,10 @@
+set("mesh type", 'uniform');
+set("define x mesh by", 'maximum mesh step');
+set("dx", 2e-08);
+set("define y mesh by", 'maximum mesh step');
+set("dy", 2e-08);
+set("define z mesh by", 'maximum mesh step');
+set("dz", 2e-08);
+set("mesh refinement", 'conformal variant 1');
+set("dt stability factor", 0.99);
+set("min mesh step", 2e-08);

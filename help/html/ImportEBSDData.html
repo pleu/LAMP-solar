@@ -1,0 +1,159 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Import EBSD Data</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div>
+         <table class="nav" summary="Navigation aid" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline"><b>LAMP-solar</b> - A MATLAB Toolbox for Solar Cell Analysis
+               </td>
+            </tr>
+         </table>
+         <p style="font-size:1px;"></p>
+      </div>
+      <div class="content">
+         <h1>Import EBSD Data</h1>
+         <introduction>
+            <p>How to import EBSD Data</p>
+         </introduction>
+         <p>Importing EBSD data into MTEX means to create a variable of type <a href="EBSD_index.html">EBSD</a> from certain data files. Once such an variable has been created the data can be <a href="EBSDPlot.html">plotted</a> and <a href="ModifyEBSDData.html">analyzed and processed</a> in many ways. Furthermore, such an EBSD variable is the starting point for <a href="GrainModelling.html">grain reconstruction</a> and <a href="EBSD2odf.html">ODF estimation</a>.
+         </p>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#3">Importing EBSD data using the import wizard</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#5">Features of the import wizard</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Supported Interfaces</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">The generic cnterface</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">The Import Script</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">Writing your own interface</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>Importing EBSD data using the import wizard<a name="3"> </a></h2>
+         <p>The most simplest way to load EBSD data is to use the <a href="matlab:import_wizard('EBSD')">import wizard</a>, which can be started either by typing into the command line
+         </p><pre class="codeinput">import_wizard(<span class="string">'EBSD'</span>);
+</pre><pre class="codeoutput">Undefined function or method 'import_wizard' for input arguments of type 'char'.
+
+Error in ==&gt; ImportEBSDData at 21
+import_wizard('EBSD'); 
+</pre><p>or using from the start menu the item <b>Start/Toolboxes/MTEX/Import Wizard EBSD</b> or by clicking on a data file and choosing <b>import</b> from the context menu. The import wizard provides a gui to import data of almost all EBSD data formats and to save the imported
+            data as a <a href="EBSD_index.html">EBSD</a> variable to the workspace or to generate a m-file loading the data automatically.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Features of the import wizard<a name="5"> </a></h2>
+         <div>
+            <ul type="square">
+               <li>import Euler angles in various conventions</li>
+               <li>import quaternions</li>
+               <li>import EBSD data with weights</li>
+               <li>import multiple phases with multiple crystal symmetries</li>
+               <li>import arbitrary additional data, e.g. MAD, BC, ...</li>
+               <li>specify crystal symmetry by CIF files</li>
+            </ul>
+         </div>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Supported Interfaces<a name="6"> </a></h2>
+         <p>MTEX inlcudes interfaces to the EBSD data formates:</p>
+         <p>
+            <table class="refsub" width="90%">
+            <tr>
+            <td width="15" valign="top"></td>
+            <td width="250px" valign="top">
+            <a href="loadEBSD_ang.html" class="toplink">*.ang</a>
+            </td>
+            <td valign="top"> TSL single orientation files.</td>
+            </tr>
+            <tr>
+            <td width="15" valign="top"></td>
+            <td width="250px" valign="top">
+            <a href="loadEBSD_csv.html" class="toplink">*.csv</a>
+            </td>
+            <td valign="top"> Oxford single orientation files.</td>
+            </tr>
+            <tr>
+            <td width="15" valign="top"></td>
+            <td width="250px" valign="top">
+            <a href="loadEBSD_ctf.html" class="toplink">*.ctf</a>
+            </td>
+            <td valign="top"> HKL single orientation files.</td>
+            </tr>
+            <tr>
+            <td width="15" valign="top"></td>
+            <td width="250px" valign="top">
+            <a href="loadEBSD_sor.html" class="toplink">*.sor</a>
+            </td>
+            <td valign="top"> LaboTEX single orientation files.</td>
+            </tr>
+            <tr>
+            <td width="15" valign="top"></td>
+            <td width="250px" valign="top">
+            <a href="loadEBSD_generic.html" class="toplink">*.txt</a>
+            </td>
+            <td valign="top"> ASCII files with Euler angles as columns.</td>
+            </tr>
+            </table>
+            
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>The generic cnterface<a name="7"> </a></h2>
+         <p>In the case of generic text files MTEX is unsure about the column association in the data file. It will ask the user which
+            colums corresponds to which physical properties.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>The Import Script<a name="8"> </a></h2>
+         <p>A script generated by the import wizard has the following form. Running the script imports the data and stores them in a variable
+            with name ebsd. The script can be freely modyfied and extended to the needs of the user.
+         </p><pre class="codeinput"><span class="comment">% specify crystal and specimen symmetry</span>
+CS = {<span class="keyword">...</span>
+  symmetry(<span class="string">'m-3m'</span>),<span class="keyword">...</span><span class="comment"> % crystal symmetry phase 1</span>
+  symmetry(<span class="string">'m-3m'</span>)};   <span class="comment">% crystal symmetry phase 2</span>
+SS = symmetry(<span class="string">'-1'</span>);   <span class="comment">% specimen symmetry</span>
+
+<span class="comment">% file name</span>
+fname = [mtexDataPath <span class="string">'/aachen_ebsd/85_829grad_07_09_06.txt'</span>];
+
+<span class="comment">% import ebsd data</span>
+ebsd = loadEBSD(fname,CS,SS,<span class="string">'interface'</span>,<span class="string">'generic'</span>,<span class="keyword">...</span>
+  <span class="string">'ColumnNames'</span>, { <span class="string">'id'</span> <span class="string">'Phase'</span> <span class="string">'x'</span> <span class="string">'y'</span> <span class="string">'Euler 1'</span> <span class="string">'Euler 2'</span> <span class="string">'Euler 3'</span> <span class="string">'Mad'</span> <span class="string">'BC'</span>},<span class="keyword">...</span>
+  <span class="string">'ignorePhase'</span>, 0, <span class="string">'Bunge'</span>);
+
+plot(ebsd,<span class="string">'phase'</span>,1)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Writing your own interface<a name="9"> </a></h2>
+         <p>It is not very difficult to write an interface for importing your own data format. Once you have written an interface that
+            reads data from certain data files and generates a EBSD object you can integrate this method into MTEX by copying it into
+            the folder <tt>MTEX/qta/interfaces</tt>. Then it will be automatical recognized by the import wizard. Examples how to write such an interface can be found in the
+            directory <tt>MTEX/qta/interfaces</tt>.
+         </p>
+         <h3 class="seealso">See also</h3>
+         <p><a href="Templates.html">Templates</a></p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

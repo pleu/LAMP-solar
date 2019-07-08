@@ -1,0 +1,149 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Rotations</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit Rotations" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Rotations</h1>
+         <introduction>
+            <p>Explains how to define rotations and how to switch between different Euler angle conventions.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#3">Description</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Euler Angle Conventions</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">Other Ways of Defining a Rotation</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#15">Calculating with Rotations</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#23">Conversion into Euler Angles and Rodrigues Parametrisation</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#24">Plotting Rotations</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>Description<a name="3"> </a></h2>
+         <p>Rotations are represented in MTEX by the class <b>rotation</b> which is an inheritant of the class <a href="quaternion_index.html">quaternion</a> and allow to work with rotations as with matrixes in MTEX.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Euler Angle Conventions<a name="4"> </a></h2>
+         <p>There are several ways to specify a rotation in MTEX. A well known possibility are the so called <b>Euler angles</b>. In texture analysis the following conventions are commonly used
+         </p>
+         <div>
+            <ul type="square">
+               <li>Bunge (phi1,Phi,phi2)       - ZXZ</li>
+               <li>Matthies (alpha,beta,gamma) - ZYZ</li>
+               <li>Roe (Psi,Theta,Phi)</li>
+               <li>Kocks (Psi,Theta,phi)</li>
+               <li>Canova (omega,Theta,phi)</li>
+            </ul>
+         </div>
+         <p><b>Defining a Rotation by Bunge Euler Angles</b></p>
+         <p>The default Euler angle convention in MTEX are the Bunge Euler angles. Here a rotation is determined by three consecutive
+            rotations, the first about the z-axis, the second about the y-axis, and the third again about the z-axis. Hence, one needs
+            three angles two define an rotation by Euler angles. The following command defines a rotation by its three Bunge Euler angles
+         </p><pre class="codeinput">o = rotation(<span class="string">'Euler'</span>,30*degree,50*degree,10*degree)
+</pre><pre class="codeoutput">Undefined function or variable 'degree'.
+
+Error in ==&gt; Rotations at 36
+o = rotation('Euler',30*degree,50*degree,10*degree)
+</pre><p><b>Defining a Rotation by Other Euler Angle Conventions</b></p>
+         <p>In order to define a rotation by a Euler angle convention different to the default Euler angle convention you to specify the
+            convention as an additional parameter, e.g.
+         </p><pre class="codeinput">o = rotation(<span class="string">'Euler'</span>,30*degree,50*degree,10*degree,<span class="string">'Roe'</span>)
+</pre><p><b>Changing the Default Euler Angle Convention</b></p>
+         <p>The default euler angle convention can be changed by the command <a href="set_mtex_option.html">set_mtex_option</a>, for a permanent change the <a href="matlab:edit('mtex_settings.m')">mtex_settings</a> should be edited. Compare
+         </p><pre class="codeinput">set_mtex_option(<span class="string">'EulerAngleConvention'</span>,<span class="string">'Roe'</span>)
+o
+</pre><pre class="codeinput">set_mtex_option(<span class="string">'EulerAngleConvention'</span>,<span class="string">'Bunge'</span>)
+o
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Other Ways of Defining a Rotation<a name="8"> </a></h2>
+         <p><b>The axis angle parametrisation</b></p>
+         <p>A very simple posibility to specify a rotation is to specify the rotational axis and the rotational angle.</p><pre class="codeinput">o = rotation(<span class="string">'axis'</span>,xvector,<span class="string">'angle'</span>,30*degree)
+</pre><p><b>Four vectors defining a rotation</b></p>
+         <p>Given four vectors u1, v1, u2, v2 there is a unique rotations q such that q u1 = v1 and q u2 = v2.</p><pre class="codeinput">o = rotation(<span class="string">'map'</span>,xvector,yvector,zvector,zvector)
+</pre><p>If only two vectors are specified the rotation with the smalles angle is returned that maps the first vector onto the second
+            one.
+         </p><pre class="codeinput">o = rotation(<span class="string">'map'</span>,xvector,yvector)
+</pre><p><b>A fibre of rotations</b></p>
+         <p>The set of all rotations that rotate a certaion vector u onto a certain vector v define a fibre in the rotation space. A discretisation
+            of such an fibre is defined by
+         </p><pre class="codeinput">u = xvector;
+v = yvector;
+o = rotation(<span class="string">'fibre'</span>,u,v)
+</pre><p><b>Defining an rotation by a 3 times 3 matrix</b></p><pre class="codeinput">o = rotation(<span class="string">'matrix'</span>,eye(3))
+</pre><p><b>Defining an rotation by a quaternion</b></p>
+         <p>A last possibility is to define a rotation by a quaternion, i.e., by its components a,b,c,d.</p><pre class="codeinput">o = rotation(<span class="string">'quaternion'</span>,1,0,0,0)
+</pre><p>Actually, MTEX represents internally every rotation as a quaternion. Hence, one can write</p><pre class="codeinput">q = quaternion(1,0,0,0)
+o = rotation(q)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Calculating with Rotations<a name="15"> </a></h2>
+         <p><b>Rotating Vectors</b></p>
+         <p>Let</p><pre class="codeinput">o = rotation(<span class="string">'Euler'</span>,90*degree,90*degree,0*degree)
+</pre><p>a certain rotation. Then the rotation of the xvector is computed via</p><pre class="codeinput">v = o * xvector
+</pre><p>The inverse rotation is computed via the <a href="rotation_mldivide.html">backslash operator</a></p><pre class="codeinput">o \ v
+</pre><p><b>Concatenating Rotations</b></p>
+         <p>Let</p><pre class="codeinput">rot1 = rotation(<span class="string">'Euler'</span>,90*degree,0,0);
+rot2 = rotation(<span class="string">'Euler'</span>,0,60*degree,0);
+</pre><p>be two rotations. Then the rotation defined by applying first rotation one and then rotation two is computed by</p><pre class="codeinput">rot = rot2 * rot1
+</pre><p><b>Computing the rotation angle and the rotational axis</b></p>
+         <p>Then rotational angle and the axis of rotation can be computed via then commands <a href="quaternion_angle.html">angle(rot)</a> and <a href="quaternion_axis.html">axis(rot)</a></p><pre class="codeinput">angle(rot)/degree
+
+axis(rot)
+</pre><p>If two rotations are specifies the command <a href="quaternion_angle.html">angle(rot1,rot2)</a> computes the rotational angle between both rotations
+         </p><pre class="codeinput">angle(rot1,rot2)/degree
+</pre><p><b>The inverse Rotation</b></p>
+         <p>The inverse rotation you get from the command <a href="quaternion_inverse.html">inverse(rot)</a></p><pre class="codeinput">inverse(rot)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Conversion into Euler Angles and Rodrigues Parametrisation<a name="23"> </a></h2>
+         <p>There are methods to transform quaternion in almost any other parameterization of rotations as they are:</p>
+         <div>
+            <ul type="square">
+               <li><a href="quaternion_Euler.html,">Euler(rot)</a>   in Euler angle
+               </li>
+               <li><a href="quaternion_Rodrigues.html,">Rodrigues(rot)</a>  in Rodrigues parameter
+               </li>
+            </ul>
+         </div><pre class="codeinput">[alpha,beta,gamma] = Euler(rot,<span class="string">'Matthies'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Plotting Rotations<a name="24"> </a></h2>
+         <p>The <a href="quaternion_plot.html">plot</a> function allows you to visualize an rotation by plotting how the standard basis x,y,z transforms under the rotation.
+         </p><pre class="codeinput">cla <span class="string">reset</span>;set(gcf,<span class="string">'position'</span>,[43   362   400   300])
+plot(rot)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

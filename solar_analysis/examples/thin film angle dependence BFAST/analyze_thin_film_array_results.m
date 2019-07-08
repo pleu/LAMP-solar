@@ -1,0 +1,101 @@
+% Analyzes the results from a several FDTD simulations
+% filename = [filenamePrefix, variableArray, variableStringArray,
+% variableUnitsArray, filenameSuffix];
+% Change the filename in order to obtain different results
+% 
+% Copyright 2011
+% Paul W. Leu 
+% LAMP, University of Pittsburgh
+clear;
+
+%numThetaQuery = 91;
+
+load('InputVariables');
+variableValues = thetaArray;
+%variableValues = variableValues(10:19);
+minTheta = min(variableValues);
+variableNames = cellstr(variableStringArray);
+variableUnits = cellstr(variableUnitsArray);
+
+ss = SolarSpectrum.global_AM1p5;
+
+va = VariableArray(variableNames, variableUnits, variableValues);
+va.Names = {''};
+va.create_filenames('SiThinFilmTheta');
+
+ma = MaterialType.create(materialName);
+
+%figure(1); 
+%sca.SolarCells.Structure.plot_results_versus_energy;
+%scArray.plot_RTA_results_versus_wavelength(4);
+
+%sr = FDTDSimulationResults.create_array(va.Filenames, 'frequency');
+
+figure(2);
+axis([wavelengthStart wavelengthStop minTheta maxTheta]);
+
+
+%sr.plot_RTA_results_versus_variable(7);
+%sca = SolarCellArray.create(ss, sr, va, ma);
+
+%thetaQuery = linspace(minTheta, maxTheta, numThetaQuery);
+
+[sra] = FDTDSimulationResultsArray.create(va, 'frequency');
+figure(1);
+clf;
+va.Names = {'Theta'};
+sra.contour('Wavelength', 'Theta', 'Absorption',200,0);
+axis([wavelengthStart*1e9,wavelengthStop*1e9,minTheta, maxTheta])
+caxis([0 1]);
+
+
+figure(2);
+sra.contour('Wavelength', 'Theta', 'Absorption',200,0, 'polar');
+%axis([wavelengthStart*1e9,wavelengthStop*1e9,minTheta, maxTheta])
+caxis([0 1]);
+
+% figure(6);
+% clf;
+% sraQuery.contour('Wavelength', 'Theta', 'Reflection',200,0);
+
+sca = SolarCellArray.create(ss, sra.Simulations, va, ma);
+
+%scaCheck = SolarCellArray.create_FDTD(ss, va, ma, 'frequency');
+
+
+figure(7);
+plot(va.Values, sca.UltimateEfficiency);
+
+figure(8);
+plot(va.Values, sca.CurrentSC);
+
+
+%sra.contour('Frequency', 'Theta', 'Reflection',200,0);
+%colorbar;
+% 
+% figure(6);
+% clf;
+
+% colorbar;
+
+% figure(7);
+% clf;
+% sraQuery.contour('Frequency', 'Theta', 'Reflection',200,0);
+% colorbar;
+% 
+% figure(8);
+% clf;
+% sraQuery.contour('Wavelength', 'Theta', 'Reflection',200,0);
+% colorbar;
+
+
+%figure(10);
+%clf;
+%scArray.plot();
+%grid on;
+%sra.contour('Wavelength', 'Theta', 'Absorption')
+
+% sr.plot_RTA_results_versus_energy(1);
+% sr.plot_RTA_results_versus_variable(4);
+% 
+% sr.plot_UE_versus_variable(7);

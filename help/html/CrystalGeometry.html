@@ -1,0 +1,355 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Crystal Geometry</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div>
+         <table class="nav" summary="Navigation aid" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline"><b>LAMP-solar</b> - A MATLAB Toolbox for Solar Cell Analysis
+               </td>
+            </tr>
+         </table>
+         <p style="font-size:1px;"></p>
+      </div>
+      <div class="content">
+         <h1>Crystal Geometry</h1>
+         <introduction>
+            <p>Introduces key concepts about the MTEX representation of specimen directions, crystal directions, crystal symmetries, rotations
+               and orientations.
+            </p>
+            <p>
+               <table class="ref" width="90%">
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('SpecimenDirections_block','SpecimenDirections_expandable_text');">
+               <img id="SpecimenDirections_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('SpecimenDirections_block','SpecimenDirections_expandable_text');"
+               onDblClick="document.location.href=&#34;SpecimenDirections.html&#34;">Specimen Directions</a>
+               </td>
+               <td valign="top">Explains how to define and calculate with specimen directions.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="SpecimenDirections_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="SpecimenDirections.html#4" style="font-weight:normal">Defining Specimen Directions</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="SpecimenDirections.html#7" style="font-weight:normal">Calculating with Specimen Directions</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="SpecimenDirections.html#11" style="font-weight:normal">Plotting three dimensionl vectors</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('Rotations_block','Rotations_expandable_text');">
+               <img id="Rotations_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('Rotations_block','Rotations_expandable_text');" onDblClick="document.location.href=&#34;Rotations.html&#34;">Rotations</a>
+               </td>
+               <td valign="top">Explains how to define rotations and how to switch between different Eulerangle conventions.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="Rotations_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="Rotations.html#3" style="font-weight:normal">Description</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="Rotations.html#4" style="font-weight:normal">Euler Angle Conventions</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="Rotations.html#8" style="font-weight:normal">Other Ways of Defining a Rotation</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="Rotations.html#15" style="font-weight:normal">Calculating with Rotations</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="Rotations.html#23" style="font-weight:normal">Conversion into Euler Angles and Rodrigues Parametrisation</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="Rotations.html#24" style="font-weight:normal">Plotting Rotations</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('CrystalSymmetries_block','CrystalSymmetries_expandable_text');">
+               <img id="CrystalSymmetries_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('CrystalSymmetries_block','CrystalSymmetries_expandable_text');"
+               onDblClick="document.location.href=&#34;CrystalSymmetries.html&#34;">Crystal Symmetries</a>
+               </td>
+               <td valign="top">Explains how to define crystal symmetries.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="CrystalSymmetries_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="CrystalSymmetries.html#4" style="font-weight:normal">Defining a Crystal Symmetry by the Name of its Laue Group</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalSymmetries.html#6" style="font-weight:normal">Defining a Crystal Symmetry by the Name of its Point Group or
+               its Space Group</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalSymmetries.html#7" style="font-weight:normal">Defining a Crystal Symmetry by a CIF File</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalSymmetries.html#8" style="font-weight:normal">The Crystal Coordinate System</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalSymmetries.html#9" style="font-weight:normal">A and B Configurations</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalSymmetries.html#11" style="font-weight:normal">Calculations</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalSymmetries.html#12" style="font-weight:normal">Plotting symmetries</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('CrystalDirections_block','CrystalDirections_expandable_text');">
+               <img id="CrystalDirections_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('CrystalDirections_block','CrystalDirections_expandable_text');"
+               onDblClick="document.location.href=&#34;CrystalDirections.html&#34;">Crystal Directions</a>
+               </td>
+               <td valign="top">Explains how to define crystal directions by Miller indices and how tocompute crystallographic equivalent
+               directions.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="CrystalDirections_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="CrystalDirections.html#4" style="font-weight:normal">Definition</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalDirections.html#8" style="font-weight:normal">Plotting Miller indece</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalDirections.html#10" style="font-weight:normal">Symmetrically Equivalent Crystal Directions</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalDirections.html#14" style="font-weight:normal">Angles</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalDirections.html#16" style="font-weight:normal">Conversations</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalDirections.html#18" style="font-weight:normal">Calculations</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('CrystalOrientations_block','CrystalOrientations_expandable_text');">
+               <img id="CrystalOrientations_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('CrystalOrientations_block','CrystalOrientations_expandable_text');"
+               onDblClick="document.location.href=&#34;CrystalOrientations.html&#34;">Crystal Orientations</a>
+               </td>
+               <td valign="top">Explains how to define crystal orientations, how to switch betweendifferent convention and how to compute
+               crystallographic equivalentorientations.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="CrystalOrientations_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="CrystalOrientations.html#5" style="font-weight:normal">Defining a Crystal Orientation</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalOrientations.html#13" style="font-weight:normal">Rotating Crystal Directions onto Specimen Directions</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalOrientations.html#17" style="font-weight:normal">Concatenating Rotations</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalOrientations.html#21" style="font-weight:normal">Caclulating Missorientations</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalOrientations.html#23" style="font-weight:normal">Calculating with Orientations and Rotations</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalOrientations.html#25" style="font-weight:normal">Conversion into Euler Angles and Rodrigues Parametrisation</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="CrystalOrientations.html#26" style="font-weight:normal">Plotting Orientations</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('AxialDirectional_block','AxialDirectional_expandable_text');">
+               <img id="AxialDirectional_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('AxialDirectional_block','AxialDirectional_expandable_text');"
+               onDblClick="document.location.href=&#34;AxialDirectional.html&#34;">Antipodal Symmetry</a>
+               </td>
+               <td valign="top">Explains the MTEX option antipodal and the impact of antipodal symmetryto pole figure plots and EBSD colorcoding.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="AxialDirectional_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="AxialDirectional.html#3" style="font-weight:normal">Directions vs. Axes</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="AxialDirectional.html#7" style="font-weight:normal">The Angle between Directions and Axes</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="AxialDirectional.html#9" style="font-weight:normal">Antipodal Symmetry in Experimental Pole Figures</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="AxialDirectional.html#11" style="font-weight:normal">Antipodal Symmetry in Recalculated Pole Figures</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="AxialDirectional.html#13" style="font-weight:normal">Antipodal Symmetry in inverse Pole Figures</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="AxialDirectional.html#16" style="font-weight:normal">EBSD Colocoding</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               </table>
+               
+            </p>
+         </introduction>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

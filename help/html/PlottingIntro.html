@@ -1,0 +1,144 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Plotting Overview</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit PlottingIntro" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Plotting Overview</h1>
+         <introduction>
+            <p>Overview over the plotting faccilities of MTEX, including annotations, plot types, color coding, combined plots and export
+               of plots.
+            </p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#3">Plotting in MTEX</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Plot Types</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#5">Spherical Projections</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Color Coding</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Plot Annotations</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">Combined Plots</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">Exporting Plots</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#10">Changing the Default Plotting Options</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>Plotting in MTEX<a name="3"> </a></h2>
+         <p>In MTEX you can plot almost any type data. Simply apply the <b>plot</b> command to any variable and MTEX tries to plot the content of the variable in the most intuive way. In this way you can plot
+            three Miller indeces, rotations, pole figures, or ODFs. MTEX also offers you a wide range of possibilities to custumize your
+            plots, e.g. by changing the <a href="PlotTypes_demo.html">plot style</a>, the <a href="SphericalProjection_demo.html">spherical projection</a>, the <a href="ColorCoding_demo.html">color coding</a>, or by adding <a href="Annotations_demo.html">colorbars or other annotations</a> to the plot. You can even <a href="CombinedPlots_demo.html">combine plots</a> of different ODFs or EBSD data. This way MTEX allows you to create publication ready plots which can be exported to almost
+            any format using the commands <a href="savefigure.html">savefigure</a>.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Plot Types<a name="4"> </a></h2>
+         <p>In general MTEX knows the following <a href="PlotTypes_demo.html">plot types</a></p>
+         <div>
+            <ul type="square">
+               <li>contour plots</li>
+               <li>filled contour plots</li>
+               <li>smoots plots</li>
+               <li>scatter plots</li>
+               <li>line plots</li>
+            </ul>
+         </div>
+         <p>Contour plots are plots consisting only of contour lines and mainly used for pole figure or ODF plots. For raw pole figure
+            data MTEX uses by default a plot where each datapoint is represented by a single dot colored accordingly to the intensity.
+            Line plots are used by MTEX for one dimesional ODF plots, plots of Fourier coefficients and plots of kernel functions functions
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Spherical Projections<a name="5"> </a></h2>
+         <p>Whenever MTEX plots pole figures, ODFs, or crystal or specimen directions MTEX uses spherical projections to map the spherical
+            data to the plane. By doing so MTEX supports a wide varity of <a href="SphericalProjection_demo.html">spherical projections</a>, i.e.,
+         </p>
+         <div>
+            <ul type="square">
+               <li>equal area projection (Schmidt)</li>
+               <li>equal distance projection</li>
+               <li>equal angle projection (stereographic)</li>
+               <li>plain</li>
+               <li>3d plots</li>
+            </ul>
+         </div>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Color Coding<a name="6"> </a></h2>
+         <p>A central issue when interpreting plots is to have a consistent <a href="ColorCoding_demo.html">color coding</a> among all plots. In MTEX this can be achieved in two ways. If the the minimum and maximum value is known then one can use
+            one of the following syntaxes to have a consistent color coding.
+         </p>
+         <div>
+            <ul type="square">
+               <li>Specifying the colorrange</li>
+               <li>Setting a logarithmic color scale</li>
+               <li>Switching to a monochrome color scale * See also <a href="ColorCodingEBSD_demo">color coding EBSD</a>.
+               </li>
+            </ul>
+         </div>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Plot Annotations<a name="7"> </a></h2>
+         <p>After generating a plot with MTEX it is possible to modify it interactivly using the MATLAB plotting tools in the plotting
+            figure. This includes
+         </p>
+         <div>
+            <ul type="square">
+               <li>adding a colorbar</li>
+               <li>adding a legend</li>
+               <li>adding annotations</li>
+               <li>resizing / shifting parts of the plot</li>
+            </ul>
+         </div>
+         <p>This is described in more detail <a href="Annotations_demo.html">here.</a></p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Combined Plots<a name="8"> </a></h2>
+         <p>Sometimes it is usefull to combine several plots, e.g. plotting on the top of an inverse pole figure some important crystall
+            directions. This can be performed by the command <a href="matlab:doc hold">hold all</a>, which preserfes MATLAB from replacing the old
+            plot by the new one. This technique is described in more detail <a href="CombinedPlots_demo.html">here.</a></p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Exporting Plots<a name="9"> </a></h2>
+         <p>Plots generated by MTEX can be exported to a wide range of formats using the MATLAB function <b>save as</b> in the figure menu or using the command <a href="savefigure.html">savefigure</a></p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Changing the Default Plotting Options<a name="10"> </a></h2>
+         <p>If you want to change the default plotting options, e.g. set color coding to <b>equal</b> in each plot or allways use the option <b>antipodal</b>. Then the desired options can be added in the start up file <a href="matlab: edit mtex_settings.m">mtex_settings</a> to the option
+            <b>default_plot_options</b>.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

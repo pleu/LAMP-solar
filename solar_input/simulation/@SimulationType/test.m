@@ -1,0 +1,1 @@
+si = SimulationType.create('FDTD');

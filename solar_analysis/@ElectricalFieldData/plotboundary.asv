@@ -1,0 +1,19 @@
+function [] = plotboundary(obj)
+  geo = obj.Geo;
+  rTop=geo(1,1);
+  rBot=geo(2,1);
+  l=geo(3,1);
+  if r == rmax
+   plot([-rBot -r],[-l l],'w--');
+   hold on;
+   plot([rmax r],[-l l],'w--');
+   plot([-rmax rmax],[-l -l],'w--');
+   plot([-r r],[l l],'w--');
+  else
+   plot([-r -r],[-l l],'w--');
+   hold on;
+   plot([r r],[-l l],'w--');
+   plot([-r r],[-l -l],'w--');
+   plot([-r r],[l l],'w--');
+  end
+end

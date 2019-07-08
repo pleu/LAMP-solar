@@ -1,0 +1,1 @@
+mo = MonitorType.create('FrequencyDomainFieldPower');

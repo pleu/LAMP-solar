@@ -1,0 +1,67 @@
+# InputVariables for Thin film
+# 
+# Make sure to change working directory to where script files are located
+# Run InputVariables.lsf
+# Run ThinFilmSimulation.lsf
+#
+# Copyright 2010-11, Baomin Wang, Paul W. Leu
+# LAMP, University of Pittsburgh
+clear;
+# fileName 
+materialName = 'Cu';
+waveMode = '';
+filenamePrefix = materialName + "NW" + waveMode;
+# filename is filePrefix + variableStringArray + num2str(filmThicknessArray(i)*1e9) + 
+# variableUnitsArray + filenameSuffix
+#
+# Film structure
+#
+# all units are in meters
+minPitch = 600e-9; 
+maxPitch = 600e-9;
+incrementPitch = 10e-9;
+maxOuterRadius = 300e-9;
+minOuterRadius = 125e-9;
+incrementRadius = 25e-9;
+innerRadius = 0;
+variableStringArray = 'd'; # "d" for "diameter"
+variableUnitsArray = 'nm';
+pitchStringArray = 'p'; # "p" for "pitch"
+filenameSuffix = '';
+material = 'Cu (Copper) - CRC';
+#
+# Simulation cell
+#
+FDTDyOffset = 60e-9;
+simulationTime = 300e-15; # in seconds
+meshType = 'auto non-uniform'; # 'auto non-uniform', 'custom non-uniform', or 'uniform'
+meshSizeX = 2e-9;
+meshSizeY = 2e-9;
+meshSizeZ = 2e-9;
+
+minMeshStep = 2e-9;
+
+dx = 20e-9;
+dy = 20e-9;
+dz = 20e-9;
+
+meshAccuracy = 2; # for auto non-uniform mesh, a number from 1 (least accurate) to 8
+FDTDzSpace = 30e-9; # distance to edge of simulation cell from monitors
+#
+#geometry of source and monitor
+# xspan of source and monitor is set to filmXSpan 
+#
+sourceXspan = 1600e-9;
+sourceOffset = 20e-9;
+wavelengthStart = 280e-9;
+wavelengthStop = 1000e-9;
+injectionAxis = 'z-axis';
+injectionDirection = 'Forward';
+angleTheta = 0;
+anglePhi = 0;
+polarizationAngle = 0;
+# for monitor 
+numFrequencyPoints = 1000;
+reflectionMonitorOffset = 30e-9;
+transmissionMonitorOffset = 30e-9;
+matlabsave("InputVariables");

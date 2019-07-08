@@ -1,0 +1,91 @@
+FDTD Solutions Version 8.17.1157 (Mac 64bit)
+ expires (month/day/year): 5/26/2017
+using config file: /Users/pleu/.config/Lumerical/FDTD Solutions.ini
+license host: <a href=http://coco.sam.pitt.edu:8095>coco.sam.pitt.edu:8095</a>
+current time: Mon Apr 24 11:42:00 2017
+Running on host: Pauls-MacBook-Pro-8.local
+All processes are communicating and ready to proceed to simulation...
+Running fsp file: /Applications/Lumerical/FDTD Solutions/FDTD Solutions.app/Contents/MacOS/fdtd-engine -remote /Users/pleu/Documents/LAMP-solar/solar_analysis/examples/thin film angle dependence BFAST/SiThinFilmTheta35degTE.fsp
+number of processors is 1
+processors are distributed as: 1x1x1
+Running 3D Simulation
+Split-field FDTD is activated with propagation along axis 3, center frequency is 3, n=1
+Starting meshing
+Simulation size in gridpoints: 4 x 3 x 299
+Completed meshing!
+Meshing complete in 0.000313 seconds of CPU time
+Numerical discretization of material 'Si (Silicon) - Palik' might be unstable! Max. imaginary part of epsilon is 0.00482749!
+80 80
+Starting meshing
+Simulation size in gridpoints: 4 x 3 x 299
+Completed meshing!
+Meshing complete in 0.00017 seconds of CPU time
+Numerical discretization of material 'Si (Silicon) - Palik' might be unstable! Max. imaginary part of epsilon is 0.00482749!
+80 80
+Starting meshing
+Simulation size in gridpoints: 4 x 3 x 299
+Completed meshing!
+Meshing complete in 0.000134 seconds of CPU time
+Numerical discretization of material 'Si (Silicon) - Palik' might be unstable! Max. imaginary part of epsilon is 0.00482749!
+80 80
+finished material properties
+Using selected optimization level: 2
+Selecting 3d kernel for splitFieldDirection=3 and optLevel=2
+-----------------------------------------
+Beginning initialization of 3D Simulation
+Starting to add sources to simulation
+Reverted to narrowband source injection
+Using BFAST in the 3d sources! Injection direction: 1, index: 1
+Adding 3D Gaussian Source propagating in Z
+Starting to add boundary conditions to simulation
+Adding 3D Periodic BC
+Adding 3D Periodic BC
+Adding 3D Anti-Symmetric BC
+Adding 3D Anti-Symmetric BC
+Adding 3D PML BC
+Adding 3D PML BC
+Starting to add monitors to Simulation
+Adding analysis monitor
+Adding 3D DFT monitor
+Adding 3D DFT monitor
+Finished initialization of 3D Simulation
+-----------------------------------------
+All processes are communicating and ready to proceed to simulation...
+Starting 246000 total iterations
+0% complete. Max time remaining: 1 min, 8 secs. Auto Shutoff: 1
+2% complete. Max time remaining: 1 min, 10 secs. Auto Shutoff: 0.293273
+3% complete. Max time remaining: 1 min, 10 secs. Auto Shutoff: 0.21169
+5% complete. Max time remaining: 1 min, 11 secs. Auto Shutoff: 0.0873804
+7% complete. Max time remaining: 1 min, 11 secs. Auto Shutoff: 0.0532171
+8% complete. Max time remaining: 1 min, 9 secs. Auto Shutoff: 0.0289188
+10% complete. Max time remaining: 1 min, 8 secs. Auto Shutoff: 0.0158274
+12% complete. Max time remaining: 1 min, 6 secs. Auto Shutoff: 0.00922016
+13% complete. Max time remaining: 1 min, 5 secs. Auto Shutoff: 0.00506728
+15% complete. Max time remaining: 1 min, 4 secs. Auto Shutoff: 0.00283638
+17% complete. Max time remaining: 1 min, 3 secs. Auto Shutoff: 0.00167968
+18% complete. Max time remaining: 1 min, 3 secs. Auto Shutoff: 0.000922301
+20% complete. Max time remaining: 1 min, 1 secs. Auto Shutoff: 0.000521947
+22% complete. Max time remaining: 1 min, 0 secs. Auto Shutoff: 0.000291153
+23% complete. Max time remaining: 59 secs. Auto Shutoff: 0.000173009
+25% complete. Max time remaining: 58 secs. Auto Shutoff: 9.75242e-05
+27% complete. Max time remaining: 57 secs. Auto Shutoff: 5.68491e-05
+28% complete. Max time remaining: 55 secs. Auto Shutoff: 3.24593e-05
+30% complete. Max time remaining: 54 secs. Auto Shutoff: 1.8215e-05
+32% complete. Max time remaining: 53 secs. Auto Shutoff: 1.0562e-05
+32% complete. Max time remaining: 53 secs. Auto Shutoff: 9.905e-06
+100% complete. Max time remaining: 0 mins, 0 secs. Auto Shutoff: 9.905e-06
+Early termination of simulation, the autoshutoff criteria are satisfied.
+Completed 78351 iterations, or 3.185001e-13s of Simulation Time
+Process 0 starting to collect data
+    collecting monitor data
+    collecting source data
+Reverted to narrowband source injection
+Using BFAST in the 3d sources! Injection direction: 1, index: 1
+Finished collecting data
+Simulation completed successfully at: Mon Apr 24 11:42:31 2017
+Overall wall time measurements in seconds:
+    time to mesh and initialize: 6
+    time to run FDTD simulation: 25
+    time to finalize data and save to files: 0
+    FDTD solver speed: 11.2449 Mnodes/s
+    total FDTD solver speed on 1 processes: 11.2449 Mnodes/s

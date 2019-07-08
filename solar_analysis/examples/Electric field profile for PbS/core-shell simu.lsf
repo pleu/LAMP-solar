@@ -1,0 +1,305 @@
+switchtolayout;
+#
+# setup structure
+#
+#selectall;
+deleteall;
+#
+save('test');
+#absp_bare_raw=readdata("50nm_bare_PbS.txt");            # import absorption data of bare solar cell
+#absp_bare = transpose(absp_bare_raw(2,1:200));
+
+#solar_spectrum_data = readdata("ASTMG173.txt"); 
+#f_ssp = c/pinch(solar_spectrum_data,2,1)*1e9;  # frequency vector, in Hz
+#ssp = pinch(solar_spectrum_data,2,3);          # power spectrum
+#ssp_length = length(ssp);
+
+addanalysisgroup;
+adduserprop("x span", 2, 0.5);
+adduserprop("y span", 2, 0.5);
+adduserprop("z span", 2, 0.5);
+
+#add nanlysis to get effective absorption
+set("name", analysisName);
+addindex;
+set("name", "index");
+setnamed("index","monitor type","3D");
+#setnamed("index","simulation type","All");
+set("override global monitor settings", 1);
+setnamed("index","spatial interpolation","specified position");
+addtogroup(analysisName);
+addpower;
+set("name", "field");
+setnamed("field","monitor type","3D");
+#setnamed("field","simulation type","All");
+set("override global monitor settings", 1);
+setnamed("field","spatial interpolation","specified position");
+addtogroup(analysisName);
+
+select(analysisName);
+setnamed("Pabs::field","frequency points",numFrequencyPoints);
+setnamed("Pabs::index","frequency points",numFrequencyPoints);
+
+
+addanalysisgroup;
+adduserprop("x span", 2, 0.5);
+adduserprop("y span", 2, 0.5);
+adduserprop("z span", 2, 0.5);
+
+#add analysis group to give E-field intensity for whole structure
+set("name", totalAnalysisName);
+addindex;
+set("name", "index");
+setnamed("index","monitor type","3D");
+#setnamed("index","simulation type","All");
+set("override global monitor settings", 1);
+setnamed("index","spatial interpolation","specified position");
+addtogroup(totalAnalysisName);
+addpower;
+set("name", "field");
+setnamed("field","monitor type","3D");
+#setnamed("field","simulation type","All");
+set("override global monitor settings", 1);
+setnamed("field","spatial interpolation","specified position");
+addtogroup(totalAnalysisName);
+
+select(totalAnalysisName);
+setnamed("Pabs_tot::field","frequency points",numFrequencyPoints);
+setnamed("Pabs_tot::index","frequency points",numFrequencyPoints);
+
+#add structure
+#
+addsphere;
+set("name", silicaCoreName);
+setnamed(silicaCoreName,"x",0);
+setnamed(silicaCoreName,"y",0);
+setnamed(silicaCoreName,"z",coreRadius+thicknessSilicaShell+thicknessAu);
+setnamed(silicaCoreName,"radius",coreRadius);
+setnamed(silicaCoreName,"material",silicaCoreMaterial);
+setnamed(silicaCoreName,"override mesh order from material database",1);
+setnamed(silicaCoreName,"mesh order",2);
+
+addsphere;
+set("name", goldLayerName);
+setnamed(goldLayerName,"x",0);
+setnamed(goldLayerName,"y",0);
+setnamed(goldLayerName,"z",coreRadius+thicknessSilicaShell+thicknessAu);
+setnamed(goldLayerName,"radius",coreRadius+thicknessAu);
+setnamed(goldLayerName,"material",goldLayerMaterial);
+setnamed(goldLayerName,"override mesh order from material database",1);
+setnamed(goldLayerName,"mesh order",3);
+
+addsphere;
+set("name", silicaShellName);
+setnamed(silicaShellName,"x",0);
+setnamed(silicaShellName,"y",0);
+setnamed(silicaShellName,"z",coreRadius+thicknessSilicaShell+thicknessAu);
+setnamed(silicaShellName,"radius",coreRadius+thicknessSilicaShell+thicknessAu);
+setnamed(silicaShellName,"material",silicaCoreMaterial);
+setnamed(silicaShellName,"override mesh order from material database",1);
+setnamed(silicaShellName,"mesh order",4);
+
+addrect;
+set("name","PbS");
+setnamed("PbS","z min",-thicknessPbS);
+setnamed("PbS","z max",0);
+setnamed("PbS","x",0);
+setnamed("PbS","y",0);
+setnamed("PbS","material",PbSMaterial);
+
+addrect;
+set("name","SiO2");
+setnamed("SiO2","z max",2*(coreRadius+thicknessSilicaShell+thicknessAu));
+setnamed("SiO2","z min",0);
+setnamed("SiO2","x",0);
+setnamed("SiO2","y",0);
+setnamed("SiO2","material",SiO2Material);
+setnamed("SiO2","override mesh order from material database",5);
+setnamed("SiO2","mesh order",5);
+
+addmesh;
+setnamed("mesh","dx",dx);
+setnamed("mesh","dy",dy);
+setnamed("mesh","dz",dz);
+setnamed("mesh","x span",2.2*(coreRadius+thicknessSilicaShell+thicknessAu));
+setnamed("mesh","y span",2.2*(coreRadius+thicknessSilicaShell+thicknessAu));
+setnamed("mesh","z span",2.2*(coreRadius+thicknessSilicaShell+thicknessAu));
+setnamed("mesh","x",0);
+setnamed("mesh","y",0);
+setnamed("mesh","z",coreRadius+thicknessSilicaShell+thicknessAu);
+
+#
+#add FDTD
+#
+addfdtd;
+setnamed("FDTD","x",0);
+setnamed("FDTD","y",0);
+setnamed("FDTD","z max",2*(coreRadius+thicknessSilicaShell+thicknessAu));
+setnamed("FDTD","z min",-thicknessPbS-FDTDOffset);
+setnamed("FDTD","simulation time",simulationTime);
+setnamed("FDTD", "mesh type", meshType);
+
+if (meshType == 'uniform') {
+  setnamed("FDTD", "dx", meshSizeX);
+  setnamed("FDTD", "dy", meshSizeY);
+  }  
+if (meshType == 'auto non-uniform') {
+  setnamed("FDTD","mesh accuracy",meshAccuracy);
+  }
+
+#for normal angle incidence
+#set the bc of simulation
+if (angleTheta == 0 & anglePhi == 0 & polarizationAngle == 0){
+  setnamed("FDTD","allow symmetry on all boundaries", 1);
+  setnamed("FDTD","x min bc","Anti-Symmetric");
+  setnamed("FDTD","x max bc","Anti-Symmetric");
+  setnamed("FDTD","y min bc","Symmetric");
+  setnamed("FDTD","y max bc","Symmetric");
+  } 
+else {
+  setnamed("FDTD","x min bc","Periodic");
+  setnamed("FDTD","x max bc","Periodic");
+  }
+setnamed("FDTD","dimension","3D");
+setnamed("FDTD","z min bc","PML");
+setnamed("FDTD","z max bc","Metal");
+
+#add source
+#
+addplane;
+setnamed("source","set frequency",1);
+setnamed("source","x",0);
+setnamed("source","y",0);
+setnamed("source","z",-thicknessPbS-sourceOffset);
+setnamed("source","set time domain",0);
+setnamed("source","wavelength start",wavelengthStart);
+setnamed("source","wavelength stop",wavelengthStop);
+
+#
+#add reflection monitor
+#
+addpower;
+set("name","Reflection");
+setnamed("Reflection","x",0);
+setnamed("Reflection","y",0);
+setnamed("Reflection","z",-thicknessPbS-monitorOffset);
+setglobalmonitor("frequency points",numFrequencyPoints);
+
+#addanalysisgroup;
+#set("name","Pabs");
+#adduserprop("x span",2,500e-9);
+#adduserprop("y span",2,500e-9);
+#adduserprop("z span",2,thicknessPbS);
+#setnamed("Pabs","x",0);
+#setnamed("Pabs","y",0);
+#setnamed("Pabs","z",-thicknessPbS/2);
+#setnamed("Pabs","setup script","selectall;\ndeleteall;\naddindex;\nset('name','index');\naddpower;\nset('name','field');\nx_span = %x span%;\ny_span = %y span%;\nz_span = %z span%;\nsetnamed('field','monitor type','3D');\nsetnamed('field','x',0);\nsetnamed('field','y',0);\nsetnamed('field','z',0);\nsetnamed('field','x span',x_span);\nsetnamed('field','y span',y_span);\nsetnamed('field','z span',z_span);\nsetnamed('index','monitor type','3D');\nsetnamed('index','override global monitor settings',0);\nsetnamed('index','x',0);\nsetnamed('index','y',0);\nsetnamed('index','z',0);\nsetnamed('index','x span',x_span);\nsetnamed('index','y span',y_span);\nsetnamed('index','z span',z_span);");
+#runsetup;
+
+#setnamed("Pabs","analysis script","x=getdata('field','x');\ny=getdata('field','y');\nz=getdata('field','z');\nf=getdata('field','f');\nnx=length(x);\nny=length(y);\nnz=length(z);\nnf=length(f);\nE2_matrix=getelectric('field');\nif (havedata('index','index_x'))\n {  n_matrix=getdata('index','index_x');\n}\n else {\n  n_matrix=getdata('index','index_z');\n}\nW=meshgrid4d(4,x,y,z,f*2*pi);\nSP=meshgrid4d(4,x,y,z,sourcepower(f));\nepsilon = eps0*n_matrix^2;\nPabs_matrix = 0.5*W*E2_matrix*imag(epsilon)/SP;\nPabs_integrated = integrate2(Pabs_matrix,1:3,x,y,z);\nPabs = rectilineardataset('Pabs',x,y,z);\nPabs.addparameter('f',f,'wavelength',c/f);\nPabs.addattribute('Pabs',Pabs_matrix);\nPabs_total = matrixdataset('Pabs total');\nPabs_total.addparameter('f',f,'wavelength',c/f);\nPabs_total.addattribute('Pabs_total',Pabs_integrated);");
+
+
+
+
+
+#
+numPitch = 1 + (maxPitch - minPitch) / incrementPitch;
+pitchArray = linspace(minPitch,maxPitch,numPitch);
+#
+#changing parameters and running simulations
+#
+for(i=1:numPitch)
+{
+  switchtolayout;
+  structures;
+
+  setnamed("PbS","x span",pitchArray(i));
+  setnamed("PbS","y span",pitchArray(i));
+
+  setnamed("FDTD","x span",pitchArray(i));
+  setnamed("FDTD","y span",pitchArray(i));
+
+  setnamed("SiO2","x span",pitchArray(i));   
+  setnamed("SiO2","y span",pitchArray(i)); 
+
+  setnamed("source","x span",pitchArray(i));
+  setnamed("source","y span",pitchArray(i));
+
+  setnamed("Reflection","x span",pitchArray(i));
+  setnamed("Reflection","y span",pitchArray(i));
+
+  setnamed("Pabs","x span",pitchArray(i));
+  setnamed("Pabs","y span",pitchArray(i));
+  setnamed("Pabs","z",-thicknessPbS/2);
+  setnamed("Pabs","z span",thicknessPbS);
+  setnamed("Pabs::index","x span",pitchArray(i));
+  setnamed("Pabs::index","y span",pitchArray(i));
+  setnamed("Pabs::index","z span",thicknessPbS);
+  setnamed("Pabs::index","z",0);
+  setnamed("Pabs::index","z",0);
+  setnamed("Pabs::field","x span",pitchArray(i));
+  setnamed("Pabs::field","y span",pitchArray(i));
+  setnamed("Pabs::field","z span",thicknessPbS);
+  setnamed("Pabs::field","z",0);
+  
+  setnamed("Pabs_tot","x span",pitchArray(i));
+  setnamed("Pabs_tot","y span",pitchArray(i));
+  setnamed("Pabs_tot","z",-0.5*(thicknessPbS+FDTDOffset)+coreRadius+thicknessSilicaShell+thicknessAu);
+  setnamed("Pabs_tot","z span",thicknessPbS+FDTDOffset+2*(coreRadius+thicknessSilicaShell+thicknessAu));
+  setnamed("Pabs_tot::index","x span",pitchArray(i));
+  setnamed("Pabs_tot::index","y span",pitchArray(i));
+  setnamed("Pabs_tot::index","z span",thicknessPbS+FDTDOffset+2*(coreRadius+thicknessSilicaShell+thicknessAu));
+  setnamed("Pabs_tot::index","z",0);
+  setnamed("Pabs_tot::index","z",0);
+  setnamed("Pabs_tot::field","x span",pitchArray(i));
+  setnamed("Pabs_tot::field","y span",pitchArray(i));
+  setnamed("Pabs_tot::field","z span",thicknessPbS+FDTDOffset+2*(coreRadius+thicknessSilicaShell+thicknessAu));
+  setnamed("Pabs_tot::field","z",0);
+  
+  runsetup;
+   
+
+  #save the files
+  filename = filenamePrefix + variableStringArray + num2str(pitchArray(i) * 1e9) + unitStringArray;
+  #save(filename);
+  #switch to simulation tab
+  simulation;
+  #run simulation
+  run;
+  #get data; use minimal formatting of data
+    
+  # matlabsave(transmissionFile, frequencyTransmission, transmissionData); 
+  frequencyReflection = getdata("Reflection", "f");
+  reflectionData = -transmission("Reflection");
+  reflectionFile = filename+"Reflection.txt";
+  dataReflection = [transpose(frequencyReflection); transpose(reflectionData)];
+   
+  if (fileexists(reflectionFile)) {
+    rm(reflectionFile);
+  }
+  write(reflectionFile,num2str(dataReflection));
+
+  frequencyAbsorption = getdata("Reflection","f");
+
+  power_absorption_analysis;
+  #runanalysis("Pabs");
+  #E2  =getresult("Pabs::field","E");
+  #n   =getresult("Pabs::index","index"); 
+    
+  #Pabs=getresult("Pabs","Pabs");
+
+  #Pabs_total = getresult("Pabs","Pabs_total");
+    
+  filenameIntegration = filename + "IntegratedReflection";
+  dataAbsorption = [transpose(frequencyAbsorption); transpose(1-Pabs_total.Pabs_total)];
+  if (fileexists(filenameIntegration+".txt")) {
+    rm(filenameIntegration+".txt");
+  }
+
+  write(filenameIntegration+".txt",num2str(dataAbsorption));
+
+
+}
+
+
+

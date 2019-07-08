@@ -1,0 +1,3 @@
+\contentsline {section}{\numberline {1}Paper}{1}{section.1}
+\contentsline {section}{\numberline {2}Internal Fluorescence}{1}{section.2}
+\contentsline {section}{\numberline {3}Step Function Absorber}{2}{section.3}

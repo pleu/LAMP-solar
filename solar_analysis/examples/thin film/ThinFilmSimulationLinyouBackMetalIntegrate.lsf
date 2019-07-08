@@ -1,0 +1,183 @@
+newproject;
+#
+# setup structure
+#
+
+material = 'Linyou';
+analysisName = 'Pabs';
+
+mymaterial = addmaterial("(n,k) material");
+setmaterial(mymaterial,"name",material);
+setmaterial(material,"Refractive Index", 4);
+setmaterial(material,"Imaginary Refractive Index", 1e-2);
+
+
+# add analysis group to get absorption
+addanalysisgroup;
+adduserprop("x span", 2, filmXSpan);
+adduserprop("y span", 2, filmYSpan);
+
+#add nanlysis to get effective absorption
+set("name", analysisName);
+addindex;
+set("name", "index");
+setnamed("index","monitor type","3D");
+#setnamed("index","simulation type","All");
+set("override global monitor settings", 1);
+setnamed("index","spatial interpolation","specified position");
+addtogroup(analysisName);
+addpower;
+set("name", "field");
+setnamed("field","monitor type","3D");
+#setnamed("field","simulation type","All");
+set("override global monitor settings", 1);
+setnamed("field","spatial interpolation","specified position");
+addtogroup(analysisName);
+
+select(analysisName);
+setnamed("Pabs::field","frequency points",numFrequencyPoints);
+setnamed("Pabs::index","frequency points",numFrequencyPoints);
+
+
+
+
+addrect;
+set("name", materialName);
+setnamed(materialName,"x span",filmXSpan);
+setnamed(materialName,"y span",filmYSpan);
+setnamed(materialName,"x",0);
+setnamed(materialName,"y",0);
+setnamed(materialName,"z min",0); # z max set in loop
+
+setnamed(materialName,"material",material);
+
+#
+#setup simulation
+#
+addfdtd;
+#set the geometry of simulation region
+setnamed("FDTD","x",0);
+setnamed("FDTD","x span",FDTDxSpan);
+setnamed("FDTD","y",0);
+setnamed("FDTD","y span",FDTDySpan);
+#set the simulation time
+setnamed("FDTD","simulation time",simulationTime);
+setnamed("FDTD","z min",-sourceOffset-reflectionMonitorOffset-FDTDzSpace);
+# "z span" is set to be 
+setnamed("FDTD", "mesh type", meshType);
+if (meshType == 'uniform') {
+  setnamed("FDTD", "dx", meshSize);
+  setnamed("FDTD", "dy", meshSize);
+  setnamed("FDTD", "dz", meshSize);
+}
+if (meshType == 'auto non-uniform') {
+  setnamed("FDTD","mesh accuracy",meshAccuracy);
+}
+#for normal angle incidence
+#set the bc of simulation
+if (angleTheta == 0 & anglePhi == 0 & polarizationAngle == 0){
+  setnamed("FDTD","allow symmetry on all boundaries", 1);
+  setnamed("FDTD","x min bc","Anti-Symmetric");
+  setnamed("FDTD","x max bc","Anti-Symmetric");
+  setnamed("FDTD","y min bc","Symmetric");
+  setnamed("FDTD","y max bc","Symmetric");
+} else {
+  setnamed("FDTD","x min bc","Periodic");
+  setnamed("FDTD","x max bc","Periodic");
+  setnamed("FDTD","y min bc","Periodic");
+  setnamed("FDTD","y max bc","Periodic");
+}
+setnamed("FDTD","z min bc","PML");
+setnamed("FDTD","z max bc","Metal");
+
+#
+#setup source
+# source placed at bottom,
+# so source and reflection monitor do not have to change every time
+addplane;
+setnamed("source","x",0);
+setnamed("source","x span",filmXSpan);
+setnamed("source","y",0);
+setnamed("source","y span",filmYSpan);
+setnamed("source","z", -sourceOffset);
+setnamed("source","wavelength start",wavelengthStart);
+setnamed("source","wavelength stop",wavelengthStop);
+setnamed("source","injection axis",injectionAxis);
+setnamed("source","direction",injectionDirection);
+setnamed("source","angle theta",angleTheta);
+setnamed("source","angle phi",anglePhi);
+setnamed("source","polarization angle",polarizationAngle);
+
+#
+#setup monitors
+#
+addpower;
+set("name","reflection");
+setnamed("reflection","x",0);
+setnamed("reflection","x span",filmXSpan);
+setnamed("reflection","y",0);
+setnamed("reflection","y span",filmYSpan);
+setnamed("reflection","z", -sourceOffset-reflectionMonitorOffset);
+
+#set the frequency points
+setglobalmonitor("frequency points",numFrequencyPoints);
+
+#
+# setup thickness 
+# 
+filmThicknessArray = linspace(minThickness,maxThickness,numThicknesses);
+#zTransmission = filmThicknessArray + transmissionMonitorOffset;
+#zMaxFDTD = zTransmission + FDTDzSpace;
+
+for (i=1:numThicknesses) {
+  #save the project
+  filename = filenamePrefix + variableStringArray + num2str(filmThicknessArray(i)*1e9) + variableUnitsArray + filenameSuffix;
+  save(filename);
+
+  #change the thickness of thin film
+  switchtolayout;
+  structures;
+  setnamed(materialName,"z max",filmThicknessArray(i));
+
+
+  setnamed("Pabs::index","z span",filmThicknessArray(i));
+  setnamed("Pabs::index","z",0);
+
+  setnamed("Pabs::field","z span",filmThicknessArray(i));
+  setnamed("Pabs::field","z",0);
+
+  #switch to simulation tab
+  simulation;
+  #setnamed("FDTD", "z max", zMaxFDTD(i));
+  setnamed("FDTD", "z max", filmThicknessArray(i));
+
+  #swith to monitors tab
+  #monitors;
+  #setnamed("transmission","z",zTransmission(i));
+
+  #run simulation
+  run(2);
+
+  #get data; use minimal formatting of data
+#  frequencyTransmission = getdata("transmission","f");
+#  transmissionData = transmission("transmission");
+#  dataTransmission = [transpose(frequencyTransmission); transpose(transmissionData)];
+  # rm(filename+"Transmission.txt");
+#  if (fileexists(filename+"Transmission.txt")) {
+#    rm(filename+"Transmission.txt");
+#  }
+#  write(filename+"Transmission.txt",num2str(dataTransmission));
+  # transmissionFile = filename+"Transmission";
+  # matlabsave(transmissionFile, frequencyTransmission, transmissionData);   
+  power_absorption_analysis;
+
+
+  frequencyReflection = getdata("reflection", "f");
+  reflectionData = -transmission("reflection");
+  dataReflection = [transpose(frequencyReflection); transpose(reflectionData)];
+  # rm(filename+"Reflection.txt");
+  if (fileexists(filename+"Reflection.txt")) {
+    rm(filename+"Reflection.txt");
+  }
+  write(filename+"Reflection.txt",num2str(dataReflection));
+}

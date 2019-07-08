@@ -1,0 +1,133 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>EBSD Data Analysis</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div>
+         <table class="nav" summary="Navigation aid" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline"><b>LAMP-solar</b> - A MATLAB Toolbox for Solar Cell Analysis
+               </td>
+            </tr>
+         </table>
+         <p style="font-size:1px;"></p>
+      </div>
+      <div class="content">
+         <h1>EBSD Data Analysis</h1>
+         <introduction></introduction>
+         <abstract>
+            <div class="intro">
+               <p>This sections describes the class <b>EBSD</b> and gives an overview over the functionality MTEX offers to analyze EBSD data.
+               </p>
+            </div>
+         </abstract>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#3">Description</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Import of EBSD Data</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Plotting EBSD Data</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">Modify EBSD Data</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">Calculate an ODF from EBSD Data</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#10">Simulate EBSD Data</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#11">Demo</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>Description<a name="3"> </a></h2>
+         <p>The following mindmap might give a basic idea about EBSD data analyis in MTEX, with the ability of <a href="GrainModelling.html">grain modelling</a> for spatial data, it offers varios way of interpreting individual orientation measurements, i.e. in terms of quantifying
+            macro-,micro- and  mesotexture.
+         </p>
+         <p><img vspace="5" hspace="5" src="grain.png"> </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Import of EBSD Data<a name="4"> </a></h2>
+         <p>The most comfortable way to import EBSD data into MTEX is to use the import wizard, which can be started by the command</p><pre class="codeinput">import_wizard(<span class="string">'ebsd'</span>)
+</pre><pre class="codeoutput">Undefined function or method 'import_wizard' for input arguments of type 'char'.
+
+Error in ==&gt; script_FDTDSimulationResults_index at 24
+import_wizard('ebsd')
+</pre><p>If the data are in a format supported by MTEX the import wizard generates a script which imports the data. More information
+            about the import wizard and a list of supported file formats can be found <a href="ImportEBSDData.html">here</a>. A typical script generated
+            by the import wizard looks a follows.
+         </p><pre class="codeinput">cs = symmetry(<span class="string">'m-3m'</span>);      <span class="comment">% crystal symmetry</span>
+ss = symmetry(<span class="string">'triclinic'</span>); <span class="comment">% specimen symmetry</span>
+
+<span class="comment">% file names</span>
+fname = [mtexDataPath <span class="string">'/aachen_ebsd/85_829grad_07_09_06.txt'</span>];
+
+<span class="comment">% load data</span>
+ebsd = loadEBSD(fname,cs,ss,<span class="keyword">...</span>
+                <span class="string">'interface'</span>,<span class="string">'generic'</span>,<span class="string">'Bunge'</span>,<span class="string">'ignorePhase'</span>,[0 2],<span class="keyword">...</span>
+                 <span class="string">'ColumnNames'</span>, { <span class="string">'Phase'</span> <span class="string">'x'</span> <span class="string">'y'</span> <span class="string">'Euler 1'</span> <span class="string">'Euler 2'</span> <span class="string">'Euler 3'</span>},<span class="keyword">...</span>
+                 <span class="string">'Columns'</span>, [2 3 4 5 6 7]);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Plotting EBSD Data<a name="6"> </a></h2>
+         <p>EBSD data are plotted using the <a href="EBSD_plot.html">plot</a> command. It assigns a color to each orientation and plots a map of
+            these colors. There are several options to specify the way the colors are assigned.
+         </p><pre class="codeinput">figure(<span class="string">'position'</span>,[100 100 600 300])
+plot(ebsd,<span class="string">'antipodal'</span>)
+</pre><p>In order to understand the colorcoding one can plot the coloring of the corresponding inverse pole figure via</p><pre class="codeinput">colorbar
+hold <span class="string">on</span>
+plotipdf(ebsd,xvector,<span class="string">'markerSize'</span>,3,<span class="string">'points'</span>,500,<span class="string">'marker'</span>,<span class="string">'o'</span>,<span class="string">'markerfacecolor'</span>,<span class="string">'none'</span>,<span class="string">'markeredgecolor'</span>,<span class="string">'k'</span>)
+set(gcf,<span class="string">'renderer'</span>,<span class="string">'opengl'</span>)
+hold <span class="string">off</span>
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Modify EBSD Data<a name="8"> </a></h2>
+         <p>MTEX offers a lot of operations to analyze and manipulate EBSD data, e.g.</p>
+         <div>
+            <ul type="square">
+               <li>plot pole figures of EBSD data</li>
+               <li>rotate EBSD data</li>
+               <li>find outliers</li>
+               <li>remove specific measurements</li>
+               <li>combine EBSD data from several meassurements</li>
+               <li>compute an ODF</li>
+            </ul>
+         </div>
+         <p>An exhausive introduction how to analyze and modify EBSD data can be found <a href="ModifyEBSDData.html">here</a></p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Calculate an ODF from EBSD Data<a name="9"> </a></h2>
+         <p>The command <a href="EBSD_calcODF.html">calcODF</a>  performs an ODF calculation from EBSD data using kernel density estimation EBSD
+            data. For a precise explaination of the algorithm and the available options look <a href="EBSD2odf.html">here</a>.
+         </p><pre class="codeinput">odf = calcODF(ebsd,<span class="string">'halfwidth'</span>,10*degree)
+plotpdf(odf,Miller(1,0,0,cs),<span class="string">'antipodal'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Simulate EBSD Data<a name="10"> </a></h2>
+         <p>Simulating EBSD data from a given ODF has been proven to be usefull to analyze the stability of the ODF estimation process.
+            There is an <a href="EBSDSimulation_demo.html">example</a> demostrating how to determine the number of individuel orientation measurements to estimate the ODF up to a given error.
+            The MTEX command to simulate EBSD data is <a href="ODF_simulateEBSD.html">simulateEBSD</a>, e.g.
+         </p><pre class="codeinput">ebsd = simulateEBSD(unimodalODF(idquaternion,cs,ss),500)
+plotpdf(ebsd,Miller(1,0,0),<span class="string">'antipodal'</span>,<span class="string">'MarkerSize'</span>,3)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Demo<a name="11"> </a></h2>
+         <p>For a more exausive description of the EBSD class have a look at the &lt;ebsd_demo.html EBSD demo&lt;!</p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

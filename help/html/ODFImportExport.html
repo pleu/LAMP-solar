@@ -1,0 +1,132 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Import and Export of ODF Data</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit ODFImportExport" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Import and Export of ODF Data</h1>
+         <introduction>
+            <p>Read and write ODFs to a Data file</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Define an Model ODF</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#5">Export an ODF to an MTEX ASCII File</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#6">Export as an generic ASCII file</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">Import ODF Data using the import wizard</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#10">Importing EBSD data using the method loadODF</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>So far ODFs may only exported from and imported into ASCII files that consists of a table of orientatiotions and weights.
+            The orientations may be given either as Euler angles or as quaternions. The weight may either represent the value of the ODF
+            at this specific orientation or it may represent the volume of a bell shaped function centerd at this orientation.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Define an Model ODF<a name="4"> </a></h2>
+         <p>Let us first define a superposition of model ODFs.</p><pre class="codeinput">cs = symmetry(<span class="string">'orthorhombic'</span>);
+ss = symmetry(<span class="string">'triclinic'</span>);
+mod1 = orientation(<span class="string">'axis'</span>,xvector,<span class="string">'angle'</span>,45*degree,cs);
+mod2 = orientation(<span class="string">'axis'</span>,yvector,<span class="string">'angle'</span>,65*degree,ss);
+model_odf = 0.5*uniformODF(cs,ss) + <span class="keyword">...</span>
+  0.05*fibreODF(Miller(1,0,0),xvector,cs,ss,<span class="string">'halfwidth'</span>,10*degree) + <span class="keyword">...</span>
+  0.05*fibreODF(Miller(0,1,0),yvector,cs,ss,<span class="string">'halfwidth'</span>,10*degree) + <span class="keyword">...</span>
+  0.05*fibreODF(Miller(0,0,1),zvector,cs,ss,<span class="string">'halfwidth'</span>,10*degree) + <span class="keyword">...</span>
+  0.05*unimodalODF(mod1,cs,ss,<span class="string">'halfwidth'</span>,15*degree) + <span class="keyword">...</span>
+  0.3*unimodalODF(mod2,cs,ss,<span class="string">'halfwidth'</span>,25*degree);
+plotodf(model_odf,<span class="string">'sections'</span>,6,<span class="string">'silent'</span>)
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; ODFImportExport at 22
+cs = symmetry('orthorhombic');
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Export an ODF to an MTEX ASCII File<a name="5"> </a></h2>
+         <p>By default the ODF is exported to an ASCII file which contains descriptions of all componets of the ODF in a human readable
+            fassion.
+         </p><pre class="codeinput"><span class="comment">% the filename</span>
+fname = [mtexDataPath <span class="string">'/odf/odf.txt'</span>];
+
+<span class="comment">% export the ODF</span>
+exportODF(model_odf,fname,<span class="string">'Bunge'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Export as an generic ASCII file<a name="6"> </a></h2>
+         <p>The generic ASCII format consists of a large table with four columns, where first three column describe the Euler angles of
+            a regular 5&Acirc;&deg; grid in the orientation space and the fourth column contains the value of the ODF at this specific position.
+         </p><pre class="codeinput"><span class="comment">% the filename</span>
+fname = [mtexDataPath <span class="string">'/odf/odf.txt'</span>];
+
+<span class="comment">% export the ODF</span>
+exportODF(model_odf,fname,<span class="string">'Bunge'</span>,<span class="string">'generic'</span>)
+</pre><p>Other Euler angle conventions or other resolutions can by specified by options to <a href="ODF_exportODF.html">exportODF</a>. Even more control you have, if you specify the grid in the orientation space directly.
+         </p><pre class="codeinput"><span class="comment">% define a equispaced grid in orientation space with resolution of 5 degree</span>
+S3G = SO3Grid(5 * degree,cs,ss);
+
+<span class="comment">% export the ODF by values at these locations</span>
+exportODF(model_odf,fname,S3G,<span class="string">'Bunge'</span>,<span class="string">'generic'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Import ODF Data using the import wizard<a name="8"> </a></h2>
+         <p>Importing ODF data into MTEX means to create an ODF variable from data files containing euler angles and weigts. Once such
+            an variable has been created the data can be analyzed and processed in many ways. See e.g. <a href="ODFCalculations.html">ODFCalculations</a>.
+            The most simplest way to import ODF data is to use the import wizard, which can be started either by typing into the command
+            line
+         </p><pre class="codeinput">import_wizard(<span class="string">'ODF'</span>)
+</pre><p>or using from the start menu the item Start/Toolboxes/MTEX/Import Wizard. The import wizard provides a gui to import data
+            of almost all ASCII data formats and allows to save the imported data as an ODF variable to the workspace or to generate a
+            m-file loading the data automatically.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Importing EBSD data using the method loadODF<a name="10"> </a></h2>
+         <p>A script generated by the import wizard typpicaly look as follows.</p><pre class="codeinput"><span class="comment">% define crystal and specimen symmetry</span>
+cs = symmetry(<span class="string">'orthorhombic'</span>);
+ss = symmetry(<span class="string">'triclinic'</span>);
+
+<span class="comment">% the file name</span>
+fname = [mtexDataPath <span class="string">'/odf/odf.txt'</span>];
+
+<span class="comment">% the halfwidth of the bell shaped functions to be placed at every</span>
+<span class="comment">% stored orientation</span>
+halfwidth = 10*degree;
+
+<span class="comment">% load the data</span>
+odf = loadODF(fname,cs,ss,<span class="string">'halfwidth'</span>,halfwidth,<span class="string">'Bunge'</span>,<span class="keyword">...</span>
+  <span class="string">'ColumnNames'</span>,{<span class="string">'Euler 1'</span>,<span class="string">'Euler 2'</span>,<span class="string">'Euler 3'</span>,<span class="string">'weight'</span>});
+
+<span class="comment">% plot data</span>
+<span class="comment">%plotodf(odf,'sections',6,'silent')</span>
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

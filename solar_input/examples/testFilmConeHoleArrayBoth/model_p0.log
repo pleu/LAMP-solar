@@ -1,0 +1,24 @@
+FDTD Solutions Version 8.5.3 (Windows 64bit)
+ expires (month/day/year): 12/6/2013
+current time: Fri Oct 11 14:34:30 2013
+Running on host: wbm06-THINK
+All processes are communicating and ready to proceed to simulation...
+Running fsp file: C:/Users/wbm06/Desktop/lamp-solar/solar_input/examples/testFilmConeHoleArrayBoth/model.fsp
+number of processors is 4
+processors are distributed as: 1x2x2
+Running 3D Simulation
+Starting meshing
+Simulation size in gridpoints: 20 x 11 x 20
+Refined 488 mesh cells (11.0909%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 20 x 11 x 20
+Refined 483 mesh cells (10.9773%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time
+Starting meshing
+Simulation size in gridpoints: 20 x 11 x 20
+Refined 486 mesh cells (11.0455%)
+Completed meshing!
+Meshing complete in 0 seconds of CPU time

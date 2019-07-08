@@ -1,0 +1,46 @@
+% preamble.tex
+
+% enclose any latex in \comment{} to suppress it
+\newcommand{\comment}[1]{}
+\newcommand{\citeNP}[1]{\cite{#1}}
+
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{times}
+\usepackage{floatflt}
+\graphicspath{{./}{figures/}}
+
+% NO psfig -- pdflatex does not support it ...
+% \usepackage{psfig}
+% \psfigurepath{./:figures/}
+% \DeclareGraphicsRule{.eps.gz}{eps}{.eps.bb}{'gunzip -c #1}
+
+\newcommand{\upline}{\vspace*{-\baselineskip}}
+\newcommand{\up}{\vspace*{-6pt}}
+\newcommand{\downline}{\vspace*{\baselineskip}}
+\newcommand{\sep}{~~~~~~~~~~}
+
+% this hardcodes the bib name, which we don't want to do.
+% \renewcommand{\thebibliography}[1]{\section*{References Cited}
+% \addcontentsline{toc}{section}{References Cited}\list
+%  {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
+%  \advance\leftmargin\labelsep
+%  \usecounter{enumi}}
+%  \def\newblock{\hskip .11em plus .33em minus -.07em}
+%  \sloppy\clubpenalty4000\widowpenalty4000
+%  \sfcode`\.=1000\relax}
+
+% fix this to specify width and height, and solve for the margins
+\input{margins}
+
+% \oddsidemargin 0.2cm
+% \evensidemargin 0cm
+% \textwidth 16.0cm
+% \topmargin -1.25cm
+% \textheight 22.94cm
+
+% remove parindent, squeeze grafs
+\setlength{\parindent}{0in}
+\setlength{\parskip}{1ex}
+
+\def\nibf#1{\noindent\textbf{#1}}

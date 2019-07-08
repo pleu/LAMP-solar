@@ -1,0 +1,120 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>ODF Plots</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit ODFPlots" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>ODF Plots</h1>
+         <introduction></introduction>
+         <abstract>
+            <div class="intro">
+               <p>In this section the basic plotting commands for ODFs are described. MTEX offers a lot of possibilities the customize the resulting
+                  plots, e.g. by changing the projection or the colorcoding, by outlining certain orientations or directions, or simply by adding
+                  colorbars or legends to plots. All these posibilities are described in the section <a href="Plotting.html">Plotting</a>.
+               </p>
+            </div>
+         </abstract>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">A Model ODF</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#5">Pole Figure Plots</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Inverse Pole Figure Plots</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#9">ODF Sections</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#11">Radial ODF Plots</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#12">Power Plot</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>A Model ODF<a name="4"> </a></h2>
+         <p>Lets start with a simple ODF which is the superposition of a unimodal ODF and a fibre symmetric model ODF</p><pre class="codeinput">cs = symmetry(<span class="string">'-3m'</span>);
+ss = symmetry(<span class="string">'-1'</span>);
+mod1 = orientation(<span class="string">'euler'</span>,50*degree,30*degree,20*degree,<span class="string">'ZYZ'</span>,cs,ss);
+
+odf = 0.1 * unimodalODF(mod1,cs,ss) <span class="keyword">...</span>
+  + 0.9*fibreODF(Miller(0,0,1),xvector,cs,ss)
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; ODFPlots at 20
+cs = symmetry('-3m'); 
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Pole Figure Plots<a name="5"> </a></h2>
+         <p>In order to plot the pole figures corresponding to a certain list of crystal directions one uses the command <a href="ODF_plotpdf.html">plotpdf</a>.
+         </p><pre class="codeinput">h = [Miller(1,0,-1,0,cs),Miller(0,0,0,1,cs),<span class="keyword">...</span>
+  Miller(1,1,-2,1,cs),Miller(1,1,-2,3,cs)];
+plotpdf(odf,h,<span class="string">'position'</span>,[100 100 600 300])
+</pre><p>One recognizes that for each crystal direction the northern and the southern hemisphere of the pole figure is plotted. Since
+            specimen symmetry here is tricline they might differ. It is well known that diffration data results in pole figures where
+            the norther and the southern hemispheres are superposed. This can achieved in MTEX by passing the option <b>antipodal</b>.
+         </p><pre class="codeinput">plotpdf(odf,h,<span class="string">'antipodal'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Inverse Pole Figure Plots<a name="7"> </a></h2>
+         <p>Plotting inverse pole figures with respect to certain specimen directions is as simple as plotting ordinary pole figures.
+            Here one has to use the command <a href="ODF_plotipdf.html">plotipdf</a>.
+         </p><pre class="codeinput">r = [vector3d(1,0,0),vector3d(0,0,1)];
+plotipdf(odf,r,<span class="string">'position'</span>,[100 100 600 300])
+</pre><p>Due to the trigonal crystal symmetry not a complete sphere is plotted but only a 120&Acirc;&deg; sector. In order to plot the complete
+            inverse pole figure simply add the option <b>complete</b>.
+         </p><pre class="codeinput">plotipdf(odf,r,<span class="string">'complete'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>ODF Sections<a name="9"> </a></h2>
+         <p>In order to plot an ODF directly one has to specify a certain type sections. Currently the following sections are supported.</p>
+         <div>
+            <ul type="square">
+               <li>alpha sections</li>
+               <li>gamma sections</li>
+               <li>phi1 sections</li>
+               <li>phi2 sections</li>
+               <li>sigma sections</li>
+            </ul>
+         </div>
+         <p>The default section type is <b>sigma sections</b> since it does not introduce distortions into the orientation space.
+         </p><pre class="codeinput">plot(odf,<span class="string">'sections'</span>,12,<span class="string">'position'</span>,[100 100 450 350],<span class="string">'silent'</span>)
+</pre><p>In order to specify a different section type one simpy adds the corresponding name as an option. E.g. the traditional ODF
+            plot is achieved by
+         </p><pre class="codeinput">plot(SantaFe,<span class="string">'alpha'</span>,<span class="string">'sections'</span>,9,<span class="keyword">...</span>
+  <span class="string">'projection'</span>,<span class="string">'plain'</span>,<span class="string">'gray'</span>,<span class="string">'contourf'</span>,<span class="string">'silent'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Radial ODF Plots<a name="11"> </a></h2>
+         <p>In case you have an unimodal ODF a radial plot is sometimes usefull.</p><pre class="codeinput">plot(odf,<span class="string">'radially'</span>,<span class="string">'center'</span>,euler2quat(50*degree,30*degree,20*degree))
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Power Plot<a name="12"> </a></h2>
+         <p>Last but not least there is a power plot, plotting the Fourier coefficients of an ODF</p><pre class="codeinput">plotFourier(odf,<span class="string">'bandwidth'</span>,32)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

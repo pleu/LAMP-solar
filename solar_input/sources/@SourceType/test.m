@@ -1,0 +1,4 @@
+so = SourceType.create('GaussianSource');
+
+
+

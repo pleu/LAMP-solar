@@ -1,0 +1,253 @@
+
+\documentclass[12pt]{article}
+%\input{preamble}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage[left=1in,top=1.0in,right=1in,headsep=0.25in,footskip=0.3in,bottom=0.7in]{geometry}
+%\usepackage[left=1in,top=1.2in,right=1in,footskip=0.3in,bottom=0.7in,showframe]{geometry}
+%\usepackage[left=1in,top=1in,right=1in,bottom=1in,nohead]{geometry}
+\usepackage{graphicx}
+\renewcommand{\arraystretch}{1} % spacing between table rows
+\usepackage[]{caption}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{-5pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\usepackage[normalem]{ulem}
+\newcounter{Labcounter}
+\newcounter{Taskcounter}
+\numberwithin{equation}{section}
+\fancyhf{}
+\pagestyle{fancy}
+\fancypagestyle{plain}{ %
+% \fancyhf{} % remove everything
+\renewcommand{\headrulewidth}{0pt} % remove lines as well
+%\renewcommand{\footrulewidth}{0pt}
+%\cfoot{Page \thepage~of \pageref{LastPage}}}
+\cfoot{\thepage}
+}
+
+
+\lhead{\textit{Nanospheres...}}
+%\chead{\Large \textbf{Paul W.~Leu } \vspace{0.3em}}
+%\chead{\Large \textbf{NSF Biographical Sketch: Paul W.~Leu} \vspace{0.3em}}
+\rhead{\textit{Leu}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}} %for displaying red texts
+
+\newcommand{\vectornorm}[1]{\left|\left|#1\right|\right|}
+%\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage[normalem]{ulem}
+\newenvironment{packed_enum}{
+\begin{enumerate}
+  \setlength{\topsep}{0pt}
+  \setlength{\partopsep}{0pt}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{enumerate}}
+
+%\usepackage[small]{caption}
+\usepackage[draft]{pdfcomment}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\usepackage{paralist}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{textcomp}
+\usepackage{subfig}
+\usepackage{framed}
+\usepackage{setspace}
+\usepackage{here}
+\usepackage[numbers, square, comma, sort&compress]{natbib}
+
+\usepackage[compact]{titlesec}
+\titlespacing{\section}{0pt}{0ex}{0pt}
+\titlespacing{\subsection}{0pt}{0pt}{0pt}
+\usepackage{xcolor}
+
+\usepackage[]{caption}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{-5pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+
+
+\usepackage{float}
+\floatstyle{plaintop}
+\newfloat{program}{thp}{lop}
+\floatname{program}{Table}
+
+\newfloat{wrapprogram}{thp}{lop}
+\floatname{wrapprogram}{Table}
+
+%\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+% bold face: highlight keywords, or big ideas
+% italics: inconspicuous stressing of key points
+% underline: hypothesis; avoid
+
+\usepackage{bm}
+
+\date{\today }
+
+\author{
+Paul W. Leu\\
+University of Pittsburgh\\
+Pittsburgh, PA}
+
+
+%\def\myTitle{CAREER: Transforming Solar Energy Harvesting through Nanophotonic Light Trapping}
+%\def\myTitle{CAREER: Characterizing Enhanced Absorption and Carrier Collection Mechanisms in Silicon and Zinc Oxide Nanocone-based Solar Cells}
+%Upper bound
+%   100 hours/year
+%    40 hours
+%    
+%\title{Ultimate Limits of Silicon Nanostructures for Photon Management\\
+%\title{Determining Silicon/Metal Nanostructures that Approach the Wave-Optics Light Trapping Limit by Data Mining of Electrodynamic Simulations}
+%\title{CAREER: Characterizing Enhanced Absorption and Carrier Collection Mechanisms in Silicon and Zinc Oxide Nanocone-based Solar Cells}
+%\title{Predicting Wave-Optics Light Trapping in Silicon and Metal Nanostructure by Data Mining of Electrodynamic Simulations}
+%Keywords: ultra thin, light trapping, wave-optics light trapping, coherent light trapping, optimization framework, data mining}
+
+%\title{Modeling and Manufacturing of Three Dimensional Silicon Nanostructures for Photon Management}
+
+\begin{document}
+
+\tableofcontents
+
+\section{Nanowires}
+
+For nanowires, the leaky resonance modes are according to Fountaine \cite{Fountaine:14}
+\begin{equation}
+\begin{aligned}
+\pm \left ( \frac{1}{k_{cyl}^2 - k_{air}^2} \right ) ^2 \left ( \frac{k_z m}{k_0 a} \right )^2 = \left ( \frac{\epsilon_{cyl}}{k_{cyl}} \frac{J_m' (k_{cyl} a )}{J_m (k_{cyl} a )} - \frac{1}{k_{air}} \frac{H_m' (k_{air} a)}{H_m (k_{air} a )} \right ) 
+\\ \times 
+\left ( \frac{1}{k_{cyl}} \frac{J_m' (k_{cyl} a )}{J_m (k_{cyl} a )} - \frac{1}{k_{air}} \frac{H_m' (k_{air} a)}{H_m (k_{air} a )} \right ) 
+\end{aligned}
+\end{equation}
+$k_{cyl}$ is the transverse component of the wavevector inside the cylinder.  
+\begin{equation}
+k_{cyl} = \left [ \left ( \frac{n_{cyl} \omega}{c} \right )^2 - \beta^2 \right ]^{1/2}
+\end{equation}
+
+$k_{air} = \left [ \left ( \frac{\omega}{c} \right )^2 -  \beta^2 \right ]^{1/2}$
+
+
+
+According to Linyou's dissertation, 
+\begin{equation}
+\kappa^2 = k_0^2 n^2 - \beta^2
+\end{equation}
+\begin{equation}
+\gamma^2 = k_0^2 - \beta^2
+\end{equation}
+$\kappa$ and $\gamma$ are the wave vectors in the transverse direction inside and outside of the cylindrical structure.  
+If $\gamma^2 < 0$ and $\kappa^2 > 0$, then it is a guided mode.  
+If $\gamma^2 > 0$, then it is a leaky mode.  
+
+\begin{equation}
+\left ( \frac{1}{\kappa^2} - \frac{1}{\gamma^2} \right ) ^2 \left ( \frac{\beta m}{a} \right )^2
+= k_0^2 \left ( n^2 \frac{J_m' (\kappa a )}{\kappa J_m (\kappa a )} - n_0^2 \frac{H_m' (\gamma a)}{\gamma H_m (\gamma a )}   \right )
+\left ( \frac{J_m' (\kappa a )}{\kappa J_m (\kappa a )} - \frac{H_m' (\gamma a)}{\gamma H_m (\gamma a )}   \right )
+\end{equation}
+This is the same as above, where
+$\kappa = k_{cyl}$ and $\gamma = k_{air}$.
+$\beta = k_z$. 
+$n^2 = \epsilon_{cyl}$. 
+
+
+
+%
+%
+%\textbf{Leaky mode} versus \textbf{Guided mode}.
+%
+%
+%
+%According to Snyder, for guided modes, 
+%\begin{equation}
+%\begin{aligned}
+%\left ( \frac{\nu \beta}{k n_{co}} \right )^2 \left ( \frac{V}{U W} \right )^4= \left ( \frac{J_\nu' (U )}{U J_\nu ( U )} +  \frac{K_\nu' (W )}{W K_\nu ( W )} \right ) 
+%\\ \times 
+%\left ( \frac{J_\nu' (U )}{U J_\nu ( U )} + \frac{n_{cl}^2}{n_{co}^2} \frac{K_\nu' (W )}{W K_\nu ( W )} \right )
+%\end{aligned}
+%\end{equation}
+%where the core paramater $U = \rho (k^2 n_{co}^2 - \beta^2 )^{1/2}$ and 
+%the cladding parameter 
+%$W = \rho (\beta^2 - k^2 n_{cl}^2 )^{1/2}$.
+%$V^2 = U^2 + W^2$.  
+%For radiation modes, 
+%$Q = \rho (k^2 n_{cl}^2 - \beta^2 )^{1/2} = i W$.  
+%$Q = a \gamma$.
+%$V^2 = U^2 - Q^2$.  
+%$W = - Q i = - a \gamma i$.  
+%
+%
+%Substituting $\nu = m$ and 
+%$k = k_{0}$.  
+%$\rho = a$.  
+%$U = a \kappa$ and $W = - i a \gamma $
+%
+%
+%\begin{equation}
+%\begin{aligned}
+%\left ( \frac{\beta m}{k n_{co}} \right )^2 \left ( \frac{V}{U W} \right )^4= \left ( \frac{J_m' (U )}{U J_m ( U )} +  \frac{K_m' (W )}{W K_m ( W )} \right ) 
+%\\ \times 
+%\left ( \frac{J_m' (U )}{U J_m ( U )} + \frac{n_{cl}^2}{n_{co}^2} \frac{K_m' (W )}{W K_m ( W )} \right )
+%\end{aligned}
+%\end{equation}
+
+
+Inside a subwavelength hole, the propagating modes are 
+\cite{Catrysse:08}
+\begin{equation}
+\begin{aligned}
+\left ( \frac{1}{k_{cyl}^2 - k_1^2} \right ) ^2 \left ( \frac{k_z m}{k_0 a} \right )^2 = \left ( \frac{\epsilon_{cyl}}{k_{cyl}} \frac{J_m' (k_{cyl} a )}{J_m (k_{cyl} a )} - \frac{\epsilon_1}{k_{1}} \frac{H_m' (k_1 a)}{H_m (k_1 a )} \right ) 
+\\ \times 
+\left ( \frac{1}{k_{cyl}} \frac{J_m' (k_{cyl} a )}{J_m (k_{cyl} a )} - \frac{1}{k_{air}} \frac{H_m' (k_1 a)}{H_m (k_1 a )} \right ) 
+\end{aligned}
+\end{equation}
+
+
+
+
+
+\subsection{Modal Cutoff}
+
+The lower limit $\beta_j = k n_{cl}$ of permissble values of the bound mode propagation constant is called 
+modal cutoff.  Modal cutoff, or just cutoff is defined by 
+\begin{equation}
+U_j = V; W_j = 0.
+\end{equation}
+Below cutoff, these modes propagate with loss and are the leaky modes.  
+\blue{Leaky modes are also referred to as quasiguided modes.}
+
+
+
+According to \cite{Snyder:83}, 
+leaky modes are bound modes below cutoff.  The modal parameters are now complex.  
+
+The leaky-mode propagation constant satisfies, 
+\begin{equation}
+0 \leq \beta^{R} < k n_{cl}
+\end{equation}
+and 
+\begin{equation}
+U^r > V
+\end{equation}.
+
+The cladding parameter is $Q = \left [ \beta^2 - \left ( \frac{n_1 \omega}{c} \right )^2   \right ]^{1/2} = i W$.
+
+Just below cutoff, $W$ is almost pure imaginary.  
+$Q$ is almost real.  
+
+Imaginary part is indicative of the radiative loss of the mode.  This transitions to zero as the mode transitions from leaky to guided.  
+
+
+
+
+
+%\blue{Some issues with some modes missing.}
+
+\bibliographystyle{IEEEtran}
+\bibliography{../../../help/BibFiles/Photodetector,../../../help/BibFiles/SiliconPV,../../../help/BibFiles/Nanosphere,../../../help/BibFiles/Plasmonics,../../../help/BibFiles/PDOS}
+
+
+\end{document}

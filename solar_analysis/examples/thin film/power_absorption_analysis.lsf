@@ -1,0 +1,131 @@
+##############################################
+  # Power absorbed
+  # This script calculates power absorption from the formula
+  # Pabs = -0.5 * w *|E|^2 * imag(eps)
+  #
+  # Output properties:
+  # Pabs:       Power absorption per unit volume (x,y,z,f)
+  # Pabs total: Total power absorption (f)
+  #
+  # You can also access Electric field and refractive
+  # index profiles from the child monitors.
+#
+# Tags: power absorption
+#
+# Copyright 2012 Lumerical Solutions Inc
+################################################
+
+# get raw data from monitors 
+x=getdata("Pabs::field","x");
+y=getdata("Pabs::field","y");
+z=getdata("Pabs::field","z");
+f=getdata("Pabs::field","f");
+nx=length(x);
+ny=length(y);
+nz=length(z);
+nf=length(f);
+
+E2_matrix=getelectric("Pabs::field");
+if (havedata("Pabs::index","index_x")) {
+  n_matrix=getdata("Pabs::index","index_x");
+} else {
+  n_matrix=getdata("Pabs::index","index_z");
+}
+
+matlabsave(filename+"X", x);
+matlabsave(filename+"Y", y);
+matlabsave(filename+"Z", z);
+matlabsave(filename+"f", f);
+
+E2_matrix=getelectric("Pabs::field");
+matlabsave(filename+"E2", E2_matrix);
+
+f_vector = sourcepower(f);
+matlabsave(filename+"SourcePower", f_vector);
+
+
+W=meshgrid4d(4,x,y,z,f*2*pi);            # create 4D matrix of f and sourcepower that 
+SP=meshgrid4d(4,x,y,z,sourcepower(f));   # that is the same size as E2 and n
+
+################################################
+# calculate power absorption 
+# as a function of x,y,z,f
+epsilon = eps0*n_matrix^2;
+Pabs_matrix = 0.5*W*E2_matrix*imag(epsilon)/SP;
+Pabs_integrated = integrate2(Pabs_matrix,1:3,x,y,z);
+
+matlabsave(filename+"Pabs", Pabs_matrix);
+
+# create data sets
+Pabs = rectilineardataset("Pabs",x,y,z);
+Pabs.addparameter("f",f,"wavelength",c/f);
+Pabs.addattribute("Pabs",Pabs_matrix);
+
+Pabs_total = matrixdataset("Pabs total");
+Pabs_total.addparameter("f",f,"wavelength",c/f);
+Pabs_total.addattribute("Pabs_total",Pabs_integrated);
+
+
+#########################################################
+
+# for E-field intensity
+# get raw data from monitors 
+#x_tot=getdata("Pabs_tot::field","x");
+#y_tot=getdata("Pabs_tot::field","y");
+#z_tot=getdata("Pabs_tot::field","z");
+#f_tot=getdata("Pabs_tot::field","f");
+#nx_tot=length(x_tot);
+#ny_tot=length(y_tot);
+#nz_tot=length(z_tot);
+#nf_tot=length(f_tot);
+
+#E2_tot_matrix=getelectric("Pabs_tot::field");
+#if (havedata("Pabs_tot::index","index_x")) {
+#  n_matrix_tot=getdata("Pabs_tot::index","index_x");
+#} else {
+#  n_matrix_tot=getdata("Pabs_tot::index","index_z");
+#}
+
+#matlabsave(filename+"Total"+"X", x_tot);
+#matlabsave(filename+"Total"+"Y", y_tot);
+#matlabsave(filename+"Total"+"Z", z_tot);
+#matlabsave(filename+"Total"+"f", f_tot);
+
+#E2_matrix_tot=getelectric("Pabs_tot::field");
+#matlabsave(filename+"Total"+"E2", E2_matrix_tot);
+
+
+#W_tot=meshgrid4d(4,x_tot,y_tot,z_tot,f_tot*2*pi);            # create 4D matrix of f and sourcepower that 
+#SP_tot=meshgrid4d(4,x_tot,y_tot,z_tot,sourcepower(f_tot));   # that is the same size as E2 and n
+
+################################################
+# calculate power absorption 
+# as a function of x,y,z,f
+#epsilon_tot = eps0*n_matrix_tot^2;
+#Pabs_matrix_tot = 0.5*W_tot*E2_matrix_tot*imag(epsilon_tot)/SP_tot;
+#Pabs_integrated_tot = integrate2(Pabs_matrix_tot,1:3,x_tot,y_tot,z_tot);
+
+#matlabsave(filename+"Total"+"Pabs", Pabs_matrix_tot);
+
+# create data sets
+#Pabs_tot = rectilineardataset("Pabs_tot",x_tot,y_tot,z_tot);
+#Pabs_tot.addparameter("f",f_tot,"wavelength",c/f_tot);
+#Pabs_tot.addattribute("Pabs",Pabs_matrix_tot);
+
+#Pabs_total_tot = matrixdataset("Pabs total");
+#Pabs_total_tot.addparameter("f",f_tot,"wavelength",c/f_tot);
+#Pabs_total_tot.addattribute("Pabs_total",Pabs_integrated_tot);
+
+
+?"Wavelength (nm):                       "+num2str(c/f*1e9);  
+?"Integrate loss technique (%):      "+num2str(transpose(Pabs_integrated)*100);
+
+
+  ################################################
+  # check accuracy of total power absorption by comparing with
+  # a box of transmission monitors.  Assume no power flows out the sides,
+  # so only two monitors are required.
+  #T1=-transmission("transmission");
+  T2=-transmission("reflection");
+  ?"Net transmission technique (%):  "+num2str(transpose(1-T2)*100);
+	

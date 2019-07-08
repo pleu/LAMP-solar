@@ -1,0 +1,34 @@
+% margins.tex
+
+% import calc
+\usepackage{calc}
+
+%
+\newlength{\myrightmargin}
+\newlength{\myleftmargin}
+\newlength{\mytopmargin}
+\newlength{\mybottommargin}
+
+% Change these settings to change the margins
+\setlength{\myrightmargin}{1.0in}
+\setlength{\myleftmargin}{1.0in}
+\setlength{\mytopmargin}{0.75in}     
+\setlength{\mybottommargin}{0.75in} 
+\setlength{\oddsidemargin}{0.0in}   % extra room on inside side
+
+%%% use margin settings to set width variables
+\setlength{\evensidemargin}{0 in}
+\setlength{\marginparsep}{0 in}
+\setlength{\marginparwidth}{0 in}
+\setlength{\hoffset}{\myleftmargin - 1.0in}
+\setlength{\textwidth}
+  {8.5in -\myleftmargin -\myrightmargin -\oddsidemargin}
+
+%%% use margin settings to set height variables
+\setlength{\voffset}{\mytopmargin -1.0in}
+\setlength{\topmargin}{0 in}
+\setlength{\headheight}{12 pt}
+\setlength{\headsep}{20 pt}
+\setlength{\footskip}{36 pt}
+\setlength{\textheight}
+  {11.0in-\mytopmargin-\mybottommargin-\headheight-\headsep-\footskip}

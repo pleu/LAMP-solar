@@ -1,0 +1,72 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Installation Guide</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div>
+         <table class="nav" summary="Navigation aid" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline"><b>LAMP-solar</b> - A MATLAB Toolbox for Solar Cell Analysis
+               </td>
+            </tr>
+         </table>
+         <p style="font-size:1px;"></p>
+      </div>
+      <div class="content">
+         <h1>Installation Guide</h1>
+         <introduction>
+            <p>Explains how to install LAMP-shade on you computer.</p>
+         </introduction>
+         <h2>Download<a name="1"> </a></h2>
+         <p>The LAMP-shade toolbox is available for Windows, Linux and MAC-OSX at: <a href="http://code.google.com/p/lamp-shade">http://code.google.com/p/lamp-shade</a></p>
+         <h2>MATLAB<a name="2"> </a></h2>
+         <p>Since LAMP-shade is a MATLAB toolbox <a href="http://www.mathworks.com">MATLAB</a> has to be installed in order to use LAMP-shade. So far the LAMP-shade toolbox has been tested with MATLAB versions 7.1 and
+            higher. No additional addons or packages are necessary.
+         </p>
+         <h2>Installation<a name="3"> </a></h2>
+         <p>In order to install LAMP-shade proceed as follows</p>
+         <div>
+            <ul type="square">
+               <li>extract LAMP-shade to an arbitrary folder</li>
+               <li>start MATLAB</li>
+               <li>navigate to the LAMP-shade folder</li>
+               <li>type 'startup_LAMP-shade'</li>
+            </ul>
+         </div>
+         <h2>Installation for All Users<a name="4"> </a></h2>
+         <p>If you are a system administrator and want to install LAMP-shade such that it is available to all users of the computer, then</p>
+         <div>
+            <ul type="square">
+               <li>copy the LAMP-shade directory to MATLAB_directoty/toolbox/LAMP-sahde</li>
+               <li>rename LAMP-shade/startup_root.m to LAMP-shade/startup.m overwritting the old file mtex/startup.m</li>
+               <li>move mtex/startup.m to MATLAB_directoty/toolbox/local</li>
+               <li>start MATLAB</li>
+            </ul>
+         </div>
+         <h2>Checking Your Installation<a name="5"> </a></h2>
+         <p>After the next start of MATLAB you should see either the message</p><pre class="codeinput"><span class="string">'LAMP-shade toolbox loaded'</span>
+</pre><p>or in the case of a All User Installation</p><pre class="codeinput"><span class="string">'in order to start the LAMP-shade toolbox type: startup_mtex'</span>
+</pre><p>After the LAMP-shade toolbox is loaded you can check your installation by typing</p><pre class="codeinput">check_mtex
+</pre><h2>Configuration and Troubleshooting<a name="8"> </a></h2>
+         <p>You can configure your LAMP-shade installation by editting the file <a href="matlab:edit mtex_settings.m">mtex_settings.m</a>. See <a href="configuration.html">Configuration</a> for more details! This page contains also some workarounds for known problems.
+         </p>
+         <p>Don't hesitate to contact the <a href="mtex_about.html">authors</a> of LAMP-shade if you have any problems.
+         </p>
+         <h2>Compile LAMP-shade Your Self<a name="9"> </a></h2>
+         <p>Compiling LAMP-shade is only neccesary if the provided binaries does not run on your system (e.g. if you have a 64 bit system)
+            or if you want to optimize them to you specific system. Compiling intstructions can be found <a href="compilation.html">here</a>.
+         </p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

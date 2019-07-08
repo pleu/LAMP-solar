@@ -1,0 +1,1 @@
+[x,fval,exitFlag,output,population,scores] = geneticSolarTest()

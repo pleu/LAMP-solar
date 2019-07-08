@@ -1,0 +1,117 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Tensor Arithmetics</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit TensorArithmetics" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>Tensor Arithmetics</h1>
+         <introduction>
+            <p>how to calculate with tensors in MTEX</p>
+         </introduction>
+         <abstract>
+            <div class="intro">
+               <p>MTEX offers some basic functionality to calculate with tensors as they occur in material sciense. It allows to define tensors
+                  of arbitrary rank, e.g., stress, strain, elasticity or piezoelectric tensors, to visuallize them and to perform various transformations.
+               </p>
+            </div>
+         </abstract>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">Defining a Tensor</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Importing a Tensor from a File</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#8">Visualization</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#10">Rotating a Tensor</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#12">The Inverse Tensor</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#13">Tensor Products</a></td>
+               </tr>
+            </table>
+         </div>
+         <h2>Defining a Tensor<a name="4"> </a></h2>
+         <p>A tensor is defined by its entries and a crystal symmetry. Let us consider a simple example. First we define some crystal
+            symmetry
+         </p><pre class="codeinput">cs = symmetry(<span class="string">'-1'</span>);
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; TensorArithmetics at 19
+cs = symmetry('-1');
+</pre><p>Next we define a two rank tensor by its matrix</p><pre class="codeinput">M = [[10 3 0];[3 1 0];[0 0 1]];
+T = tensor(M,cs)
+</pre><p>In case the two rank tensor is diagonal the syntax simplifies to</p><pre class="codeinput">T = tensor(diag([10 3 1]),cs)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Importing a Tensor from a File<a name="7"> </a></h2>
+         <p>Especially for higher order tensors it is more convinient to import the tensor entries from a file. As an example we load
+            the following elastic stiffness tensor
+         </p><pre class="codeinput">fname = fullfile(mtexDataPath,<span class="string">'tensor'</span>,<span class="string">'Olivine1997PC.GPa'</span>);
+
+cs = symmetry(<span class="string">'mmm'</span>,[4.7646 10.2296 5.9942]);
+
+C = loadTensor(fname,cs,<span class="string">'name'</span>,<span class="string">'stiffness'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Visualization<a name="8"> </a></h2>
+         <p>The default plot for each tensor is its directional magnitude, i.e. for each direction x it is plotted Q(x) = T_ijkl x_i x_j
+            x_k x_l
+         </p><pre class="codeinput">set_mtex_option(<span class="string">'defaultColorMap'</span>,seismicColorMap);
+plot(C,<span class="string">'complete'</span>)
+</pre><p>There are more specialized visuallition possibilities for specific tensors, e.g., for the elasticity tensor. See section <a href="ElasticityTensor.html">Elasticity Tensor</a>.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Rotating a Tensor<a name="10"> </a></h2>
+         <p>Rotation a tensor is done by the command <a href="tensor_rotate.html">rotate</a>. Lets define a rotation
+         </p><pre class="codeinput">r = rotation(<span class="string">'Euler'</span>,45*degree,0*degree,0*degree)
+</pre><p>Then the rotated tensor is given by</p><pre class="codeinput">Trot = rotate(T,r)
+plot(Trot)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>The Inverse Tensor<a name="12"> </a></h2>
+         <p>The inverse of a 2 rank tensor or a 4 rank elasticity tensor is computed by the command <a href="tensor_inv.html">inv</a></p><pre class="codeinput">S = inv(C)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Tensor Products<a name="13"> </a></h2>
+         <p>In MTEX tensor products are specifies according to Einsteins summation convention, i.e. a tensor product of the form T_ij
+            = E_ijkl S_kl has to be interpreted as a sum over the indice k and l. In MTEX this sum can be computed using the command <a href="tensor_EinsteinSum.html">EinsteinSum</a></p><pre class="codeinput">S = EinsteinSum(C,[-1 -2 1 2],T,[-1 -2])
+</pre><p>here the negative numbers indicates the indices which are summend up. Each pair of equal negative numbers correspondes to
+            one sum. The positive numbers indicate the order of the dimensions of the resulting tensor.
+         </p>
+         <p>Let us consider a second example. The linear compressibility in a certain directiom v of a specimen can be computed from it
+            mean elasticity tensor E by the formula, c = S_ijkk v_i v_j where S is the complience, i.e. the inverse of the elasticity
+            tensor
+         </p><pre class="codeinput">v = xvector;
+c = EinsteinSum(C,[-1 -2 -3 -3],v,-1,v,-2)
+</pre><p>set back the default color map.</p><pre class="codeinput">set_mtex_option(<span class="string">'defaultColorMap'</span>,WhiteJetColorMap)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

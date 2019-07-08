@@ -1,0 +1,82 @@
+# InputVariables for Thin film Angular Dependence
+# 
+# Make sure to change working directory to where script files are located
+# Run InputVariables.lsf
+# Run AngledependenceThinFilm.lsf
+#
+# Copyright 2010-11, Baomin Wang, Paul W. Leu
+# LAMP, University of PIttsburgh
+
+clear;
+
+materialName = 'Si';
+filenamePrefix = materialName + "ThinFilm";
+
+variableStringArray = 'Theta';
+variableUnitsArray = 'deg';
+filenameSuffix = '';
+
+#
+# Film structure
+#
+# all units are in meters
+material = 'Si (Silicon) - Palik';
+filmXSpan=400e-9;
+filmYSpan=400e-9;
+filmThickness = 2330e-9;
+
+#
+#geometry of source and monitor
+# xspan of source and monitor is set to filmXSpan 
+#
+sourceOffset=100e-9;
+wavelengthStart=280e-9;
+wavelengthStop=2000e-9;
+injectionAxis = 'z-axis';
+injectionDirection = 'Forward';
+
+anglePhi=0;
+minTheta=70;
+maxTheta=85;
+thetaStep = 5;
+steepAngle = 45; # sets angle for steep BC
+
+simulationType = 'TE';  # 'TE' or 'TM'
+
+if (simulationType == 'TM') {
+  polarizationAngle=0;
+} else {
+  polarizationAngle = 90;
+}
+filenameSuffix = simulationType;
+
+
+thetaArray = minTheta:thetaStep:maxTheta;
+numTheta=length(thetaArray);
+
+
+#
+# Simulation cell
+#
+FDTDxSpan=20e-9;
+FDTDySpan=20e-9;
+simulationTime=1000e-15; # in seconds
+meshType = 'uniform'; # `auto non-uniform', 'custom non-uniform', or 'uniform'
+meshSize = 20e-9; 
+meshRefinement = 'staircase';
+meshAccuracy = 8; # for auto non-uniform mesh, a number from 1 (least accurate) to 8
+FDTDzSpace = 100e-9; # distance to edge of simulation cell from monitors
+minPmlLayers=12;
+maxPmlLayers=12;
+pmlReflection = 1e-07;
+
+
+# for monitor 
+numFrequencyPoints=500;
+reflectionMonitorOffset=100e-9;
+transmissionMonitorOffset=100e-9;
+
+frequencyStart = c/wavelengthStop;
+frequencyStop = c/wavelengthStart;
+
+matlabsave("InputVariables");

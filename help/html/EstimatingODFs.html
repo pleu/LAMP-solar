@@ -1,0 +1,193 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>Model ODFs and ODF Estimation</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div>
+         <table class="nav" summary="Navigation aid" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline"><b>LAMP-solar</b> - A MATLAB Toolbox for Solar Cell Analysis
+               </td>
+            </tr>
+         </table>
+         <p style="font-size:1px;"></p>
+      </div>
+      <div class="content">
+         <h1>Model ODFs and ODF Estimation</h1>
+         <introduction>
+            <p>How to define Model ODFs and recover ODFs from Pole Figure Data or EBSD Data</p>
+            <p>
+               <table class="ref" width="90%">
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('ModelODFs_block','ModelODFs_expandable_text');">
+               <img id="ModelODFs_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('ModelODFs_block','ModelODFs_expandable_text');" onDblClick="document.location.href=&#34;ModelODFs.html&#34;">Model
+               ODFs</a>
+               </td>
+               <td valign="top">Describes how to define model ODFs in MTEX, i.e., uniform ODFs, unimodalODFs, fibre ODFs, Bingham ODFs and
+               ODFs defined by itsFourier coefficients.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="ModelODFs_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="ModelODFs.html#3" style="font-weight:normal">Introduction</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ModelODFs.html#4" style="font-weight:normal">The Uniform ODF</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ModelODFs.html#5" style="font-weight:normal">Unimodal ODFs</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ModelODFs.html#7" style="font-weight:normal">Fibre ODFs</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ModelODFs.html#8" style="font-weight:normal">ODFs given by Fourier coefficients</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ModelODFs.html#10" style="font-weight:normal">Bingham ODFs</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="ModelODFs.html#14" style="font-weight:normal">Combining MODEL ODFs</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('PoleFigure2odf_block','PoleFigure2odf_expandable_text');">
+               <img id="PoleFigure2odf_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('PoleFigure2odf_block','PoleFigure2odf_expandable_text');" onDblClick="document.location.href=&#34;PoleFigure2odf.html&#34;">ODF
+               Estimation from Pole Figure Data</a>
+               </td>
+               <td valign="top">This page describes how to use MTEX to estimate an ODF from pole figuredata.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="PoleFigure2odf_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="PoleFigure2odf.html#4" style="font-weight:normal">ODF Estimation</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="PoleFigure2odf.html#7" style="font-weight:normal">Error analyis</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="PoleFigure2odf.html#10" style="font-weight:normal">Discretization</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="PoleFigure2odf.html#12" style="font-weight:normal">Zero Range Method</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="PoleFigure2odf.html#13" style="font-weight:normal">Ghost Corrections</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="PoleFigure2odf.html#14" style="font-weight:normal">Theory</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               <tr align="left">
+               <td valign="top" width="15">
+               <div align="center">
+               <a href="#" onClick="return toggleexpander('EBSD2odf_block','EBSD2odf_expandable_text');">
+               <img id="EBSD2odf_expandable_text" src="arrow_right.gif" style="border:0px"/></a>
+               </div>
+               </td>
+               <td valign="top" width="250px">
+               <a class="toplink" href="#" onClick="return toggleexpander('EBSD2odf_block','EBSD2odf_expandable_text');" onDblClick="document.location.href=&#34;EBSD2odf.html&#34;">ODF
+               Estimation from EBSD data</a>
+               </td>
+               <td valign="top">How to estimate an ODF from single orientation measurements.</td>
+               <th/>
+               </tr>
+               <tr>
+               <td width="15"/>
+               <th align="left" colspan="2">
+               <div class="expander" id="EBSD2odf_block" style="display:none; background:#e7ebf7; padding-left:2ex;">
+               <table>
+               <tr>
+               <td align="left">
+               <a href="EBSD2odf.html#3" style="font-weight:normal">ODF Estimation</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="EBSD2odf.html#4" style="font-weight:normal">Automatic halfwidth selection</a>
+               </td>
+               </tr>
+               <tr>
+               <td align="left">
+               <a href="EBSD2odf.html#7" style="font-weight:normal">Effect of halfwidth selection</a>
+               </td>
+               </tr>
+               </table>
+               </div>
+               </th>
+               </tr>
+               </table>
+               
+            </p>
+         </introduction>
+         <p>Estimating ODFs from EBSD or pole figure data is one of the basic features of the MTEX toolbox. There is no difference between
+            model ODFs and estimated ODFs, since they are both based on the class <a href="ODF_index.html">ODF</a>, thus one can compare easily ODFs comming from Pole Figure Data with EBSD of the same sample, or even with an assumed model
+            ODF.
+         </p>
+         <p><img vspace="5" hspace="5" src="odf.png"> </p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

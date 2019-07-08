@@ -1,0 +1,159 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <title>ODF Estimation from Pole Figure Data</title>
+      <link rel="stylesheet" href="style.css"> <script language="JavaScript" src="docscripts.js"> </script></head>
+   <body><a name="top_of_page"> </a><div class="myheader">
+         <table border="0" width="100%" cellpadding="10" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="left" style="color:white"><a href="matlab:edit PoleFigure2odf" style="color:white">
+                     Open Matlab File in the Editor</a></td>
+               <td valign="baseline" align="right" style="color:white"><a href="mtex_product_page.html" style="color:white">
+                     LAMP-solar</a></td>
+            </tr>
+         </table>
+      </div>
+      <div class="content">
+         <h1>ODF Estimation from Pole Figure Data</h1>
+         <introduction>
+            <p>This page describes how to use MTEX to estimate an ODF from pole figure data.</p>
+         </introduction>
+         <div>
+            <table class="content">
+               <tr>
+                  <td class="header">On this page ...</td>
+               </tr>
+               <tr>
+                  <td><a href="#4">ODF Estimation</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#7">Error analyis</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#10">Discretization</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#12">Zero Range Method</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#13">Ghost Corrections</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#14">Theory</a></td>
+               </tr>
+            </table>
+         </div>
+         <p>Starting point of any ODF reconstruction is a <a href="PoleFigure_index.html">PoleFigure</a> object which can be created e.g. by
+         </p><pre class="codeinput"><span class="comment">% specify scrystal and specimen symmetry</span>
+cs = symmetry(<span class="string">'-3m'</span>,[1.4,1.4,1.5]);
+ss = symmetry(<span class="string">'triclinic'</span>);
+
+<span class="comment">% specify file names</span>
+fname = {<span class="keyword">...</span>
+  [mtexDataPath <span class="string">'/dubna/Q(10-10)_amp.cnv'</span>],<span class="keyword">...</span>
+  [mtexDataPath <span class="string">'/dubna/Q(10-11)(01-11)_amp.cnv'</span>],<span class="keyword">...</span>
+  [mtexDataPath <span class="string">'/dubna/Q(11-22)_amp.cnv'</span>]};
+
+<span class="comment">% specify crystal directions</span>
+h = {Miller(1,0,-1,0,cs),[Miller(0,1,-1,1,cs),Miller(1,0,-1,1,cs)],Miller(1,1,-2,2,cs)};
+
+<span class="comment">% specify structure coefficients</span>
+c = {1,[0.52 ,1.23],1};
+
+<span class="comment">% import pole figure data</span>
+pf = loadPoleFigure(fname,h,cs,ss,<span class="string">'superposition'</span>,c)
+
+<span class="comment">% plot pole figures</span>
+figure(<span class="string">'position'</span>,[359 450 749 249])
+plot(pf)
+</pre><pre class="codeoutput">Undefined function or method 'symmetry' for input arguments of type 'char'.
+
+Error in ==&gt; PoleFigure2odf at 14
+cs = symmetry('-3m',[1.4,1.4,1.5]);
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>ODF Estimation<a name="4"> </a></h2>
+         <p>See <a href="ImportPoleFigureData.html">interfaces</a> for more infomations how to import pole figure data and to create a pole figure object. ODF estimation from a pole figure
+            object is done by the function <a href="PoleFigure_calcODF.html">calcODF</a>. The most simplest syntax is
+         </p><pre class="codeinput">odf = calcODF(pf)
+</pre><p>There are a lot of options to the function <a href="PoleFigure_calcODF.html">calcODF</a>. You can specify the discretization, the functional to minimize, the number of iteration or regularization to be applied.
+            Furthermore you can specify ghost correction or the zero range method to be applied. These options are discussed below.
+         </p>
+         <p>You may want to verify that the pole figures are reproduced. Here is a plot of the computed pole figures.</p><pre class="codeinput">plotpdf(odf,get(pf,<span class="string">'Miller'</span>),<span class="string">'antipodal'</span>,<span class="string">'silent'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Error analyis<a name="7"> </a></h2>
+         <p>For a more quantitative description of the reconstruction quality one can use the function <a href="PoleFigure_calcerror.html">calcerror</a> to compute the fit between the reconstructed ODF and the measured pole figure intensities. The following measured are available:
+         </p>
+         <div>
+            <ul type="square">
+               <li>RP - error</li>
+               <li>L1 - error</li>
+               <li>L2 - error</li>
+            </ul>
+         </div><pre class="codeinput">calcerror(pf,odf,<span class="string">'RP'</span>,1)
+</pre><p>In order to recognize bad pole figure intensities it is often usfull to plot difference pole figures between the normalized
+            measured intensities and the recalculated ODF. This can be done by the command <a href="PoleFigure_plotDiff.html">PlotDiff</a>.
+         </p><pre class="codeinput">plotDiff(pf,odf)
+</pre><p>Assuming you have drived two ODFs from different pole figure measurements or by ODF modelling. Then one can ask for the difference
+            between both. This difference is computet by the command <a href="ODF_calcerror.html">calcerror</a>.
+         </p><pre class="codeinput"><span class="comment">% define a unimodal ODF with the same modal orienation</span>
+odf_modell = unimodalODF(modalorientation(odf),cs,ss,<span class="string">'halfwidth'</span>,15*degree)
+
+<span class="comment">% plot the pole figures</span>
+close <span class="string">all</span>;
+plotpdf(odf_modell,h,<span class="string">'antipodal'</span>)
+
+<span class="comment">% compute the difference</span>
+calcerror(odf_modell,odf)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Discretization<a name="10"> </a></h2>
+         <p>In MTEX the ODF is approximated by a superposition of up to 10,000,000 unimodal components. By exact number and position of
+            these  components, as well as its shape can be specified by the user. By default the positions are chosen equispaced in the
+            orientation space with 1.5 times the resolution of the pole figures and the components are de la Vallee Poussin shaped with
+            the same halfwidth as the resoltion of the positions.
+         </p>
+         <p>Next an example how to change the default resolution:</p><pre class="codeinput">odf = calcODF(pf,<span class="string">'resolution'</span>,15*degree)
+plotpdf(odf,get(pf,<span class="string">'Miller'</span>),<span class="string">'antipodal'</span>,<span class="string">'silent'</span>)
+</pre><p>Beside the resolution you can use the following options to change the default discretization:</p>
+         <div>
+            <ul type="square">
+               <li><b>kernel</b> to specify a specific kernel function
+               </li>
+               <li><b>halfwidth</b> to take the default kernel with a specific halfwidth
+               </li>
+            </ul>
+         </div>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Zero Range Method<a name="12"> </a></h2>
+         <p>If the flag <b>zero_range</b> is set the ODF is forced to be zero at all orientation where there is a corresponding zero in the pole figure. This technique
+            is especially usfull for sharp ODF with large areas in the pole figure beeing zero. In this case the calculation time is greatly
+            improved and much higher resolution of the ODF can be achived.
+         </p>
+         <p>In the following example the zero range method is applied with a the treshhold 100. For more options to control the zero range
+            method see the documentation of <a href="PoleFigure_zero_range.html">zero_range</a> or <a href="plot_zero_range.html">plot_zero_range</a>.
+         </p><pre class="codeinput">odf = calcODF(pf,<span class="string">'zero_range'</span>)
+plotpdf(odf,get(pf,<span class="string">'Miller'</span>),<span class="string">'antipodal'</span>,<span class="string">'silent'</span>)
+</pre><p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Ghost Corrections<a name="13"> </a></h2>
+         <p><i>Ghost correction</i> is a technique first introduced by Matthies that increases the uniform portion of the estimated ODF to reduce the so called
+            <i>ghost error</i>. It applies especially useful in the case of week ODFs. The classical example is the <a href="SantaFe_demo.html">SantaFe model ODF</a>. An analysis of the approximation error under ghost correction can be found <a href="PoleFigureSimulation_demo.html">here</a></p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <h2>Theory<a name="14"> </a></h2>
+         <p>ODF estimation in MTEX is based upon the modified least squares estimator. The functional that is minimized is</p>
+         <p><img vspace="5" hspace="5" src="PoleFigure2odf_eq18152.png"> </p>
+         <p>A precise description of the estimator and the algorithm can be foun in the paper <i>Pole Figure Inversion - The MTEX Algorithm</i>.
+         </p>
+         <p class="pagenavlink"><script language="Javascript">addTopOfPageButtons();</script><a href="#top_of_page">Back to Top</a></p>
+         <p style="font-size:1px;"></p>
+         <table class="footer" border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+               <td valign="baseline" align="right"></td>
+               <td valign="baseline" align="right"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

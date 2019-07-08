@@ -1,0 +1,95 @@
+# InputVariables for Nanowire Angular Dependence
+# 
+# Make sure to change working directory to where script files are located
+# Run InputVariablesNanowire.lsf
+#
+# Copyright 2016-17,Paul W. Leu
+# LAMP, University of PIttsburgh
+
+clear;
+
+materialName = 'Si';
+filenamePrefix = materialName + "Nanowire";
+
+variableStringArray = cell(2);
+variableStringArray{1} = "Theta";
+variableStringArray{2} = "Phi";
+
+
+variableUnitsArray = cell(2);
+variableUnitsArray{1} = "deg";
+variableUnitsArray{2} = "deg";
+
+
+#
+# Nanowire array
+#
+# all units are in meters
+material = 'Si (Silicon) - Palik';
+diameter = 300e-9;
+pitch = 600e-9;
+height = 1000e-9;
+
+#
+#geometry of source and monitor
+# xspan of source and monitor is set to filmXSpan 
+#
+sourceOffset=100e-9;
+wavelengthStart=280e-9;
+wavelengthStop=2000e-9;
+injectionAxis = 'z-axis';
+injectionDirection = 'Forward';
+
+
+simulationType = 'TE';  # 'TE' or 'TM'
+
+if (simulationType == 'TM') {
+  polarizationAngle=0;
+} else {
+  polarizationAngle = 90;
+}
+filenameSuffix = simulationType;
+  
+minPhi = 0;
+maxPhi = 10;
+phiStep = 10;
+
+
+minTheta=0;
+maxTheta=10;
+thetaStep = 10;
+
+steepAngle = 45; # sets angle for steep BC
+
+thetaArray = minTheta:thetaStep:maxTheta;
+phiArray = minPhi:phiStep:maxPhi;
+
+numPhi = length(phiArray);
+numTheta=length(thetaArray);
+
+
+#
+# Simulation cell
+#
+simulationTime=1000e-15; # in seconds
+meshType = 'uniform'; # `auto non-uniform', 'custom non-uniform', or 'uniform'
+meshSize = 40e-9; 
+meshRefinement = 'staircase';
+meshAccuracy = 8; # for auto non-uniform mesh, a number from 1 (least accurate) to 8
+
+FDTDzSpace = 100e-9; # distance to edge of simulation cell from monitors
+
+minPmlLayers=12;
+maxPmlLayers=12;
+pmlReflection = 1e-07;
+
+
+# for monitor 
+numFrequencyPoints=500;
+reflectionMonitorOffset=100e-9;
+transmissionMonitorOffset=100e-9;
+
+frequencyStart = c/wavelengthStop;
+frequencyStop = c/wavelengthStart;
+
+matlabsave("InputVariables");

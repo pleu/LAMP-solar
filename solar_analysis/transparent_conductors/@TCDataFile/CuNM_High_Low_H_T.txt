@@ -1,0 +1,17 @@
+# Our experimental Cu NM on quartz results at 550 nm
+Cu NM (quartz,exp)
+98.34 0.72    %CNHG-3.5-80 (S-HG-7)
+98.15 0.67    %CNHG-1.4-80 (S-HG-7)
+
+91    0.825   %CNHG-3.5-80 (HG29)df(1)
+
+67    0.82    %CNHG-3.5-80 (S-HG-3)
+
+90    0.80    %CNHG-3.5-80 (HG29)
+89    0.77    %CNHG-1.4-80 (HG29)
+64    0.73     %CNHG-1.4-80 nm (HG29)
+
+8.46  0.65     %CNHG-1.4-80 nm (S-HG-0)
+11.45 0.79     %CNHG-3.5-80 (S-HG-0)
+
+

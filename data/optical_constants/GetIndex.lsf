@@ -1,0 +1,42 @@
+# Specify material
+
+material="etch";
+materialName="etch";
+
+
+ 
+
+# Specify frequency range
+
+fmin=c/2001*1e9;
+
+fmax=c/200*1e9;
+
+f=linspace(fmin,fmax,100);
+
+ 
+
+# Get material data
+
+n_exp  = getindex(material,f);
+
+n_FDTD = getfdtdindex(material,f,fmin,fmax);
+# export data into two text files
+
+# each file has 3 columns: f,Re(n),Im(n)
+
+file1=materialName+" (raw).txt";
+
+file2=materialName+" (FDTD).txt";
+
+#rm(file1);
+
+#rm(file2);
+
+for (i=1:length(f)) {
+
+ write(file1,num2str(c/f(i)*1e10)+" "+num2str(real(n_exp(i)))+" "+num2str(imag(n_exp(i))));
+
+ write(file2,num2str(c/f(i)*1e10)+" "+num2str(real(n_FDTD(i)))+" "+num2str(imag(n_FDTD(i))));
+
+}

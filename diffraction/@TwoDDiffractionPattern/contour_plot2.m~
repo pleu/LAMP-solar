@@ -1,0 +1,37 @@
+function [] = contour_plot2(obj, figureNumber)
+%CONTOUR_PLOT Summary of this function goes here
+%   Detailed explanation goes here
+numContourLines = 200;
+if nargin == 1
+  figureNumber = 1;
+end
+
+for i = 1:size(obj, 2)
+  figure(figureNumber);
+  clf;
+  %[h1] = polarplot(obj(i).KxNormalized,obj(i).KyNormalized);
+  hold on;
+  %P = peaks(obj(i).KxNormalized,obj(i).KyNormalized);
+  axprop = {'DataAspectRatio',[1 1 8],'View', [-12 38],...
+    'Xlim', [-90 90]*pi/180,       'Ylim', [-90 90]*pi/180,...
+    'XTick',[-90:30:90]*pi/180,    'YTick',[-90:30:90]*pi/180};
+  figure(1);
+  clf;  
+  polarplot3d(obj(i).NormalizedIntensity,'plottype','surfcn','radialrange',[0 90]*pi/180,...
+    'polargrid',{10 24},'tickspacing',15);
+  set(gca,axprop{:});
+
+
+
+end
+
+
+xlabel('Theta (degrees)');
+ylabel('Normalized Intensity');
+%axis([-90 90 0 1]);
+
+end
+
+
+
+

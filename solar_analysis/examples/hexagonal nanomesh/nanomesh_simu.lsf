@@ -1,0 +1,205 @@
+switchtolayout;
+selectall;
+deleteall;
+
+#
+#add film
+#
+addrect;
+set("name",filmName);
+setnamed(filmName,"x",0);
+setnamed(filmName,"y",0);
+setnamed(filmName,"z",0);
+setnamed(filmName,"z span",filmThickness);
+setnamed(filmName,"material",filmMaterial);
+
+#add holes
+#
+for(i=1:5){
+addcircle;
+set("name",filmFeature + num2str(i));
+setnamed(filmFeature + num2str(i),"material",featureMaterial);
+setnamed(filmFeature + num2str(i),"override mesh order from material database",1);
+setnamed(filmFeature + num2str(i),"mesh order",1);
+setnamed(filmFeature + num2str(i),"z span",filmThickness);
+setnamed(filmFeature + num2str(i),"z",0);
+}
+
+
+#add FDTD
+#
+addfdtd;
+setnamed("FDTD","x",0);
+setnamed("FDTD","y",0);
+
+
+#add reflection monitor
+#
+addpower;
+set("name","reflection");
+setnamed("reflection","x",0);
+setnamed("reflection","y",0);
+#
+#add transmission monitor
+#
+addpower;
+set("name","transmission");
+setnamed("transmission","x",0);
+setnamed("transmission","y",0);
+#
+#add source
+#
+addplane;
+setnamed("source","x",0);
+setnamed("source","y",0);
+setnamed("source","direction","Backward");
+setnamed("source","polarization angle",polarizationAngle);
+setnamed("source","wavelength start",wavelengthStart);
+setnamed("source","wavelength stop",wavelengthStop);
+
+#addmesh;
+#setnamed("mesh","x",0);
+#setnamed("mesh","y",0);
+#setnamed("mesh","dx",dx);
+#setnamed("mesh","dy",dy);
+#setnamed("mesh","dz",dz);
+#setnamed("mesh","z",0);
+#setnamed("mesh","z span",filmThickness + meshOffset);
+
+
+#
+numPitches = 1 + (pitchMax - pitchMin) / pitchIncrement;
+pitchArray = linspace(pitchMin,pitchMax,numPitches);
+#
+#changing parameters and running simulations
+#
+for(i=1:numPitches){
+  numDiameters = 1 + (diameterMax - diameterMin) / diameterIncrement;
+  diameterArray = linspace(diameterMin,diameterMax,numDiameters); 
+  for(j=1:numDiameters){
+    switchtolayout;
+    structures;
+
+    #
+    #setup simulation
+    #
+    FDTDxSpan = pitchArray(i);
+    FDTDySpan = sqrt(3)*pitchArray(i);
+    FDTDzMax = 0.5*filmThickness+FDTDoffset;
+    FDTDzMin = -0.5*filmThickness-FDTDoffset;
+
+    #setnamed("mesh","x span",FDTDxSpan);
+    #setnamed("mesh","y span",FDTDySpan);
+
+   for(k=1:5){
+      setnamed(filmFeature + num2str(k),"radius",0.5*diameterArray(j));
+    }
+    
+    setnamed(filmFeature + num2str(1),"x",0);
+    setnamed(filmFeature + num2str(1),"y",0);
+    setnamed(filmFeature + num2str(2),"x",0.5*FDTDxSpan);
+    setnamed(filmFeature + num2str(3),"x",0.5*FDTDxSpan);
+    setnamed(filmFeature + num2str(4),"x",-0.5*FDTDxSpan);
+    setnamed(filmFeature + num2str(5),"x",-0.5*FDTDxSpan);
+    setnamed(filmFeature + num2str(2),"y",0.5*FDTDySpan);
+    setnamed(filmFeature + num2str(3),"y",-0.5*FDTDySpan);
+    setnamed(filmFeature + num2str(4),"y",0.5*FDTDySpan);
+    setnamed(filmFeature + num2str(5),"y",-0.5*FDTDySpan);
+    
+    
+    setnamed(filmName,"x span",FDTDxSpan);
+    setnamed(filmName,"y span",FDTDySpan);
+
+    #set the geometry of simulation region
+    setnamed("FDTD","x span",FDTDxSpan);
+    #set the simulation time
+    setnamed("FDTD","simulation time",simulationTime);
+    setnamed("FDTD","y span",FDTDySpan);  
+    setnamed("FDTD","z max",FDTDzMax);
+    setnamed("FDTD","z min",FDTDzMin);
+    setnamed("FDTD", "mesh type", meshType);
+    #select mesh type
+    if (meshType == 'uniform') {
+    setnamed("FDTD", "dx", meshSizeX);
+    setnamed("FDTD", "dy", meshSizeY);
+    }  
+    if (meshType == 'auto non-uniform') {
+    setnamed("FDTD","mesh accuracy",meshAccuracy);
+    }
+    #for normal angle incidence
+    #set the bc of simulation
+   
+      if (polarizationAngle == 90){
+        setnamed("FDTD","allow symmetry on all boundaries", 1);
+        setnamed("FDTD","x min bc","Symmetric");
+        setnamed("FDTD","x max bc","Symmetric");
+        setnamed("FDTD","y min bc","Anti-symmetric");
+        setnamed("FDTD","y max bc","Anti-symmetric");
+        setnamed("FDTD","z max bc","PML");
+        setnamed("FDTD","z min bc","PML");
+        } 
+      else {
+        setnamed("FDTD","allow symmetry on all boundaries", 1);
+        setnamed("FDTD","y min bc","Symmetric");
+        setnamed("FDTD","y max bc","Symmetric");
+        setnamed("FDTD","x min bc","Anti-symmetric");
+        setnamed("FDTD","x max bc","Anti-symmetric");
+        setnamed("FDTD","z max bc","PML");
+        setnamed("FDTD","z min bc","PML"); 
+        }
+ 
+
+    #
+    #setup source
+    # source placed at bottom,
+    # so source and reflection monitor do not have to change every time
+    sourceXspan = pitchArray(i);
+    sourceYspan = FDTDySpan;
+    setnamed("source","x span",sourceXspan);
+    setnamed("source","y span",sourceYspan);
+    setnamed("source","polarization angle",polarizationAngle);
+    setnamed("source","z",0.5*filmThickness+sourceOffset);
+    #
+    #setup monitors  
+    #
+    #setup reflection monitors
+    #
+    setnamed("reflection","y span",FDTDySpan);   
+    setnamed("reflection","x span",FDTDxSpan);
+    setnamed("reflection","z",FDTDzMax);
+    #
+    #setup transmission monitors
+    #
+    setnamed("transmission","y span",FDTDySpan);
+    setnamed("transmission","x span",FDTDxSpan);
+    setnamed("transmission","z",FDTDzMin);
+    #set the frequency points
+    setglobalmonitor("frequency points",numFrequencyPoints);
+    #save the files
+    filename = filenamePrefix + thicknessStringArray + num2str(filmThickness*1e9) + variableUnitsArray + diameterStringArray + num2str(diameterArray(j) * 1e9) + variableUnitsArray + pitchStringArray + num2str(pitchArray(i)*1e9) + variableUnitsArray;
+    save(filename);
+    #switch to simulation tab
+    simulation;
+    #run simulation
+    run;
+    #get data; use minimal formatting of data
+    frequencyTransmission = getdata("transmission","f");
+    transmissionData = -transmission("transmission");
+    dataTransmission = [transpose(frequencyTransmission); transpose(transmissionData)];
+    # rm(filename+"Transmission.txt");
+    if (fileexists(filename+"Transmission.txt")) {
+    rm(filename+"Transmission.txt");
+    }
+    write(filename+"Transmission.txt",num2str(dataTransmission));
+    # transmissionFile = filename+"Transmission";
+    # matlabsave(transmissionFile, frequencyTransmission, transmissionData); 
+    frequencyReflection = getdata("reflection", "f");
+    reflectionData = transmission("reflection");
+    dataReflection = [transpose(frequencyReflection); transpose(reflectionData)];
+    # rm(filename+"Reflection.txt");
+    if (fileexists(filename+"Reflection.txt")) {
+    rm(filename+"Reflection.txt");
+    }
+    write(filename+"Reflection.txt",num2str(dataReflection));
+  }
+}
