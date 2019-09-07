@@ -1,0 +1,35 @@
+filename = 'SiNWNormal';
+
+minWavelength = 280;
+maxWavelength = 1100;
+wavelengthQuery = 550;
+
+srNormal = FDTDSimulationResults(filename);
+
+filename = 'SiNWTE';
+srTE = FDTDSimulationResults(filename);
+
+filename = 'SiNWTM';
+srTM = FDTDSimulationResults(filename);
+
+%sr.truncate_wavelength(minWavelength, maxWavelength);
+
+ss = SolarSpectrum.global_AM1p5();
+ss.truncate_spectrum_wavelength(minWavelength, maxWavelength);
+
+idNormal = IntegratedData(ss, srNormal);
+idNormal.ReflectionIntegrated;
+
+idTE = IntegratedData(ss, srTE);
+idTE.ReflectionIntegrated;
+
+idTM = IntegratedData(ss, srTM);
+idTM.ReflectionIntegrated;
+
+
+srNormal.ReflectionResults.query_monitor_data_w
+
+
+
+
+
