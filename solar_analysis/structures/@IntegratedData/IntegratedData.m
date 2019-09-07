@@ -56,6 +56,9 @@ classdef IntegratedData
   
   methods(Static)
     test1();
+    
+    test2();
   end
+  
 end
 

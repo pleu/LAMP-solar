@@ -141,6 +141,11 @@ classdef SolarSpectrum < handle
     irradianceEnergy = convert_photon_flux_to_irradiance_energy(photonFlux, energy)
       
     irradiance = convert_irradiance_energy_to_irradiance(irradianceEnergy, energy)
+
+    solarSpectrum = CIEphotopic()
+
+    solarSpectrum = read_CIE()
+
     
     solarSpectrum = global_AM0()
     % Reads in Global AM0 data 

@@ -26,4 +26,4 @@ f_simArray = mean(frequencyMatrix, 2);
 thetaActual = real(180/pi*asin(repmat(f_simArray, 1, size(frequency, 2)).*...
   sin(repmat(thetaArray, 1, size(frequency, 2)).*pi/180)./frequencyMatrix));
 
-[moQuery] = mo.query_monitor_data(thetaActual, thetaQuery, frequencyQuery);
+%[moQuery] = mo.query_monitor_data(thetaActual, thetaQuery, frequencyQuery);
