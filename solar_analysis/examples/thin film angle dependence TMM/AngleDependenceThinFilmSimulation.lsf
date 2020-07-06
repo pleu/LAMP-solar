@@ -7,15 +7,25 @@ frequencies = linspace(frequencyStart, frequencyStop,numFrequencyPoints);
 # setup structure
 #
 
-layerThicknesses = [0; filmThickness; 0];
+if (filenameSuffix == 'Film') {
+  layerThicknesses = [0; filmThickness; 0];	
+} else {
+  layerThicknesses = [0; 0];
+}
+
+
 
 numFrequencies = length(frequencies);
 numThicknesses = length(layerThicknesses);
 n = matrix(numThicknesses,numFrequencies);
 n(1,1:numFrequencies) = 1; # air
-n(3,1:numFrequencies) = 1; # air
-
 n(2, 1:numFrequencies) = getfdtdindex(material,frequencies,frequencyStart,frequencyStop);
+
+
+if (filenameSuffix == 'Film') {
+    n(3,1:numFrequencies) = 1; # air
+}
+    
 
 # get RT using non-dispersive index data, and theta=0
 RT = stackrt(n, layerThicknesses, frequencies, theta);

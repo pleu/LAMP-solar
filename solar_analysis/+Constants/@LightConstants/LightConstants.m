@@ -5,6 +5,7 @@ classdef LightConstants
     Cnm = 2.99792458e17; % nm/sec
     HC=1.239841716682783e+003;  % Planck constant times speed of light (eV-nm)
     T_a = 300;   % room Temperature
+    T_c = 298.15; % standard cell testing temperature
     T_sun = 5760;
     H = 4.135666804142161e-15; %eV*sec; Planck constant
     Hbar = Constants.LightConstants.H/(2*pi); %eV*sec; reduced plack constant

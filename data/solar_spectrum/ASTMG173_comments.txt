@@ -1,8 +1,0 @@
-% data was obtained from
-% http://rredc.nrel.gov/solar/spectra/am1.5/
-% column 1 is wavelength in nm
-% column 2 is AM0 (ASTM E490) irradiance
-% column 3 is AM1.5 Global (ASTMG173)
-% column 4 is AM1.5 Direct+circumsolar (ASTMG173)
-
-% all irradiance are units of (W/m^2*nm^-1)

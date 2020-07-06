@@ -193,6 +193,8 @@ classdef SolarSpectrum < handle
     % tests the SolarSpectrum class
     % 
     
+    plot_limiting_efficiency_jsc_voc_versus_energy()
+    
     test2()
     
     test3()

@@ -365,53 +365,59 @@ We consider the following processes:
 \end{enumerate}
 
 \begin{equation}
-0 = J_s + J_{th} - J_{rad} - J
+0 = J_s + J_{th} - J_{rad} (V) - J (V)
+%0 = J_s - J_{rad} (V) - J (V)
 \end{equation}
 where $J_s$ is the current from solar generation, $J_{th}$ is generation from ambient temperature, $J_{rad}$ is from radiative recombination, and $J$ is from the extraction of electrons and holes.  
 
-This equation may be reorganized as 
-\begin{equation}
-J = J_s - [J_{rad} -J_{th}] 
-\end{equation}
-where the term in brackets is the current in the dark.  
+%This equation may be reorganized as 
+%\begin{equation}
+%0 = J_s + J_{th} - J_{rad} (V) - J (V)
+%%J = J_s - J_{rad} (0) - [ J_{rad} (V) - J_{rad} (0)] 
+%\end{equation}
+%where the term in brackets is the current in the dark.  
 
 The total current is 
 \begin{equation}
 \boxed{J(V) = J_{sc} - J_{dark}(V)}
 \end{equation}
-where $J_{sc} = J_s$ and $J_{dark}(V) = J_{rad} - J_{th}$.  
-
+%where $J_{sc} = J_s - J_{rad} (0)$ and $J_{dark}(V) = J_{rad} (V) - J_{rad} (0)$.  
+where $J_{sc} = J_s $ and $J_{dark}(V) = J_{rad} (V) - J_{th}$.  
 %Due to excited carriers, there is an increased probability of radiative recombination.  
 %The flux of photons out of the top surface of a flat plate solar cell may be calculated from its reverse process, the flux of 
 %Due to detailed balance, these two rates must be the same.  
 
 The short-circuit current density is 
 \begin{equation}
-\boxed{J_{sc} = q \int_{0}^{\infty} b_s(E) A(E) dE.}
+\boxed{J_{sc} = q \int_{0}^{\infty} b_s(E) A(E) dE dE .}
 \end{equation}
-For a perfectly absorbing, non-reflecting solar cell,  
-\begin{equation}
-\boxed{J_{sc} = q \int_{E_g}^{\infty} b_s(E) dE.}
-\end{equation}
+%\begin{equation}
+%\boxed{J_{sc} = q \int_{0}^{\infty} b_s(E) A(E) dE - f_g \int_{0}^{\infty} b_e (E, 0) A(E) dE .}
+%\end{equation}
+%For a perfectly absorbing, non-reflecting solar cell,  
+%\begin{equation}
+%\boxed{J_{sc} = q \left [ \int_{E_g}^{\infty} b_s(E) d E- f_g \int_{E_g}^{\infty} b_e(E, 0) dE \right ].}
+%\end{equation}
 
 The dark current may be determined from 
 \begin{equation}
-J_{dark}(V) = q \int_{0}^{\infty} \left [ b_e (E, \Delta \mu)  \epsilon(E) - b_e (E, 0) A(E) \right ] dE.
+J_{dark}(V) = q f_g \int_{0}^{\infty} \left [ b_e (E, \Delta \mu)  \epsilon(E) - b_e (E, 0) A(E) \right ] dE.
 \end{equation}
 where $\epsilon(E)$ is the emission.  
+$f_g$ is a geometric factor. $f_g = 2$ if it is emitting from both the top and bottom of the cell.  
 The emission out of the solar cell is equal to the absorption in the dark, and can shown to be still equal under constant $\Delta \mu$.  
 Thus, 
 \begin{equation}
-\boxed{J_{dark}(V) = q \int_{0}^{\infty} \left [ b_e (E, \Delta \mu) - b_e (E, 0) \right ] A(E) dE.}
+\boxed{J_{dark}(V) = q f_g \int_{E_g}^{\infty} \left [  b_e (E, \Delta \mu) - b_e (E, 0) \right ] A(E) dE.}
 \end{equation}
 
 The solar cell is again assumed to be perfectly absorbing, non-reflecting material and thus,  
 \begin{equation}
-J_{dark}(V) = q \int_{E_g}^{\infty} (b_e (E, \Delta \mu) - b_e (E, 0)) dE.
+J_{dark}(V) = q f_g \int_{E_g}^{\infty} \left [ b_e (E, \Delta \mu) - b_e (E, 0) \right ] dE.
 \end{equation}
 
 The quasi Fermi level is assumed to be constant throughout the cell.  The difference in quasi Fermi level between the excited and ground states is $\Delta \mu = q V$.
-
+$f_g$ is a geometrical factor.  If the solar cell is emitting radiation from the front and back, then $f_g = 2$.  
 
 The extracted power is calculated from 
 \begin{equation}
@@ -430,35 +436,36 @@ where $P_s = \int_0^{\infty} I(E) dE$.
  \caption{Limiting Efficiency versus Band gap energy}
   \label{fig:LimitingEfficiency}
 \end{figure}
-We get a maximum of 33.6\%.  
+We get a maximum of 33.12\% at a bandgap of 1.34 eV.  
+This is very close to the 33.16\% and bandgap of 1.34 eV in this reference \cite{Ruhle:16}.
 
-\subsubsection{Slight Accuracy Improvement}
-
-In the dark, 
-\begin{equation}
-J = J_{th} - J_{rad}
-\end{equation}
-\begin{equation}
-J_{rad} = q \int_{E_g}^{\infty}  b_e (E, \Delta \mu)  dE
-\end{equation}
-\begin{equation} 
-J_{th} = q \int_{E_g}^{\infty} b_e (E, 0) dE
-\end{equation}
-In the light, 
-\begin{equation}
-J = J_s - [J_{rad} -J_{th}] 
-\end{equation}
-\begin{equation}
-J_s = q \int_{E_g}^{\infty} b_s(E) dE
-\end{equation}
-and $J_{rad}$ is the same.  However, $J_{th}$ is now, 
-\begin{equation}
-J_{th} = q \int_{E_g}^{\infty} \left ( 1 - \frac{F_s}{F_e}  \right ) b_e (E, 0) dE
-\end{equation}
-since a small fraction of thermal photons has been replaced by solar photons.  
-\begin{equation}
-J = q \int_{E_g}^{\infty} \left [ b_s(E) - \frac{F_s}{F_e} b_e(E, 0) \right ] dE - q \int_{E_g}^{\infty}   \left [ b_e (E, \Delta \mu)  - b_e (E, 0) \right ]  dE 
-\end{equation}
+%\subsubsection{Slight Accuracy Improvement}
+%
+%In the dark, 
+%\begin{equation}
+%J = J_{th} - J_{rad}
+%\end{equation}
+%\begin{equation}
+%J_{rad} = q \int_{E_g}^{\infty}  b_e (E, \Delta \mu)  dE
+%\end{equation}
+%\begin{equation} 
+%J_{th} = q \int_{E_g}^{\infty} b_e (E, 0) dE
+%\end{equation}
+%In the light, 
+%\begin{equation}
+%J = J_s - [J_{rad} -J_{th}] 
+%\end{equation}
+%\begin{equation}
+%J_s = q \int_{E_g}^{\infty} b_s(E) dE
+%\end{equation}
+%and $J_{rad}$ is the same.  However, $J_{th}$ is now, 
+%\begin{equation}
+%J_{th} = q \int_{E_g}^{\infty} \left ( 1 - \frac{F_s}{F_e}  \right ) b_e (E, 0) dE
+%\end{equation}
+%since a small fraction of thermal photons has been replaced by solar photons.  
+%\begin{equation}
+%J = q \int_{E_g}^{\infty} \left [ b_s(E) - \frac{F_s}{F_e} b_e(E, 0) \right ] dE - q \int_{E_g}^{\infty}   \left [ b_e (E, \Delta \mu)  - b_e (E, 0) \right ]  dE 
+%\end{equation}
 
 \subsection{Tandem Cells}
 
@@ -1192,7 +1199,7 @@ Using the same argument as in
 
 
 \bibliographystyle{IEEEtran}
-\bibliography{../BibFiles/SiliconPV,../BibFiles/Photovoltaics}
+\bibliography{AllRefs}
 
 \end{document}
 

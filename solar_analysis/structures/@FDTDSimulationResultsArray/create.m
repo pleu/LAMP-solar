@@ -13,6 +13,7 @@ function [saArray] = create(variableArray, independentVariableType)
 %   end
   simResults = FDTDSimulationResults.empty(variableArray.NumValues, 0);
   for i = 1:variableArray.NumValues
+    variableArray.Filenames{i}
     simResults(i) = FDTDSimulationResults(variableArray.Filenames{i}, independentVariableType);
   end
 % This section has been removed due to new BFAST option  

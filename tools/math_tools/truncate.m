@@ -39,6 +39,7 @@ for i = 1:numY
   varargout{i} = varargin{i}(ind);
 end
 
+%if isempty(find(is_almost_equal(x, minX)))
 if isempty(find(x == minX, 1))
   if x(1) < x(length(x))
     xOut = [minX; xOut];
@@ -56,6 +57,7 @@ if isempty(find(x == minX, 1))
   end
 end
 if isempty(find(x == maxX, 1))
+%if isempty(find(is_almost_equal(x, maxX)))
   if x(1) < x(length(x))
     xOut = [xOut; maxX];
     for i = 1:numY

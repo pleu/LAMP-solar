@@ -4,7 +4,7 @@ function [hLine,hAxes] = add_plotyy(x2,y2,Labels,Range,YTick,varargin) %
 % the same as the left y-axis
 
 %axes = get(gcf, 'children);
-axesInd = findobj(gcf,'type','axes');
+  axesInd = findobj(gcf,'type','axes');
   
 for i = 1:length(axesInd)
   %hAxes(1) = gca;
@@ -19,6 +19,8 @@ end
 %  hAxes(2) = axes('Position',get(hAxes(1),'Position'),'YColor','r');
 
 hAxes = axes('Position',get(axesInd(1),'Position'),'YColor','y');
+
+%yyaxis right
 
 hLine = optionplot(x2, y2, varargin{:});
 
@@ -45,14 +47,15 @@ set(hAxes,'Xlim',get(axesInd(1),'Xlim'),'YAxisLocation','right',...
 %  set(ylabelh, 'Position', get(ylabelh, 'Position') - [0.2 0 0]) 
   set(hAxes, 'yColor', 'c')
 
+  set(hAxes(1), 'XTick', [0 5000]);
   set(hAxes,'Ylim',Range(:));
 
   
   set(hAxes,'YTick',YTick);
   position = get(hAxes, 'Position');
-  position(3) = 0.75;
+  %position(3) = 0.75;
   %position(4) = 0.68;
-  set(hAxes, 'Position', position)
+  %set(hAxes, 'Position', position)
  
   for i = 1:length(axesInd)
     set(axesInd(i), 'Position', position)

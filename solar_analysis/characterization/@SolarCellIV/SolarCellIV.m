@@ -42,12 +42,13 @@ classdef SolarCellIV
   methods(Hidden)
     function iv = Analyze(iv)
       if sum(iv.CurrentLight) == 0
-        iv.CurrentSC
+        iv.CurrentSC = 0
         iv.MaxInd = nan;
         iv.VoltageM = nan;
         iv.CurrentM = nan;
-        iv.VOC = nan;
-        iv.FF = nan;
+        iv.VOC = 0;
+        iv.FF = 0;
+        iv.Efficiency = 0;
       else      
         iv.CurrentSC = iv.calc_CurrentSC;
         iv.EfficiencyArray = iv.calc_efficiency;
@@ -76,6 +77,20 @@ classdef SolarCellIV
   end
   
   methods(Static)
+
+    function IV = calc_IV_detailed_balance(currentSC, F0, ma, ss)
+      voltage = linspace(0, ma.BandGap);
+      currentTotal = Constants.LightConstants.Q*F0*(exp(Constants.LightConstants.Q*voltage/(Constants.LightConstants.k_B*Constants.LightConstants.T_c))-1)-currentSC;
+      IV = SolarCellIV(voltage, currentTotal, ss.PowerDensity);   
+    end
+
+    
+    function IV = create_zero_efficiency_cell(ss)
+      voltage = linspace(0, 1);
+      currentTotal = zeros(length(voltage), 1);
+      IV = SolarCellIV(voltage, currentTotal, ss.PowerDensity);   
+    end
+    
     function [VOC] = calc_VOC(voltage, current)
 %      VOC = interp1(current, voltage, 0);
        [~, ind] = min(abs(current));
@@ -89,11 +104,62 @@ classdef SolarCellIV
        end
     end
     
+    function IV = calc_IVRuhle(bandGap, ss)
+      % This is based on Ruhle, Tabulated values of the Shockley?Queisser limit for single junction solar cells
+      geometricFactor = 2;
+      energyInd = find(ss.Energy >= bandGap);
+      deltaE = [diff(ss.Energy); 0]; % 0 at back
+      currentSC = -Constants.LightConstants.Q*...
+        sum(ss.PhotonFlux(energyInd).*deltaE(energyInd));
+      EVector = ss.Energy(energyInd);
+      deltaEInt = deltaE(energyInd);
+      currentDark0 = -geometricFactor*Constants.LightConstants.Q*sum(SolarSpectrum.calculate_be(EVector, 0, Constants.LightConstants.T_c, Constants.LightConstants.F_a).*deltaEInt);
+      % factor of 2 because of emission from top and bottom;
+      
+      voltage = linspace(0, bandGap-...
+        Constants.LightConstants.k_B*Constants.LightConstants.T_a, 200);
+      currentDark = zeros(1, size(voltage, 2));
+      for voltageInd = 1:size(voltage, 2)
+        currentDark(voltageInd) = -Constants.LightConstants.Q*geometricFactor*...
+          sum(SolarSpectrum.calculate_be(EVector, voltage(voltageInd), Constants.LightConstants.T_c, Constants.LightConstants.F_a).*deltaEInt) - currentDark0;
+      end
+      %currentSC = currentS - currentDark0;
+      %currentSC = currentS;
+      currentTotal = currentSC-currentDark;
+      IV = SolarCellIV(voltage, currentTotal, ss.PowerDensity);   
+    end
+    
+    function IV = calc_IVNelson(bandGap, currentSC, solarSpectrum)
+      % This is based on Nelson textbook
+      % This includes the factor of -Fs/Fe where a fraction of ambient flux
+      % has been replaced by solar radiation
+      EVector = linspace(bandGap, max(solarSpectrum.Energy));
+      deltaE = [diff(EVector) 0];
+      currentDark0 = Constants.LightConstants.Q*sum(SolarSpectrum.calculate_be(EVector, 0, Constants.LightConstants.T_a, Constants.LightConstants.F_a).*deltaE);
+      %Constants.LightConstants.Q*geometricalFactor*trapz(EVector, SolarSpectrum.calculate_be_omega(EVector, 0, Constants.LightConstants.T_a));
+      % trapz(EVector, SolarSpectrum.calculate_be_omega(EVector, 0, Constants.LightConstants.T_a));
+      % *trapz(EVector, SolarSpectrum.calculate_be_omega(EVector, 0, Constants.LightConstants.T_a));
+      %currentDark0 = Constants.LightConstants.Q*geometricalFactor*trapz(EVector, SolarSpectrum.calculate_be_omega(EVector, 0, Constants.LightConstants.T_a));
+      %currentAbs = (1 - Constants.LightConstants.F_s/Constants.LightConstants.F_a)*currentDark0;
+      voltage = linspace(0, bandGap-...
+        Constants.LightConstants.k_B*Constants.LightConstants.T_a);
+      currentDark = zeros(1, size(voltage, 2));
+      for voltageInd = 1:size(voltage, 2)
+        currentDark(voltageInd) = Constants.LightConstants.Q*...
+          sum(SolarSpectrum.calculate_be(EVector, voltage(voltageInd), Constants.LightConstants.T_a, Constants.LightConstants.F_a).*deltaE);
+      end
+      currentSCadjust = currentSC - Constants.LightConstants.F_s/Constants.LightConstants.F_a*currentDark0;
+      currentTotal = currentSCadjust-(currentDark-currentDark0);
+      IV = SolarCellIV(voltage, currentTotal, solarSpectrum.PowerDensity);   
+    end
     
     function IV = calc_IV2(bandGap, currentSC, ...
         solarSpectrum)
       % This is based on Nelson textbook
       geometricalFactor = pi;
+      
+      
+      
       voltage = linspace(0, bandGap-...
         Constants.LightConstants.k_B*Constants.LightConstants.T_a);
       EVector = linspace(bandGap, max(solarSpectrum.Energy));
@@ -102,8 +168,6 @@ classdef SolarCellIV
       currentDark0 = Constants.LightConstants.Q*geometricalFactor*trapz(EVector, SolarSpectrum.calculate_be_omega(EVector, 0, Constants.LightConstants.T_a));
       
       % current with voltage
-
-
       currentDark = zeros(1, size(voltage, 2));
       for voltageInd = 1:size(voltage, 2)
         currentDark(voltageInd) = Constants.LightConstants.Q* ...
@@ -113,6 +177,8 @@ classdef SolarCellIV
       currentTotal = currentSC-(currentDark-currentDark0);
       IV = SolarCellIV(voltage, currentTotal, solarSpectrum.PowerDensity);   
     end
+    
+    
     
     function IV = calc_IV(bandGap, absorptionResults, currentSC, ...
         solarSpectrum, thetaE, internalFluorescence, thickness, material)
@@ -135,7 +201,7 @@ classdef SolarCellIV
         Constants.LightConstants.k_B*Constants.LightConstants.T_a);
       EVector = linspace(bandGap, max(solarSpectrum.Energy));
       
-      beVector = pi*SolarSpectrum.calculate_b(EVector, 0, Constants.LightConstants.T_a);
+      beVector = SolarSpectrum.calculate_be(EVector, 0, Constants.LightConstants.T_a, Constants.LightConstants.F_a);
       currentDark = zeros(1, size(voltage, 2));
       currentDark2 = zeros(1, size(voltage, 2));
 
@@ -148,8 +214,8 @@ classdef SolarCellIV
       if internalFluorescence == 1
         for voltageInd = 1:size(voltage, 2)
           currentDark(voltageInd) = Constants.LightConstants.Q* ...
-          gammaE*trapz(EVector, (SolarSpectrum.calculate_b(EVector, voltage(voltageInd),...
-          Constants.LightConstants.T_a) -...
+          gammaE*trapz(EVector, (SolarSpectrum.calculate_be(EVector, voltage(voltageInd),...
+          Constants.LightConstants.T_a, Constants.LightConstants.F_a) -...
           beVector).*absorption);
         end
 %        currentDark2(voltageInd) = 0;

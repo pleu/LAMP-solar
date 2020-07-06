@@ -45,6 +45,13 @@ classdef SimulationResults < Absorber & TransparentStructureType
   
   methods(Static)
     
+    function sr = create_empty_simulation_results(wavelengths)
+      % Constructor
+      sr = SimulationResults(wavelengths);
+    end
+
+    
+    
 %     
 %     function sr = create_from_RCWA(wavelengths, reflectionData, transmissionData, absorptionData)
 %       % Constructor

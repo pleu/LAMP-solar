@@ -9,7 +9,7 @@
   clf;
   ss = SolarSpectrum.global_AM1p5;
   %ss.plot_irradiance_versus_energy;
-  ss.plot_limiting_efficiency_versus_energy;
+  limitingEfficiency = ss.plot_limiting_efficiency_versus_energy;
   ylabel('Detailed Solar Cell Efficiency', 'Color', 'b')
   
   add_plotyy(ss.Energy,ss.PhotonFlux/1e21,...
@@ -24,6 +24,8 @@
   %[limitingEfficiency] = ss.plot_limiting_efficiency_versus_energy;  
   hold on;
   
+  bandgap = 1.43;
+  limitingEfficiency(knnsearch(ss.Energy, bandgap))
   %axis([0 4 0 6]);
   %grid on;
   %axis([0 4 0 10]);
