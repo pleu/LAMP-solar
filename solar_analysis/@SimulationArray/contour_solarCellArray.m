@@ -1,4 +1,4 @@
-function contour_solarCellArray(sa, xVarString, yVarString, zVarString, numContourLines, interpolation, plotType)
+ function [X, Y, Z] = contour_solarCellArray(sa, xVarString, yVarString, zVarString, numContourLines, interpolation, plotType)
 %function contour(sa, xVarString, yVarString, monitorType, numContourLines)
 
 % CONTOUR
@@ -41,7 +41,7 @@ end
 if strcmp(zVarString,'CurrentSC')
   zValues = vertcat(sa.Simulations.CurrentSC)
 elseif strcmp(zVarString, 'Efficiency')
-  zValues = vertcat(sa.Simulations.Efficiency)
+  zValues = vertcat(sa.Simulations.Efficiency)*100;
 elseif strcmp(zVarString, 'VoltageM')
   zValues = vertcat(sa.Simulations.VoltageM)
 elseif strcmp(zVarString, 'CurrentM')
@@ -49,7 +49,7 @@ elseif strcmp(zVarString, 'CurrentM')
 elseif strcmp(zVarString, 'FF')
   zValues = vertcat(sa.Simulations.FF)
 elseif strcmp(zVarString, 'VOC')
-  zValues = vertcat(sa.Simulations.VOc)
+  zValues = vertcat(sa.Simulations.VOC)
 end
 
 axprop = {'DataAspectRatio',[1 1 8],'View', [0 90]};

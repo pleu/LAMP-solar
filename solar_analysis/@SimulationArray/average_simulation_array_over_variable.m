@@ -20,16 +20,20 @@ for i = 1:va2.NumValues
   weights = ones(numSims, 1);
   weights(1) = 1/2;
   weights(end) = 1/2;
+  weights = weights/sum(weights);
   
   for j= 1:length(indexIntegrate)
     dataReflect(j,:) = sa.Simulations(indexIntegrate(j)).ReflectionResults.Data;
     dataTransmit(j,:) = sa.Simulations(indexIntegrate(j)).TransmissionResults.Data;
     dataAbsorb(j,:) = sa.Simulations(indexIntegrate(j)).AbsorptionResults.Data;
   end
+  reflectionData = weights'*dataReflect;
+  transmissionData = weights'*dataTransmit;
+  absorptionData = weights'*dataAbsorb;
   
-  reflectionData = mean(weights.*dataReflect, 1);
-  transmissionData = mean(weights.*dataTransmit, 1);
-  absorptionData = mean(weights.*dataAbsorb, 1);
+%   reflectionData = mean(weights.*dataReflect, 1);
+%   transmissionData = mean(weights.*dataTransmit, 1);
+%   absorptionData = mean(weights.*dataAbsorb, 1);
   simulations(i) = SimulationResults(wavelengths, reflectionData, transmissionData, absorptionData);
   % end
 end

@@ -30,7 +30,7 @@ classdef FDTDSimulationResults < SimulationResults
   
   methods
     
-    function sr = FDTDSimulationResults(filename, independentVariableType)
+    function sr = FDTDSimulationResults(filename, independentVariableType, percent)
       % Constructor
       if nargin == 1 && strcmp(filename,'')
         sr.Filename = '';
@@ -38,13 +38,13 @@ classdef FDTDSimulationResults < SimulationResults
         if nargin == 1
           sr.Filename = filename;
           sr.IndependentVariableType = 'Frequency';
-        elseif nargin == 2
+        elseif nargin == 2 || nargin == 3
           sr.Filename = filename;
           sr.IndependentVariableType = independentVariableType;
         end
         sr.ReflectionResults = sr.calc_reflection_results;
         sr.TransmissionResults = sr.calc_transmission_results(sr.ReflectionResults.Frequency);
-        sr.AbsorptionResults = sr.calc_absorption_results;
+        sr.AbsorptionResults = sr.calc_absorption_results(percent);
       end
     end
     
@@ -110,6 +110,17 @@ classdef FDTDSimulationResults < SimulationResults
     test2;
     
     test3;
+    
+    function sr = create_empty_simulation_results(wavelengths)
+      % Constructor
+      sr = FDTDSimulationResults('');
+      sr.ReflectionResults = Monitor('Reflection', ...
+        Photon.convert_wavelength_to_frequency(wavelengths), 100*ones(1, length(wavelengths)));
+      sr.TransmissionResults = Monitor('Transmission', ...
+        Photon.convert_wavelength_to_frequency(wavelengths), zeros(1, length(wavelengths)));
+      sr.AbsorptionResults = sr.calc_absorption_results;
+    end
+    
     
     function sr = create_array(filenames, independentVariableType)
       ind = strfind(filenames(1), 'Theta');

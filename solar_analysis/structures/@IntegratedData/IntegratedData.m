@@ -59,6 +59,13 @@ classdef IntegratedData
     
     test2();
     test3();
+    
+    function id = create_array(ss, simArray)
+      id = IntegratedData.empty(length(simArray),0);
+      for ind = 1:length(simArray)
+        id(ind) = IntegratedData(ss, simArray(ind));
+      end
+    end
   end
   
 end

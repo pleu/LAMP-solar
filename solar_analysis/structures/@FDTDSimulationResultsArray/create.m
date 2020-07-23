@@ -1,4 +1,4 @@
-function [saArray] = create(variableArray, independentVariableType)
+function [saArray] = create(variableArray, independentVariableType, percent)
 % thetaQuery is much finer theta
 % frequencyQuery is also much finer frequency
 %
@@ -8,13 +8,16 @@ function [saArray] = create(variableArray, independentVariableType)
   if nargin == 1
     independentVariableType = 'frequency';
   end
+  if nargin <= 2
+    percent = 0;
+  end
 %   if variableArray.NumVariables ~= 1
 %     error('number of variables in variableArray should be 1');
 %   end
   simResults = FDTDSimulationResults.empty(variableArray.NumValues, 0);
   for i = 1:variableArray.NumValues
     variableArray.Filenames{i}
-    simResults(i) = FDTDSimulationResults(variableArray.Filenames{i}, independentVariableType);
+    simResults(i) = FDTDSimulationResults(variableArray.Filenames{i}, independentVariableType, percent);
   end
 % This section has been removed due to new BFAST option  
 %   if strcmpi(variableArray.Names, 'theta')

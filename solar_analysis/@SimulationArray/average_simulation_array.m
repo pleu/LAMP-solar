@@ -2,13 +2,12 @@ function [saAvg] = average_simulation_array(sa, sa2)
 % will average over varString
 
 % check to make sure variable arrays are identical
-if ~isequal(sa.VariableArray, sa2.VariableArray)
+%if %~isequal(sa.VariableArray, sa2.VariableArray)
+if ~isequal(sa.VariableArray.Values, sa2.VariableArray.Values)
   warning('The variable arrays between these two simulations are different.');
 end
 
 va = sa.VariableArray; 
-
-
 simulations = SimulationResults.empty(va.NumValues, 0);
 
 for i = 1:va.NumValues
