@@ -36,9 +36,14 @@ classdef FDTDSimulationResults < SimulationResults
         sr.Filename = '';
       else
         if nargin == 1
+          percent = 0;
           sr.Filename = filename;
           sr.IndependentVariableType = 'Frequency';
-        elseif nargin == 2 || nargin == 3
+        elseif nargin == 2 
+          sr.Filename = filename;
+          sr.IndependentVariableType = independentVariableType;
+          percent = 0;
+        elseif nargin == 3
           sr.Filename = filename;
           sr.IndependentVariableType = independentVariableType;
         end
