@@ -7,7 +7,7 @@ function test
 % LAMP, University of Pittsburgh
   ss = SolarSpectrum.global_AM1p5;
   assert(ss.Wavelength(1) == 280);
-  assert(ss.Irradiance(1) == 4.7300e-23);
+  assert(ss.Irradiance(1) == 4.7309e-23);
   assert(is_numerically_equal(ss.PowerDensity, 1.000470703609345e+03));
   assert(is_numerically_equal(ss.Energy(1), 4.428006131009940));
   assert(is_numerically_equal(ss.Frequency(1), 1.070687350000000e+15));
