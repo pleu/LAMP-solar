@@ -12,7 +12,7 @@ classdef SolarSpectrum < handle
     SpectrumPhoton;
     Irradiance;    % irradiance of solar spectrum (W/m^2*nm^-1)
     PowerDensityUntruncated;  % power density (W/m^2)
-    NumPhotonsUntruncated; % # of photons/m^2
+    NumPhotonsUntruncated; % # of photons/m^2*sec^(-1)
   end
   
   properties (SetAccess = private, Dependent = true)
@@ -147,14 +147,14 @@ classdef SolarSpectrum < handle
     solarSpectrum = read_CIE()
 
     
-    solarSpectrum = global_AM0()
-    % Reads in Global AM0 data 
+    solarSpectrum = AM0()
+    % Reads in AM0 data 
     
     solarSpectrum = global_AM1p5()
     % Reads in Global AM1.5 data 
     
     solarSpectrum = direct_AM1p5()
-    % Reads in Global AM1.5 data 
+    % Reads in direct AM1.5 data 
     
     solarSpectrum = create_blackbody_spectrum(temperature, wavelength)
     %CREATE_BLACKBODY_SPRECTRUM
@@ -193,6 +193,7 @@ classdef SolarSpectrum < handle
     % tests the SolarSpectrum class
     % 
     
+    
     plot_limiting_efficiency_jsc_voc_versus_energy()
     
     test2()
@@ -200,6 +201,10 @@ classdef SolarSpectrum < handle
     test3()
     
     test4()
+    
+    test5()
+    
+    test6()
     
     testArray()
     

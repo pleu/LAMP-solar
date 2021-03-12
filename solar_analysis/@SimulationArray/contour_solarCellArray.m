@@ -39,7 +39,7 @@ end
 [y, yAxis, yLabel] = get_values_and_labels(sa.VariableArray, yVarString);
 
 if strcmp(zVarString,'CurrentSC')
-  zValues = vertcat(sa.Simulations.CurrentSC)
+  zValues = abs(vertcat(sa.Simulations.CurrentSC));
 elseif strcmp(zVarString, 'Efficiency')
   zValues = vertcat(sa.Simulations.Efficiency)*100;
 elseif strcmp(zVarString, 'VoltageM')
