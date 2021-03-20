@@ -25,27 +25,31 @@ classdef StepFunctionAbsorber < Absorber
         sfa.BandGap = bandgap;
         
         ss = SolarSpectrum.global_AM1p5;
-        data = zeros(length(ss.Energy), 1);
-        data(ss.Energy >= bandgap) = 1;                
-        sfa.AbsorptionResults = Monitor('Absorption', Photon.convert_energy_to_frequency(ss.Energy), data);
-        sfa.ReflectionResults = Monitor('Reflection', Photon.convert_energy_to_frequency(ss.Energy), zeros(length(ss.Energy)));
-        data = zeros(length(ss.Energy), 1);
-        data(ss.Energy < bandgap) = 1;                
-        sfa.TransmissionResults = Monitor('Transmission', Photon.convert_energy_to_frequency(ss.Energy), data);
+        energy = ss.Energy;
+        
+%         data = zeros(length(ss.Energy), 1);
+%         data(ss.Energy >= bandgap) = 1;                
+%         
+%         sfa.AbsorptionResults = Monitor('Absorption', Photon.convert_energy_to_frequency(ss.Energy), data);
+%         sfa.ReflectionResults = Monitor('Reflection', Photon.convert_energy_to_frequency(ss.Energy), zeros(1, length(ss.Energy)));
+%         data = zeros(length(ss.Energy), 1);
+%         data(ss.Energy < bandgap) = 1;                
+%         sfa.TransmissionResults = Monitor('Transmission', Photon.convert_energy_to_frequency(ss.Energy), data);
       else
         sfa.Name = name;
         sfa.BandGap = bandgap;
-
-        data = zeros(length(energy), 1);
-        data(energy >= bandgap) = 1;
-        sfa.AbsorptionResults = Monitor('Absorption', Photon.convert_energy_to_frequency(energy), data);
-        sfa.ReflectionResults = Monitor('Reflection', Photon.convert_energy_to_frequency(energy), zeros(length(energy)));
-        data = zeros(length(energy), 1);
-        data(energy < bandgap) = 1;                
-        sfa.TransmissionResults = Monitor('Transmission', Photon.convert_energy_to_frequency(energy), data);
       end
+      data = zeros(length(energy), 1);
+      data(energy >= bandgap) = 1;
+      sfa.AbsorptionResults = Monitor('Absorption', Photon.convert_energy_to_frequency(energy), data);
+      sfa.ReflectionResults = Monitor('Reflection', Photon.convert_energy_to_frequency(energy), zeros(1, length(energy)));
+      data = zeros(length(energy), 1);
+      data(energy < bandgap) = 1;
+      sfa.TransmissionResults = Monitor('Transmission', Photon.convert_energy_to_frequency(energy), data);
     end
   end
+  
+  
   methods(Static) 
     function [scArray] = create_step_function_absorbers_array(bandGapArray, energy)
       scArray = StepFunctionAbsorber.empty(length(bandGapArray), 0);  

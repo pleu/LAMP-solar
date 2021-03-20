@@ -104,14 +104,16 @@ classdef SolarCellIV
        end
     end
     
+
+    
     function IV = calc_IVRuhle(bandGap, ss)
       % This is based on Ruhle, Tabulated values of the Shockley?Queisser limit for single junction solar cells
       geometricFactor = 2;
-      energyInd = find(ss.Energy >= bandGap);
+      %energyInd = find(ss.Energy >= bandGap);
       %      deltaE = [diff(ss.Energy); 0]; % 0 at back
       %       currentSC = -Constants.LightConstants.Q*...
       %         sum(ss.PhotonFlux(energyInd).*deltaE(energyInd));
-      EVector = ss.Energy(energyInd);
+      EVector = ss.Energy(ss.Energy >= bandGap);
       %      deltaEInt = deltaE(energyInd);
       currentMax = -Constants.LightConstants.Q*...
         trapz(EVector, ss.PhotonFlux(energyInd)); % this is more accurate than below

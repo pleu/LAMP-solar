@@ -106,7 +106,7 @@ classdef SolarSpectrum < handle
         
     function irradianceEnergy = get.IrradianceEnergy(obj)
       irradianceEnergy = obj.Irradiance*Constants.LightConstants.HC./(obj.Energy).^2;
-    end
+    end    
     
     function shortCircuitCurrent = calc_max_short_circuit_current(obj, bandGap, upperLimit)
       % This is in units of Amps/m^2
@@ -136,6 +136,9 @@ classdef SolarSpectrum < handle
   end
   
   methods(Static) 
+    
+    F0 = calc_F0(bandGap, n)
+
     obj = create_single_wavelength(wavelength)
     
     irradianceEnergy = convert_photon_flux_to_irradiance_energy(photonFlux, energy)

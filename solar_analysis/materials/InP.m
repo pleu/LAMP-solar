@@ -3,7 +3,7 @@ classdef InP < MaterialType
 % 
 
   properties
-    BandGap = 1.344;
+    BandGap = 1.34;
   end
   
   methods

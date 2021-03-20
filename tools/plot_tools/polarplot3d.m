@@ -62,6 +62,8 @@ function [Xi,Yi,Zi] = polarplot3d(Zp,varargin)
 %      Every other tick mark is labeled. To supress tick marks specify zero,
 %      an empty vector or an increment value greater than 180.
 %
+%    'RadialTickSpacing' location of spacing along x-axis
+%
 %   'PolarGrid'      Polar grid density (2 element cell array) (default = {10 8})
 %      Number of grid sections in the radial and azimuthal directions.  A value
 %      of 1 eliminates a grid direction from the plot. If a vector is specified
@@ -233,6 +235,7 @@ p.radlabelcolor     = 'black';    % default radial label color
 p.plotprops         = {};         % no additional plot properties
 p.xi = [];
 p.yi = [];
+p.radialtickspacing = {};
 
 % Parse property value pairs, replace defaults with values specified by caller
 try
@@ -613,6 +616,8 @@ if ~isequal(p.axislocation,'off')
       line(xt(1:2,:),yt(1:2,:),[zt; zt],'Color',p.tickcolor);
 
       % Add tick labels
+      %for k = 2 * (1:nl-1)
+      zt = ones(2*nl+1, 1);
       for k = 2 * (1:nl) - 1
          text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
            'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
@@ -713,18 +718,60 @@ if r > 1 || m > 1
    end
 
    % Draw azimuthal grid lines in radial direction (concentric arcs)
+%    if length(radgrid) > 2
+%       xm = xi(1:v:end,:);
+%       ym = yi(1:v:end,:);
+%       zm = zi(1:v:end,:);
+%       plot3(xm',ym',zm',p.gridstyle,'Color',p.gridcolor,'LineWidth',1);
+%    end
    if length(radgrid) > 2
-      xm = xi(1:v:end,:);
-      ym = yi(1:v:end,:);
-      zm = zi(1:v:end,:);
+      xm = xi([1,end],:);
+      ym = yi([1,end],:);
+      zm = zi([1,end],:);
       plot3(xm',ym',zm',p.gridstyle,'Color',p.gridcolor,'LineWidth',1);
    end
-   hold off;
+   
+   
+   
+   
+   
 end
 
 %-- Set axis font
 if ~isequal(p.plottype,'off'), set(gca,fontargs{:}); end
 
+if isempty(p.radialtickspacing)
+  xTicks = get(gca, 'xtick');
+else
+  xTicks = p.radialtickspacing;
+end
+xTicks = xTicks(xTicks> 0  & xTicks< max(max(rad)) & xTicks> min(min(rad)));
+thetaTemp = linspace(min(p.angularrange)+pi/2,max(p.angularrange)+pi/2, 361);
+[thetaMat, xTicksMat] = ndgrid(thetaTemp, xTicks);
+[xi,yi] = pol2cart(thetaMat,xTicksMat);               % convert to Cartesian
+xi = xi + p.cartorigin(1);                        % translate center, x
+yi = yi + p.cartorigin(2);                        %                   y
+%zi = zi + p.cartorigin(3);                        %                   z
+set(gca,'XMinorTick','on')
+if length(radgrid) > 2
+  xm = xi(1:end,:);
+  ym = yi(1:end,:);
+  %zm = zi(1:end,:);
+  plot(xm,ym,p.gridstyle,'Color',p.gridcolor,'LineWidth',1);
+end
+xTickLabels = get(gca, 'xticklabel');
+xTickLabelsNew = cell(length(xTickLabels), 1);
+for i = 1:length(xTickLabels)
+  if str2double(xTickLabels{i}) < 0
+    xTickLabelsNew{i} = '';
+  else
+    xTickLabelsNew{i} = xTickLabels{i};
+  end
+end
+set(gca, 'xticklabel', xTickLabelsNew);
+%xTicks = xTicks(xTicks> 0
+hold off;
+   
 %-- Apply additional properties to the plot
 if ~isempty(p.plotprops), set(gca,p.plotprops{:}); end
 end

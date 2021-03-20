@@ -1,4 +1,4 @@
-function contour(sa, xVarString, yVarString, monitorType, numContourLines, interpolation, plotType)
+function contour(sa, xVarString, yVarString, monitorType, numContourLines, interpolation, plotType, varargin)
 %function contour(sa, xVarString, yVarString, monitorType, numContourLines)
 
 % CONTOUR
@@ -53,11 +53,11 @@ end
 zValues = vertcat(monitor.Data);
 
 %set where absorption >= 1 as 1
-% index = zValues>1;
-% if ~isempty(find(index == 1))
-%   zValues(index) = 1;
-%   display('Warning: some values > 1')
-% end
+index = zValues>1;
+if ~isempty(find(index == 1))
+  zValues(index) = 1;
+  display('Warning: some values > 1')
+end
 %xlimit = max(max(x));
 axprop = {'DataAspectRatio',[1 1 8],'View', [0 90]};
 %  ,...
@@ -99,7 +99,25 @@ if interpolation == 1 % linear interpolation
   end
 else % no interpolation
   %numContourLines = 200;
-  if isvector(x)
+  if isvector(x) && isvector(y)
+    xUnique = unique(x);
+    yUnique = unique(y);
+    [X,Y] = meshgrid(xUnique,yUnique);
+    Z = reshape(zValues, [length(yUnique), length(xUnique)]);
+    if strncmp(plotType, 'cartesian', 4)
+      [C, h] = contourf(X, Y, Z, numContourLines);
+    else
+%       polarplot3d(Z, 'plottype','contourf','ContourLines', numContourLines, 'angularrange', deg2rad([yUnique(1) yUnique(end)]), 'radialrange', [xUnique(1) xUnique(end)],...
+%         'ColorData', Z, 'interpmethod', 'nearest', 'polargrid',{9 18}, 'polardirection', 'cw', varargin{:});
+      polarplot3d(Z', 'plottype','contourf','ContourLines', numContourLines, 'angularrange', deg2rad([yUnique(1) yUnique(end)]), 'radialrange', [xUnique(1) xUnique(end)],...
+        'ColorData', Z', 'interpmethod', 'nearest', 'polargrid',{9 18}, 'polardirection', 'cw', varargin{:});
+      %       polarplot3d(zValues(:, ind)', 'plottype','contourf','ContourLines', numContourLines, 'angularrange', y'*pi/180, 'radialrange', [200 1000],...
+      %         'ColorData', zValues', 'interpmethod', 'nearest', 'polargrid',{9 18}, 'polardirection', 'cw');
+      %
+      set(gca,axprop{:});
+      xlabel(xLabel);
+    end
+  elseif isvector(x)
     if strncmp(plotType, 'cartesian', 4)
       [C, h] = contourf(x, y(1, :)', zValues, numContourLines);
     end
@@ -112,17 +130,19 @@ else % no interpolation
       %       polarplot3d(zValues', 'plottype','surfcn','angularrange',...
       %       y'*pi/180, 'radialrange', x(1,:)',...
       %         'ColorData', zValues', 'interpmethod', 'nearest', 'polargrid',{9, 24});
-%       polarplot3d(zValues', 'plottype','contourf','ContourLines', numContourLines, 'angularrange', y'*pi/180, 'radialrange', x(1,:)',...
-%         'ColorData', zValues', 'interpmethod', 'nearest', 'polargrid',{9 9}, 'polardirection', 'cw')
-
+      %       polarplot3d(zValues', 'plottype','contourf','ContourLines', numContourLines, 'angularrange', y'*pi/180, 'radialrange', x(1,:)',...
+      %         'ColorData', zValues', 'interpmethod', 'nearest', 'polargrid',{9 9}, 'polardirection', 'cw')
+      
       [sortedX, ind] = sort(x(1,:));
-      polarplot3d(zValues(:, ind)', 'plottype','contourf','ContourLines', numContourLines, 'angularrange', y'*pi/180, 'radialrange', sortedX,...
-       'ColorData', zValues', 'interpmethod', 'nearest', 'polargrid',{9 18}, 'polardirection', 'cw');
-%       
+      polarplot3d(zValues(:, ind)', 'plottype','contourf','ContourLines', numContourLines, 'angularrange', [min(y'*pi/180) max(y'*pi/180)], 'radialrange', [min(sortedX) max(sortedX)],...
+        'ColorData', zValues', 'interpmethod', 'nearest', 'polargrid',{9 18}, 'polardirection', 'cw', varargin{:});
+      %       polarplot3d(zValues(:, ind)', 'plottype','contourf','ContourLines', numContourLines, 'angularrange', y'*pi/180, 'radialrange', [200 1000],...
+      %         'ColorData', zValues', 'interpmethod', 'nearest', 'polargrid',{9 18}, 'polardirection', 'cw');
+      %
       set(gca,axprop{:});
       xlabel(xLabel);
       %ylabel(xLabel);
-
+      
     end
   end
 end

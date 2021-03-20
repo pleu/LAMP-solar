@@ -16,6 +16,7 @@ classdef UnitConversions
     NMtoA = 10;
     HztoTHz = 1e-12;
     THztoHz = 1e12;
+    AmpsPerM2tomAmpsPerCm2 = 0.1;
   end  
 end
 

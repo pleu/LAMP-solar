@@ -14,6 +14,7 @@ classdef Photon < handle
     Frequency; % in Hz (1/sec)
     AngularFrequency; % in radians/sec
     Wavenumber; % this is k (1/nm)
+    
   end
   
   methods
