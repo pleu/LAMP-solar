@@ -15,6 +15,15 @@ rb = RadiationBeam(latitudes, days, betaFraction, gammas, betaFractionFlag);
 
 figure(1);
 clf;
-rb.contour_irradiance('Latitude', 'BetaFraction','TotalA');
+rb.contour_irradiance('Latitude', 'BetaFraction','TotalA', [1000 1500 2000 2500]);
+ylabel('Tilt Fraction of Latitude');
 
-xlabel('Day');
+hold on;
+
+latitudeCutoff = 20;
+[val, indY] = max(squeeze(real(rb.ITmA)), [], 2);
+hold on;
+plot(latitudes(latitudes>=latitudeCutoff), betaFraction(indY(latitudes>=latitudeCutoff)), 'w:');
+
+
+

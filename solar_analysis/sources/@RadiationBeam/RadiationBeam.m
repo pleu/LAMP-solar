@@ -29,7 +29,7 @@ classdef RadiationBeam < handle
     ITmA;
     
     Omegas; % hour angle in radians
-    Variables;
+    %Variables;
   end
   
 %   properties(Hidden)
@@ -54,6 +54,7 @@ classdef RadiationBeam < handle
     LatitudeRad; % latitude in radians
     Delta; % declination angle in Radians
     BetaRad; % beta in radians
+    GammaRad; % gamma in radians
   end
   
   methods
@@ -77,7 +78,7 @@ classdef RadiationBeam < handle
 %       end
         
       % this is strange; maybe needs to be moved out
-      omega = linspace(0, 3*pi/4, 100); % little bit better accuracy
+      omega = linspace(-3*pi/4, 3*pi/4, 100); % little bit better accuracy
       %omega = [-omega(end:-1:2) omega]';
       rb.Omegas = omega;
 
@@ -110,11 +111,15 @@ classdef RadiationBeam < handle
 
     
     function delta = get.Delta(rb)
-      delta = RadiationBeamDay.calculate_delta(rb.Days);
+      delta = RadiationBeam.calculate_delta(rb.Days);
     end
     
     function betaRad = get.BetaRad(rb)
       betaRad = deg2rad(rb.Betas);
+    end
+    
+    function gammaRad = get.GammaRad(rb)
+      gammaRad = deg2rad(rb.Gammas);
     end
 
     function latitudeRad = get.LatitudeRad(rb)
@@ -123,32 +128,31 @@ classdef RadiationBeam < handle
 
     function [rb] = calculate_daily_insolation(rb)
       if ~rb.BetaFractionFlag
-        [omegaMat, latitudeMat, deltaMat, betaMat, gammaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Delta, rb.BetaRad, rb.Gammas); %
+        [omegaMat, latitudeMat, betaMat, gammaMat, deltaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.BetaRad, rb.GammaRad,rb.Delta); %
       else
-        [omegaMat, latitudeMat, deltaMat, betaFractionMat, gammaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Delta, rb.Betas, rb.Gammas); %
+        [omegaMat, latitudeMat, betaFractionMat, gammaMat, deltaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Betas, rb.GammaRad,rb.Delta); %
       end
-%      [omegaMat, latitudeMat, deltaMat, betaMat, gammaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Delta, rb.BetaRad, rb.Gammas);
+      %      [omegaMat, latitudeMat, deltaMat, betaMat, gammaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Delta, rb.BetaRad, rb.Gammas);
+      %omegaS = acos(-tan(latitudeMat).*tan(deltaMat)); % sunset angle
+      %omegaMat = 
+      
       cosThetaZMat = sin(deltaMat).*sin(latitudeMat)+cos(deltaMat).*cos(latitudeMat).*cos(omegaMat);
       thetaZMat = acos(cosThetaZMat);
       sinAlphaSMat = cosThetaZMat;
       alphaSMat = asin(sinAlphaSMat);
       
-      omegaS = acos(-tan(latitudeMat).*tan(deltaMat)); % sunset angle
-      %omega = omega_s.*linspace(0, 1, numOmega);
       
-
+      %omega = omega_s.*linspace(0, 1, numOmega);
       
             
       alphaSMat(alphaSMat < 0) = 0;
+      thetaZMat(thetaZMat > pi/2) = pi/2;
       %thetaSMat(thetaSMat > pi/2) = 0;
       
       Ib = 1.353*0.7.^((1./cosThetaZMat).^0.678); 
       Ib(alphaSMat <= 0) = 0;
       %Id = 0.1.*Ib;
       %rb.Ibn = Ib;
-      
-      sinAlphaSMat = cosThetaZMat;
-      alphaSMat = asin(sinAlphaSMat);
       
       cosGammaSMat = (cosThetaZMat.*sin(latitudeMat) - sin(deltaMat))./(sin(thetaZMat).*cos(latitudeMat));
       %cosPhiSMat = (sin(deltaMat).*cos(latitude)-cos(deltaMat).*sin(latitude).*cos(omegaMat))./cos(alphaSMat);
@@ -159,17 +163,23 @@ classdef RadiationBeam < handle
       gammaSMat(alphaSMat <= 0) = 0;
       gammaSMat = real(gammaSMat);
       
-      alphaSMat(alphaSMat < 0) = 0;
       
-      [IbNormX, IbNormY, IbNormZ] = sph2cart(gammaSMat, alphaSMat, 1);
       
+%       [IbNormX, IbNormY, IbNormZ] = sph2cart(gammaSMat, alphaSMat, 1);
+%       
+%       if rb.BetaFractionFlag
+%         [moduleNormX, moduleNormY, moduleNormZ] = sph2cart(gammaMat, pi/2-betaFractionMat.*latitudeMat, 1);
+%       else
+%         [moduleNormX, moduleNormY, moduleNormZ] = sph2cart(gammaMat, pi/2-betaMat, 1);
+%       end
+      
+%      cosThetaTiltMat = (IbNormX.*moduleNormX+IbNormY.*moduleNormY+IbNormZ.*moduleNormZ);
       if rb.BetaFractionFlag
-        [moduleNormX, moduleNormY, moduleNormZ] = sph2cart(gammaMat, pi/2-betaFractionMat.*latitudeMat, 1);
+        cosThetaTiltMat = cosThetaZMat.*cos(betaFractionMat.*latitudeMat)+sin(thetaZMat).*sin(betaMat).*cos(gammaSMat - gammaMat);
       else
-        [moduleNormX, moduleNormY, moduleNormZ] = sph2cart(gammaMat, pi/2-betaMat, 1);
+        cosThetaTiltMat = cos(thetaZMat).*cos(betaMat)+sin(thetaZMat).*sin(betaMat).*cos(gammaSMat - gammaMat);
       end
       
-      cosThetaTiltMat = (IbNormX.*moduleNormX+IbNormY.*moduleNormY+IbNormZ.*moduleNormZ);
       Ibtilt = Ib.*cosThetaTiltMat;
       Ibtilt(Ibtilt<0) = 0;
       Id = 0.1.*Ib;
@@ -180,18 +190,18 @@ classdef RadiationBeam < handle
         Idtilt = (1+cos(betaMat))./2.*Id;
       end
 
-      rb.IdD = reshape(24/pi*trapz(rb.Omegas, Id, 1), rb.NumLatitudes, rb.NumDays, rb.NumBetas, rb.NumGammas);
-      rb.IdmD = reshape(24/pi.*trapz(rb.Omegas, Idtilt, 1), rb.NumLatitudes, rb.NumDays, rb.NumBetas, rb.NumGammas);
+      rb.IdD = reshape(12/pi*trapz(rb.Omegas, Id, 1), rb.NumLatitudes, rb.NumBetas, rb.NumGammas,rb.NumDays);
+      rb.IdmD = reshape(12/pi.*trapz(rb.Omegas, Idtilt, 1), rb.NumLatitudes, rb.NumBetas, rb.NumGammas,rb.NumDays);
 
-      rb.IbD = reshape(24/pi*trapz(rb.Omegas, Ib, 1), rb.NumLatitudes, rb.NumDays, rb.NumBetas, rb.NumGammas);
-      rb.IbmD = reshape(24/pi.*trapz(rb.Omegas, Ibtilt, 1), rb.NumLatitudes, rb.NumDays, rb.NumBetas, rb.NumGammas);
+      rb.IbD = reshape(12/pi*trapz(rb.Omegas, Ib, 1), rb.NumLatitudes, rb.NumBetas, rb.NumGammas,rb.NumDays);
+      rb.IbmD = reshape(12/pi.*trapz(rb.Omegas, Ibtilt, 1), rb.NumLatitudes, rb.NumBetas, rb.NumGammas,rb.NumDays);
 
       rb.ITD = rb.IbD + rb.IdD;
       rb.ITmD = rb.IbmD + rb.IdmD;
 
       % annual data
       %rb.IbA; % annual
-      dayIndex = 2;
+      dayIndex = 4;
       rb.IbA = trapz(rb.Days, rb.IbD, dayIndex);
       rb.IdA = trapz(rb.Days, rb.IdD, dayIndex);
       rb.ITA = trapz(rb.Days, rb.ITD, dayIndex);
@@ -211,7 +221,7 @@ classdef RadiationBeam < handle
         if size(y, varsNotPlot(ind)) ~= 1
           error('all other variables should be of size 1');
         end
-end
+      end
     end
   end
 
@@ -224,16 +234,26 @@ end
     end
 
     function [obj] = create_with_betaFraction(latitudes, days, betaFraction, gammas)
-      obj = RadiationBeamDay(latitudes, days, betaFraction, gammas, 1);
+      obj = RadiationBeam(latitudes, days, betaFraction, gammas, 1);
     end
     
     test()
 
     test2()
+    
+    test3()
+    
+    test4()
+    
+    test5()
+    
+    test6()
 
     contour_ITmD()
 
     contour_ITmA()
+    
+    test_script()
     
   end
   

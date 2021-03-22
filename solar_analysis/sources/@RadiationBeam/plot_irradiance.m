@@ -9,7 +9,7 @@ function plot_irradiance(rb, xVariable, lineVariable, yVariable)
 [lineIndex, varLine, lineLabel, varLineUnits] = rb.get_variable(lineVariable);
 
 
-RadiationBeamDay.check_vars_plot(y, varXIndex, lineIndex);
+RadiationBeam.check_vars_plot(y, varXIndex, lineIndex);
 
 nDim = length(size(y));
 inds = repmat({1},1,nDim);

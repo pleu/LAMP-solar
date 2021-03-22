@@ -1,17 +1,37 @@
-function [varPlot, varMPlot, ylabel] = get_irradiance_variable(rb, variable)
+function [varPlot, varMPlot, varLabel, dorA] = get_irradiance_variable(rb, variable)
 
-if strncmpi(variable, 'beam', 1)
+if strncmpi(variable, 'beamDay', 5)
   varPlot = rb.IbD;
   varMPlot = rb.IbmD;
-  ylabel = ('Direct Insolation (kW-h/m^2/day)');
-elseif strncmpi(variable, 'diffuse', 3)
+  varLabel = ('Direct Insolation (kW-h/m^2/day)');
+  dorA = 'd';
+elseif strncmpi(variable, 'diffuseDay', 8)
   varPlot = rb.IdD;
   varMPlot = rb.IdmD;
-  ylabel = ('Diffuse Insolation (kW-h/m^2/day)');
-elseif strncmpi(variable, 'total', 1)
+  varLabel = ('Diffuse Insolation (kW-h/m^2/day)');
+  dorA = 'd';
+elseif strncmpi(variable, 'totalDay', 6)
   varPlot = rb.ITD;
   varMPlot = rb.ITmD;
-  ylabel = ('Total Insolation (kW-h/m^2/day)');
+  varLabel = ('Total Insolation (kW-h/m^2/day)');
+  dorA = 'd';
+elseif strncmpi(variable, 'beamAnnual', 5)
+  varPlot = rb.IbA;
+  varMPlot = rb.IbmA;
+  varLabel = ('Direct Insolation (kW-h/m^2)');
+  dorA = 'A';
+elseif strncmpi(variable, 'diffuseAnnual', 8)
+  varPlot = rb.IdD;
+  varMPlot = rb.IdmD;
+  varLabel = ('Diffuse Insolation (kW-h/m^2)');
+  dorA = 'A';
+elseif strncmpi(variable, 'totalAnnual', 6)
+  varPlot = rb.ITA;
+  varMPlot = rb.ITmA;
+  varLabel = ('Total Insolation (kW-h/m^2)');
+  dorA = 'A';
 else
-  error(variable, ' is not recognized');
+  error([variable, ' is not recognized']);
 end
+
+

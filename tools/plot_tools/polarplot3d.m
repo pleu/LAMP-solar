@@ -111,6 +111,7 @@ function [Xi,Yi,Zi] = polarplot3d(Zp,varargin)
 %
 %   'PolarDirection' 'ccw'     0 degs along +x axis, angles increase ccw (default)
 %                    'cw'      0 degs along +y axis, angles increase cw
+%                    '180'     0 degs along -y axis, angles increase cw
 %                              This makes a compass-style polar grid.
 %
 %   'InterpMethod'   'cubic'   bicubic          interpolation on Zp (default)
@@ -207,7 +208,7 @@ plst = {'mesh','meshc','wire',...
 alst = {'off','const','min','max','mean','surf','top','bottom'};
 rlst = {'off','const','min','max','mean','surf','top','bottom'};
 mlst = {'cubic','linear','spline','nearest'};
-dlst = {'ccw','cw'};
+dlst = {'ccw','cw', '180'};
 glst = {'-',':','-.','--'};
 
 % Set up property structure with default values
@@ -483,8 +484,12 @@ else
 end
 
 % Swap x,y for clockwise polar plot
-if isequal(p.polardirection,'cw')
+if isequal(p.polardirection,'cw') 
   [Xi,Yi] = deal(Yi,Xi);
+end
+if isequal(p.polardirection,'180') 
+  [Xi,Yi] = deal(Yi,Xi);
+  [Yi] = deal(-Yi);
 end
 
 % Offset grid data to Cartesian origin
@@ -577,7 +582,7 @@ if ~isequal(p.axislocation,'off')
 
    % Swap x,y for clockwise polar plot
    if isequal(p.polardirection,'cw'), [xa,ya] = deal(ya,xa); end
-
+   if isequal(p.polardirection,'180'), [xa,ya] = deal(ya,xa); [ya, xa] = deal(-ya, -xa); end
    % Plot the polar axis
    hold on;
    line(xa,ya,za,'Color',p.polaraxiscolor,'LineWidth',1);
@@ -611,7 +616,8 @@ if ~isequal(p.axislocation,'off')
 
       % Swap x,y for clockwise polar plot
       if isequal(p.polardirection,'cw'), [xt,yt] = deal(yt,xt); end
-
+      if isequal(p.polardirection,'180'), [xt,yt] = deal(yt,xt); [yt,xt]=deal(-yt,-xt); end
+      
       % Draw the tick marks
       line(xt(1:2,:),yt(1:2,:),[zt; zt],'Color',p.tickcolor);
 
@@ -640,7 +646,8 @@ if p.radlabels > 0 && ~isequal(p.radlabellocation,'off')
 
    % Swap x,y for clockwise polar plot
    if isequal(p.polardirection,'cw'), [xt,yt] = deal(yt,xt); end
-
+   if isequal(p.polardirection,'180'), [xt,yt] = deal(yt,xt); [yt,xt]=deal(-yt,-xt); end
+   
    % Set sagittal_radax to z location of radial labels
    switch p.radlabellocation
       case 'min',    sagittal_radax = min (Zi(:));
