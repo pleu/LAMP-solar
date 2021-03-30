@@ -1,5 +1,5 @@
 clear;
-latitudes = 0:2:60; %[20 40]; % latitude in degrees
+latitudes = [0  1 2:2:60]; %[20 40]; % latitude in degrees
 %latitudes = 20;
 %latitudes = 40; % latitude in degrees
 days = linspace(0, 365);
@@ -18,7 +18,7 @@ clf;
 rb.contour_irradiance('Latitude', 'Beta','TotalA', [1000 1500 2000 2500]);
 ylabel('Tilt (^\circ)');
 
-latitudeCutoff = 20;
+latitudeCutoff = 1;
 [maxITmA, indY] = max(squeeze(real(rb.ITmA)), [], 2);
 betaOpt = betas(indY(latitudes>=latitudeCutoff));
 
@@ -43,6 +43,16 @@ colorbar();
 hold on;
 [C, h] = contour(latitudeInterp,betaInterp-betaOptMat, ITmAinterp./maxITmAMat, [.95 .96 .97 .98 .99 1], 'linecolor', 'k', 'linewidth', 1, 'linestyle', '-');
 clabel(C,h, 'FontSize',18,'Color','k', 'LabelSpacing',400)
+
+figure(3);
+clf;
+x = mean(betaInterp-betaOptMat, 2);
+y = mean(ITmAinterp./maxITmAMat, 2);
+plot(x, y, 'b');
+fraction10 = mean(interp1(x, y, [-10 10]));
+fraction20 = mean(interp1(x, y, [-20 20]));
+xlabel('Tilt Misalignment (Degrees)');
+ylabel('Normalized Annual Insolation');
 
 % for i = 1:numLatitudesInterp
 %   %betaInterp = betaOpt(i)+[-20:1:20];

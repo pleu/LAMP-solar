@@ -1,6 +1,6 @@
 function contour_irradiance(rb, xVariable, yVariable, zVariable, lines, typePlot,varargin)
 axprop = {'DataAspectRatio',[1 1 8],'View', [0 90]};
-if nargin == 4
+if nargin == 5
   typePlot = 'Cartesian';
 end
 [varXIndex, varX, xAxisLabel, varXUnits] = rb.get_variable(xVariable);
@@ -15,11 +15,19 @@ RadiationBeam.check_vars_plot(z, varXIndex, varYIndex);
 %contourf(xMat, yMat, squeeze(real(zM)));
 
 if strncmpi(typePlot, 'Cart', 4)
-  contourf(xMat, yMat, squeeze(real(zM)), 200, 'LineStyle', 'none');
+  if varXIndex < varYIndex
+    contourf(xMat, yMat, squeeze(real(zM)), 200, 'LineStyle', 'none');
+    hold on;
+    [C, h] = contour(xMat, yMat, squeeze(real(zM)), lines , 'linecolor', 'k', 'linewidth', 1, 'linestyle', '-');
+  else
+    contourf(xMat, yMat, squeeze(real(zM))', 200, 'LineStyle', 'none');
+    hold on;
+    [C, h] = contour(xMat, yMat, squeeze(real(zM))', lines , 'linecolor', 'k', 'linewidth', 1, 'linestyle', '-');
+  end
   %contourf(latitudeMatPlot, betaFractionMatPlot, squeeze(real(I_bmA)));
   colorbar();
-  hold on;
-  [C, h] = contour(xMat, yMat, squeeze(real(zM)), lines , 'linecolor', 'k', 'linewidth', 1, 'linestyle', '-');
+  
+  
   clabel(C,h, 'FontSize',18,'Color','k', 'LabelSpacing',400)
   
   xlabel([xAxisLabel, '(', varXUnits, ')']);

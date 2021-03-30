@@ -130,7 +130,7 @@ classdef RadiationBeam < handle
       if ~rb.BetaFractionFlag
         [omegaMat, latitudeMat, betaMat, gammaMat, deltaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.BetaRad, rb.GammaRad,rb.Delta); %
       else
-        [omegaMat, latitudeMat, betaFractionMat, gammaMat, deltaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Betas, rb.GammaRad,rb.Delta); %
+        [omegaMat, latitudeMat, betaMat, gammaMat, deltaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Betas, rb.GammaRad,rb.Delta); %
       end
       %      [omegaMat, latitudeMat, deltaMat, betaMat, gammaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Delta, rb.BetaRad, rb.Gammas);
       %omegaS = acos(-tan(latitudeMat).*tan(deltaMat)); % sunset angle
@@ -175,7 +175,7 @@ classdef RadiationBeam < handle
       
 %      cosThetaTiltMat = (IbNormX.*moduleNormX+IbNormY.*moduleNormY+IbNormZ.*moduleNormZ);
       if rb.BetaFractionFlag
-        cosThetaTiltMat = cosThetaZMat.*cos(betaFractionMat.*latitudeMat)+sin(thetaZMat).*sin(betaMat).*cos(gammaSMat - gammaMat);
+        cosThetaTiltMat = cosThetaZMat.*cos(betaMat.*latitudeMat)+sin(thetaZMat).*sin(betaMat.*latitudeMat).*cos(gammaSMat - gammaMat);
       else
         cosThetaTiltMat = cos(thetaZMat).*cos(betaMat)+sin(thetaZMat).*sin(betaMat).*cos(gammaSMat - gammaMat);
       end
@@ -185,7 +185,7 @@ classdef RadiationBeam < handle
       Id = 0.1.*Ib;
 
       if rb.BetaFractionFlag
-        Idtilt = (1+cos(betaFractionMat.*latitudeMat))./2.*Id;
+        Idtilt = (1+cos(betaMat.*latitudeMat))./2.*Id;
       else
         Idtilt = (1+cos(betaMat))./2.*Id;
       end
