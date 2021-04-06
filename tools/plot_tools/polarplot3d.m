@@ -624,7 +624,7 @@ if ~isequal(p.axislocation,'off')
       % Add tick labels
       %for k = 2 * (1:nl-1)
       zt = ones(2*nl+1, 1);
-      for k = 2 * (1:nl) + 1
+      for k = 2 * (0:nl-1)+1
          text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
            'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
       end
