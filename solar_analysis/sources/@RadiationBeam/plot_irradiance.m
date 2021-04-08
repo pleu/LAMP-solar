@@ -18,6 +18,8 @@ numLineVar = length(varLine);
 colors = distinguishable_colors(numLineVar+1);
 
 plot(varX, squeeze(y(inds{:})), 'Color', colors(1, :), 'LineStyle', '-');
+
+
 hold on;
 legendLabel = cell(numLineVar+1,1);
 legendLabel{1} = 'Incident';

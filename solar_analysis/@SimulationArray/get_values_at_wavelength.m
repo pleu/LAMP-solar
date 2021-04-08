@@ -5,11 +5,13 @@ simResults = SimulationResults.empty(sa.NumSimulations, 0);
 for j= 1:sa.NumSimulations
   ra = [sa.Simulations(j).ReflectionResults];
   ta = [sa.Simulations(j).TransmissionResults];
+  aa = [sa.Simulations(j).AbsorptionResults];
   %     ta = [sa.Simulations.TransmissionResults];
   %
   reflectionData = interp1(ra.Wavelength, ra.Data, value);
   transmissionData = interp1(ra.Wavelength, ta.Data, value);
-  absorptionData = 1 - reflectionData - transmissionData;
+  absorptionData = interp1(ra.Wavelength, aa.Data, value);
+  %absorptionData = 1 - reflectionData - transmissionData;
   
   simResults(j) = SimulationResults(value, reflectionData, transmissionData, absorptionData);
 end
