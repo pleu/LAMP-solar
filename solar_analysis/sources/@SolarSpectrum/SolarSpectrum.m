@@ -166,6 +166,9 @@ classdef SolarSpectrum < handle
     % READ_ASTMG173 
     % Reads in ASTMG173 data 
     
+    
+    bn = calculate_bn_lambda(lambda, n, temperature, F)
+    
     bn = calculate_bn(energy, n, delMu, temperature, F)
     % CALCULATE_BN
     % Equation 2.12 in Nelson, Physics of Solar Cells

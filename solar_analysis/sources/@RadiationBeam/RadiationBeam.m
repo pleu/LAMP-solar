@@ -78,7 +78,8 @@ classdef RadiationBeam < handle
 %       end
         
       % this is strange; maybe needs to be moved out
-      omega = linspace(-3*pi/4, 3*pi/4, 100); % little bit better accuracy
+      %omega = linspace(-3*pi/4, 3*pi/4, 100); % little bit better accuracy
+      omega = linspace(-pi, pi, 100); % little bit better accuracy
       %omega = [-omega(end:-1:2) omega]';
       rb.Omegas = omega;
 
@@ -125,7 +126,7 @@ classdef RadiationBeam < handle
     function latitudeRad = get.LatitudeRad(rb)
       latitudeRad = deg2rad(rb.Latitudes);
     end
-
+    
     function [rb] = calculate_daily_insolation(rb)
       if ~rb.BetaFractionFlag
         [omegaMat, latitudeMat, betaMat, gammaMat, deltaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.BetaRad, rb.GammaRad,rb.Delta); %
@@ -209,6 +210,39 @@ classdef RadiationBeam < handle
       rb.IbmA = trapz(rb.Days, rb.IbmD, dayIndex);
       rb.IdmA = trapz(rb.Days, rb.IdmD, dayIndex);
       rb.ITmA = trapz(rb.Days, rb.ITmD, dayIndex);
+    end
+    
+    
+    function [tiltMisalignmentRelative, avgOverAllLatitudes] = contour_tilt_misalignment(rb, misalignmentMagnitude)
+     
+      %tiltMisalignment = -misalignmentMagnitude:2:misalignmentMagnitude;
+      numTilts = 100;
+      ItMAinterp = zeros(rb.NumLatitudes, numTilts);
+      tiltMisalignmentRelative = linspace(-misalignmentMagnitude, misalignmentMagnitude);
+      for ind = 1:rb.NumLatitudes
+        [maxVal, maxInd] = max(rb.ITmA(ind, :));
+        tiltMisalignment = tiltMisalignmentRelative + rb.Betas(maxInd);
+        ItMAinterp(ind, :) = interp1(rb.Betas, rb.ITmA(ind, :), tiltMisalignment)./maxVal;
+      end
+      %[betasMat, latitudesPlotMat] = meshgrid(rb.Betas, rb.Latitudes);      
+      
+      %[tiltMisalignmentMat, latitudesMisalignmentMat] = meshgrid(tiltMisalignment, rb.Latitudes);
+      
+      %ItMAinterp =  interp2(betasMat, latitudesPlotMat, rb.ITmA, tiltMisalignmentMat, latitudesMisalignmentMat);
+      [tiltMisalignmentMat,latitudesMat] = meshgrid(tiltMisalignmentRelative,rb.Latitudes);
+      contourf(latitudesMat, tiltMisalignmentMat, ItMAinterp);
+      
+      avgOverAllLatitudes = mean(ItMAinterp, 1);
+      xlabel('Latitudes (Deg)');
+      ylabel('Normalized Annual Insolation');
+      
+      n = get(gcf,'Number')
+      
+      figure(n+1);
+      clf;
+      plot(tiltMisalignmentRelative, avgOverAllLatitudes, '-');
+      xlabel('Tilt Misalignment (Degrees)');
+      ylabel('Normalized Annual Insolation');
     end
     
   end

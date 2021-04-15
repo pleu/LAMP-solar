@@ -45,8 +45,14 @@ F0spectralEnergy = Constants.LightConstants.Q*trapz(deg2rad(phiVector), trapz(de
 F0 = trapz(energyVector(energyVector >= ma.BandGap), F0spectralEnergy(energyVector >= ma.BandGap));
 
 F0spectralNM = F0spectralEnergy.*energyVector.^2./(Constants.LightConstants.HC);
-%F0check = -trapz(Photon.convert_energy_to_wavelength(energyVector(energyVector >= ma.BandGap)), F0spectralNM(energyVector >= ma.BandGap));
 
+% blambda = SolarSpectrum.calculate_bn_lambda(Photon.convert_energy_to_wavelength(energyVector), n, Constants.LightConstants.T_a,1)';
+% blambdaGrid = repmat(blambda', 1, length(thetaVector), length(phiVector));
+% integrand = blambdaGrid.*absorptionGrid.*cosd(thetaGrid).*sind(thetaGrid);
+% F0spectralNMcheck = Constants.LightConstants.Q*trapz(deg2rad(phiVector), trapz(deg2rad(thetaVector), integrand, 2), 3);
+% 
+% F0check = -trapz(Photon.convert_energy_to_wavelength(energyVector(energyVector >= ma.BandGap)), F0spectralNM(energyVector >= ma.BandGap));
+% F0check2 = -trapz(Photon.convert_energy_to_wavelength(energyVector(energyVector >= ma.BandGap)), F0spectralNMcheck(energyVector >= ma.BandGap));
 % figure(2);
 % clf;
 % plot(Photon.convert_energy_to_wavelength(energyVector), 8*F0spectralNM*Constants.UnitConversions.AmpsPerM2tomAmpsPerCm2, 'b-');

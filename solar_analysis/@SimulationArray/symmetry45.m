@@ -6,7 +6,9 @@ end
 numSims = length(sa.Simulations);
 sa.Simulations = sa.Simulations(numSims:-1:1);
 
-sa.VariableArray.Values = sa.VariableArray.Values(numSims:-1:1,:);
+varTheta = setdiff(1:sa.VariableArray.NumVariables, varIndex);
+
+sa.VariableArray.Values(:, varTheta) = sa.VariableArray.Values(numSims:-1:1,varTheta);
 varIndMirror = sa.VariableArray.Values(:, varIndex)~=0;
 sa.VariableArray.Values = [sa.VariableArray.Values; sa.VariableArray.Values(varIndMirror,:)];
 sa.Simulations = [sa.Simulations sa.Simulations(varIndMirror)];
