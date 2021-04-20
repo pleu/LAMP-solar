@@ -28,6 +28,7 @@ classdef SolarCellIV
   
   methods
     
+      
     function iv = SolarCellIV(voltage, currentLight, powerDensity)  
       if nargin > 0
         iv.Voltage = voltage;
@@ -77,6 +78,14 @@ classdef SolarCellIV
   end
   
   methods(Static)
+    
+    function [scIV] = calculate_IV(Jsc, J0, powerDensity)
+
+      V = linspace(-.3, 1.1);  % volts
+      J = Jsc - J0*(exp(V/(Constants.LightConstants.k_B*Constants.LightConstants.T_c))-1); % mA/cm^2
+
+      scIV = SolarCellIV(V, J, powerDensity);
+    end
 
     function IV = calc_IV_detailed_balance(currentSC, F0, ma, ss)
       voltage = linspace(0, ma.BandGap);

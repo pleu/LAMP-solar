@@ -1,4 +1,4 @@
-function [F0, energyVector, F0spectralEnergy, F0spectralNM] = calculate_F0(sa, ma, n)
+function [F0, energyVector, F0spectralEnergy, F0spectralNM] = calculate_qF0(sa, ma, n)
 
 va = sa.VariableArray; 
 va.check_if_variable('Theta')
