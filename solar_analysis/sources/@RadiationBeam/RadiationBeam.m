@@ -29,6 +29,8 @@ classdef RadiationBeam < handle
     ITmA;
     
     Omegas; % hour angle in radians
+    
+    ModuleType;
     %Variables;
   end
   
@@ -48,6 +50,7 @@ classdef RadiationBeam < handle
     NumDays;
     NumBetas;
     NumGammas;
+    
   end
   
   properties(Dependent = true, Hidden)
@@ -58,16 +61,23 @@ classdef RadiationBeam < handle
   end
   
   methods
-    function rb = RadiationBeam(latitudes, days, betas, gammas, betaFractionFlag)
+    function rb = RadiationBeam(latitudes, days, betas, gammas, moduleType, betaFractionFlag)
       rb.Latitudes = latitudes;
       rb.Days = days;
       rb.Betas = betas;
       rb.Gammas = gammas;
       if nargin == 4
+        rb.ModuleType = 'fixed';
+        betaFractionFlag = 0;
+      else
+        rb.ModuleType = moduleType;
+      end
+      if nargin == 5
         rb.BetaFractionFlag = 0;
       else
         rb.BetaFractionFlag = betaFractionFlag;
       end
+      
 %         
 %       elseif betaFractionFlag ==1
 %         rb.Latitudes = latitudes;
@@ -82,8 +92,8 @@ classdef RadiationBeam < handle
       omega = linspace(-pi, pi, 100); % little bit better accuracy
       %omega = [-omega(end:-1:2) omega]';
       rb.Omegas = omega;
-
-      rb.calculate_daily_insolation();
+      rb.calculate_daily_insolation2();
+      
     end
 
     function numOmega = get.NumOmega(rb)
@@ -127,6 +137,116 @@ classdef RadiationBeam < handle
       latitudeRad = deg2rad(rb.Latitudes);
     end
     
+    function [rb] = calculate_daily_insolation2(rb)
+      if ~rb.BetaFractionFlag
+        if strncmpi(rb.ModuleType,'fixed', 1)
+          [omegaMat, latitudeMat, deltaMat, betaMat, gammaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Delta, rb.BetaRad, rb.GammaRad); %
+        elseif strncmpi(rb.ModuleType, '1axis', 5) 
+          [omegaMat, latitudeMat, deltaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Delta); %
+        end
+      else
+        [omegaMat, latitudeMat, deltaMat, betaMat, gammaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Delta, rb.Betas, rb.GammaRad); %
+      end
+      %      [omegaMat, latitudeMat, deltaMat, betaMat, gammaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.Delta, rb.BetaRad, rb.Gammas);
+      %omegaS = acos(-tan(latitudeMat).*tan(deltaMat)); % sunset angle
+      %omegaMat = 
+      
+      cosThetaZMat = sin(deltaMat).*sin(latitudeMat)+cos(deltaMat).*cos(latitudeMat).*cos(omegaMat);
+      thetaZMat = acos(cosThetaZMat);
+      sinAlphaSMat = cosThetaZMat;
+      alphaSMat = asin(sinAlphaSMat);
+      
+      
+      %omega = omega_s.*linspace(0, 1, numOmega);
+      
+            
+      alphaSMat(alphaSMat < 0) = 0;
+      thetaZMat(thetaZMat > pi/2) = pi/2;
+      %thetaSMat(thetaSMat > pi/2) = 0;
+      
+      Ib = 1.353*0.7.^((1./cosThetaZMat).^0.678); 
+      Ib(alphaSMat <= 0) = 0;
+      %Id = 0.1.*Ib;
+      %rb.Ibn = Ib;
+      
+      cosGammaSMat = (cosThetaZMat.*sin(latitudeMat) - sin(deltaMat))./(sin(thetaZMat).*cos(latitudeMat));
+      %cosPhiSMat = (sin(deltaMat).*cos(latitude)-cos(deltaMat).*sin(latitude).*cos(omegaMat))./cos(alphaSMat);
+      gammaSMat = sign(omegaMat).*acos(cosGammaSMat);
+      gammaSMat(isnan(gammaSMat)) = 0;
+      %phiSMat(omega >= 0) = -phiSMat(omega >= 0)+2*pi;
+      
+      gammaSMat(alphaSMat <= 0) = 0;
+      gammaSMat = real(gammaSMat);
+      
+      
+      
+      %       [IbNormX, IbNormY, IbNormZ] = sph2cart(gammaSMat, alphaSMat, 1);
+      %
+      %       if rb.BetaFractionFlag
+      %         [moduleNormX, moduleNormY, moduleNormZ] = sph2cart(gammaMat, pi/2-betaFractionMat.*latitudeMat, 1);
+      %       else
+      %         [moduleNormX, moduleNormY, moduleNormZ] = sph2cart(gammaMat, pi/2-betaMat, 1);
+      %       end
+      
+      %      cosThetaTiltMat = (IbNormX.*moduleNormX+IbNormY.*moduleNormY+IbNormZ.*moduleNormZ);
+      
+      if strncmpi(rb.ModuleType,'fixed', 1)
+        if rb.BetaFractionFlag
+          cosThetaTiltMat = cosThetaZMat.*cos(betaMat.*latitudeMat)+sin(thetaZMat).*sin(betaMat.*latitudeMat).*cos(gammaSMat - gammaMat);
+        else
+          cosThetaTiltMat = cos(thetaZMat).*cos(betaMat)+sin(thetaZMat).*sin(betaMat).*cos(gammaSMat - gammaMat);
+        end
+      elseif strncmpi(rb.ModuleType, '1axisEW', 7) % rotate along east-west direction
+        cosThetaTiltMat = sqrt(1 - cos(deltaMat).^2.*sin(omegaMat).^2);
+        betaMat = atan(tan(thetaZMat).*abs(cos(gammaSMat)));
+      elseif strncmpi(rb.ModuleType, '1axisNS', 7)
+        cosThetaTiltMat = sqrt(cos(thetaZMat).^2+cos(deltaMat).^2.*sin(omegaMat).^2); 
+        gammaMat = zeros(size(gammaSMat));
+        gammaMat(gammaSMat > pi/2) = pi/2;
+        gammaMat(gammaSMat <= pi/2) = -pi/2;
+        betaMat = atan(tan(thetaZMat).*abs(cos(gammaMat - gammaSMat)));
+      end
+        
+      Ibtilt = Ib.*cosThetaTiltMat;
+      Ibtilt(Ibtilt<0) = 0;
+      Id = 0.1.*Ib;
+
+      if rb.BetaFractionFlag
+        Idtilt = (1+cos(betaMat.*latitudeMat))./2.*Id;
+      else
+        Idtilt = (1+cos(betaMat))./2.*Id;
+      end
+
+      if strncmpi(rb.ModuleType,'fixed', 1)
+        rb.IdD = reshape(12/pi*trapz(rb.Omegas, Id, 1), rb.NumLatitudes, rb.NumDays, rb.NumBetas, rb.NumGammas);
+        rb.IdmD = reshape(12/pi.*trapz(rb.Omegas, Idtilt, 1), rb.NumLatitudes, rb.NumDays, rb.NumBetas, rb.NumGammas);
+        
+        rb.IbD = reshape(12/pi*trapz(rb.Omegas, Ib, 1), rb.NumLatitudes, rb.NumDays, rb.NumBetas, rb.NumGammas);
+        rb.IbmD = reshape(12/pi.*trapz(rb.Omegas, Ibtilt, 1), rb.NumLatitudes, rb.NumDays, rb.NumBetas, rb.NumGammas);
+      else
+        rb.IdD = reshape(12/pi*trapz(rb.Omegas, Id, 1), rb.NumLatitudes, rb.NumDays);
+        rb.IdmD = reshape(12/pi.*trapz(rb.Omegas, Idtilt, 1), rb.NumLatitudes, rb.NumDays);
+        
+        rb.IbD = reshape(12/pi*trapz(rb.Omegas, Ib, 1), rb.NumLatitudes, rb.NumDays);
+        rb.IbmD = reshape(12/pi.*trapz(rb.Omegas, Ibtilt, 1), rb.NumLatitudes, rb.NumDays);
+      end
+
+      rb.ITD = rb.IbD + rb.IdD;
+      rb.ITmD = rb.IbmD + rb.IdmD;
+
+      % annual data
+      %rb.IbA; % annual
+      dayIndex = 2;
+      rb.IbA = trapz(rb.Days, rb.IbD, dayIndex);
+      rb.IdA = trapz(rb.Days, rb.IdD, dayIndex);
+      rb.ITA = trapz(rb.Days, rb.ITD, dayIndex);
+
+      rb.IbmA = trapz(rb.Days, rb.IbmD, dayIndex);
+      rb.IdmA = trapz(rb.Days, rb.IdmD, dayIndex);
+      rb.ITmA = trapz(rb.Days, rb.ITmD, dayIndex);
+    end
+    
+    
     function [rb] = calculate_daily_insolation(rb)
       if ~rb.BetaFractionFlag
         [omegaMat, latitudeMat, betaMat, gammaMat, deltaMat] = ndgrid(rb.Omegas, rb.LatitudeRad, rb.BetaRad, rb.GammaRad,rb.Delta); %
@@ -166,21 +286,31 @@ classdef RadiationBeam < handle
       
       
       
-%       [IbNormX, IbNormY, IbNormZ] = sph2cart(gammaSMat, alphaSMat, 1);
-%       
-%       if rb.BetaFractionFlag
-%         [moduleNormX, moduleNormY, moduleNormZ] = sph2cart(gammaMat, pi/2-betaFractionMat.*latitudeMat, 1);
-%       else
-%         [moduleNormX, moduleNormY, moduleNormZ] = sph2cart(gammaMat, pi/2-betaMat, 1);
-%       end
+      %       [IbNormX, IbNormY, IbNormZ] = sph2cart(gammaSMat, alphaSMat, 1);
+      %
+      %       if rb.BetaFractionFlag
+      %         [moduleNormX, moduleNormY, moduleNormZ] = sph2cart(gammaMat, pi/2-betaFractionMat.*latitudeMat, 1);
+      %       else
+      %         [moduleNormX, moduleNormY, moduleNormZ] = sph2cart(gammaMat, pi/2-betaMat, 1);
+      %       end
       
-%      cosThetaTiltMat = (IbNormX.*moduleNormX+IbNormY.*moduleNormY+IbNormZ.*moduleNormZ);
-      if rb.BetaFractionFlag
-        cosThetaTiltMat = cosThetaZMat.*cos(betaMat.*latitudeMat)+sin(thetaZMat).*sin(betaMat.*latitudeMat).*cos(gammaSMat - gammaMat);
-      else
-        cosThetaTiltMat = cos(thetaZMat).*cos(betaMat)+sin(thetaZMat).*sin(betaMat).*cos(gammaSMat - gammaMat);
+      %      cosThetaTiltMat = (IbNormX.*moduleNormX+IbNormY.*moduleNormY+IbNormZ.*moduleNormZ);
+      
+      if strncmpi(rb.ModuleType,'fixed', 1)
+        
+        if rb.BetaFractionFlag
+          cosThetaTiltMat = cosThetaZMat.*cos(betaMat.*latitudeMat)+sin(thetaZMat).*sin(betaMat.*latitudeMat).*cos(gammaSMat - gammaMat);
+        else
+          cosThetaTiltMat = cos(thetaZMat).*cos(betaMat)+sin(thetaZMat).*sin(betaMat).*cos(gammaSMat - gammaMat);
+        end
+      elseif strncmpi(rb.ModuleType, '1axisEW', 5) % rotate along east-west direction
+        cosThetaTiltMat = sqrt(1 - cos(deltaMat).^2.*sin(omegaMat).^2);
+        betaMat = atan(tan(thetaZMat).*abs(cos(gammaSMat)));
+      elseif strncmpi(rb.ModuleType, '1axisNS', 5)
+        cosThetaTiltMat = sqrt(cos(thetaZMat).^2+cos(deltaMat).^2.*sin(omegaMat).^2);        
+        betaMat = atan(tan(thetaZMat).*abs(cos(gammaMat - gammaSMat)));
       end
-      
+        
       Ibtilt = Ib.*cosThetaTiltMat;
       Ibtilt(Ibtilt<0) = 0;
       Id = 0.1.*Ib;
@@ -268,7 +398,7 @@ classdef RadiationBeam < handle
     end
 
     function [obj] = create_with_betaFraction(latitudes, days, betaFraction, gammas)
-      obj = RadiationBeam(latitudes, days, betaFraction, gammas, 1);
+      obj = RadiationBeam(latitudes, days, betaFraction, gammas, 'fixed', 1);
     end
     
     test()
@@ -282,6 +412,8 @@ classdef RadiationBeam < handle
     test5()
     
     test6()
+    
+    test7()
 
     contour_ITmD()
 

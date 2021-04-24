@@ -7,7 +7,7 @@ function [Jsc] = calculate_Jsc(sa, ma, ss)
 % maxWavelength = round(max(sa.Simulations(1).AbsorptionResults.Wavelength));
 % ss.truncate_spectrum_wavelength(minWavelength, maxWavelength);
 
-sa.Simulations(idx).AbsorptionResults
+sa.Simulations(idx).AbsorptionResults;
 
 energyVector = sa.Simulations(idx).ReflectionResults.Energy';
 energyVector = sort([energyVector; ma.BandGap]);

@@ -11,21 +11,21 @@ betaFractionFlag = 0;
 gammas = 0;
 
 %rb = RadiationBeamDay(latitudes, days,betas,gammas);
-rb = RadiationBeam(latitudes, days, betas, gammas, betaFractionFlag);
+rb = RadiationBeam(latitudes, days, betas, gammas, 'fixed', betaFractionFlag);
 
 figure(1);
 clf;
 rb.contour_irradiance('Latitude', 'Beta','TotalA', [1000 1500 2000 2500]);
 ylabel('Tilt (^\circ)');
-
-latitudeCutoff = 20;
-[val, indY] = max(squeeze(real(rb.ITmA)), [], 2);
-zQ = rb.extract('TotalA',{'Latitude', 'Betas'},...
-  [latitudes(latitudes>=latitudeCutoff);betas(indY(latitudes>=latitudeCutoff))]');
-
-figure(2);
-clf;
-plot(latitudes(latitudes>=latitudeCutoff), zQ);
+% 
+% latitudeCutoff = 20;
+% [val, indY] = max(squeeze(real(rb.ITmA)), [], 2);
+% zQ = rb.extract('TotalA',{'Latitude', 'Betas'},...
+%   [latitudes(latitudes>=latitudeCutoff);betas(indY(latitudes>=latitudeCutoff))]');
+% 
+% figure(2);
+% clf;
+% plot(latitudes(latitudes>=latitudeCutoff), zQ);
 
 %betas(indY(latitudes>=latitudeCutoff))
 

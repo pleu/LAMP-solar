@@ -5,8 +5,13 @@ if strncmpi(variable, 'latitude', 1)
   var = rb.Latitudes;
   varLabel = ('Latitude');
   varUnits = ('^{\circ}');
-elseif strncmpi(variable, 'beta', 1)
+elseif strncmpi(variable, 'day', 1)
   varIndex = 2;
+  var = rb.Days;
+  varLabel = ('Day');
+  varUnits = ('');
+elseif strncmpi(variable, 'beta', 1)
+  varIndex = 3;
   var = rb.Betas;
   varLabel = ('Tilt');
   if rb.BetaFractionFlag
@@ -16,15 +21,10 @@ elseif strncmpi(variable, 'beta', 1)
     varUnits = ('^{\circ}');
   end
 elseif strncmpi(variable, 'gamma', 1)
-  varIndex = 3;
+  varIndex = 4;
   var = rb.Gammas;
   varLabel = ('Azimuth');
   varUnits = ('^{\circ}');
-elseif strncmpi(variable, 'day', 1)
-  varIndex = 4;
-  var = rb.Days;
-  varLabel = ('Day');
-  varUnits = ('');
 else
   error([variable, ' is not recognized']);
 end

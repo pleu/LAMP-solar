@@ -27,13 +27,13 @@ Xq = zeros(size(varValues, 1), nDim);
 varsNotPlot = setdiff(1:nDim, [varIndex{:}]);
 for i = 1:length(varsNotPlot)
   if varsNotPlot(i) == 1
-    Xq(:, 1) = rb.Latitude;
+    Xq(:, 1) = rb.Latitudes;
   elseif varsNotPlot(i) == 2
-    Xq(:, 2) = rb.Betas;
+    Xq(:, 2) = rb.Days;
   elseif varsNotPlot(i) == 3
-    Xq(:, 3) = rb.Gammas;
+    Xq(:, 3) = rb.Betas;
   elseif varsNotPlot(i) == 4
-    Xq(:, 4) = rb.Days
+    Xq(:, 4) = rb.Gammas;
   end
 end
 for i = 1:numVarsQ

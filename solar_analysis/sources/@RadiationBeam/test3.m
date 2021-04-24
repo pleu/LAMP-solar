@@ -11,7 +11,7 @@ betaFractionFlag = 1;
 gammas = 0;
 
 %rb = RadiationBeamDay(latitudes, days,betas,gammas);
-rb = RadiationBeam(latitudes, days, betaFraction, gammas, betaFractionFlag);
+rb = RadiationBeam(latitudes, days, betaFraction, gammas, 'fixed', betaFractionFlag);
 
 figure(1);
 clf;
