@@ -38,18 +38,18 @@ end
 [x, xAxis, xLabel] = get_values_and_labels(sa.VariableArray, xVarString);
 [y, yAxis, yLabel] = get_values_and_labels(sa.VariableArray, yVarString);
 
-if strcmp(zVarString,'CurrentSC')
-  zValues = abs(vertcat(sa.Simulations.CurrentSC));
+if strcmpi(zVarString,'CurrentSC') || strcmpi(zVarString, 'Jsc')
+  zValues = abs(vertcat(sa.Simulations.CurrentSC))*Constants.UnitConversions.AmpsPerM2tomAmpsPerCm2;
 elseif strcmp(zVarString, 'Efficiency')
   zValues = vertcat(sa.Simulations.Efficiency)*100;
 elseif strcmp(zVarString, 'VoltageM')
-  zValues = vertcat(sa.Simulations.VoltageM)
+  zValues = vertcat(sa.Simulations.VoltageM);
 elseif strcmp(zVarString, 'CurrentM')
-  zValues = vertcat(sa.Simulations.CurrentM)
+  zValues = vertcat(sa.Simulations.CurrentM);
 elseif strcmp(zVarString, 'FF')
-  zValues = vertcat(sa.Simulations.FF)
-elseif strcmp(zVarString, 'VOC')
-  zValues = vertcat(sa.Simulations.VOC)
+  zValues = vertcat(sa.Simulations.FF);
+elseif strcmpi(zVarString, 'VOC')
+  zValues = vertcat(sa.Simulations.VOC);
 end
 
 axprop = {'DataAspectRatio',[1 1 8],'View', [0 90]};

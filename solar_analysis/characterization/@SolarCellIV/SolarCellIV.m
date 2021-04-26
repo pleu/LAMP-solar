@@ -79,9 +79,9 @@ classdef SolarCellIV
   
   methods(Static)
     
-    function [scIV] = calculate_IV(Jsc, J0, powerDensity)
+    function [scIV] = calculate_IV(Jsc, J0, powerDensity, bandGap)
 
-      V = linspace(-.3, 1.1);  % volts
+      V = linspace(-.3, bandGap, 200);  % volts
       J = Jsc - J0*(exp(V/(Constants.LightConstants.k_B*Constants.LightConstants.T_c))-1); % mA/cm^2
 
       scIV = SolarCellIV(V, J, powerDensity);
@@ -125,7 +125,7 @@ classdef SolarCellIV
       EVector = ss.Energy(ss.Energy >= bandGap);
       %      deltaEInt = deltaE(energyInd);
       currentMax = -Constants.LightConstants.Q*...
-        trapz(EVector, ss.PhotonFlux(energyInd)); % this is more accurate than below
+        trapz(EVector, ss.PhotonFlux(ss.Energy >= bandGap)); % this is more accurate than below
       %       currentMax2 = -Constants.LightConstants.Q*...
       %         sum(ss.PhotonFlux(energyInd).*deltaE(energyInd))
       currentDark0 = -geometricFactor*Constants.LightConstants.Q*trapz(EVector, SolarSpectrum.calculate_be(EVector, 0, Constants.LightConstants.T_c, Constants.LightConstants.F_a));

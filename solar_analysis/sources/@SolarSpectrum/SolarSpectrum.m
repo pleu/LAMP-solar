@@ -137,7 +137,7 @@ classdef SolarSpectrum < handle
   
   methods(Static) 
     
-    F0 = calc_F0(bandGap, n)
+    F0 = calc_qF0(bandGap, n)
 
     obj = create_single_wavelength(wavelength)
     

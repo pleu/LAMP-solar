@@ -28,7 +28,7 @@ for ind = 1:va.NumValues
   absorptionGrid(bandgapInd, thetaVector==thetaCurrent, phiVector==phiCurrent) = interp1(sa.Simulations(ind).AbsorptionResults.Energy, sa.Simulations(ind).AbsorptionResults.Data, ma.BandGap);
 end
 
-be = SolarSpectrum.calculate_bn(energyVector, n, 0, Constants.LightConstants.T_a,1)';
+be = SolarSpectrum.calculate_bn(energyVector, n, 0, Constants.LightConstants.T_c,1)';
 beGrid = repmat(be', 1, length(thetaVector), length(phiVector));
 %beCheck = SolarSpectrum.calculate_bn(1.34, n, 0, Constants.LightConstants.T_a, Constants.LightConstants.F_a)
 
