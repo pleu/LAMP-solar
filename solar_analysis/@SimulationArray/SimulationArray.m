@@ -45,8 +45,9 @@ classdef SimulationArray
           anglePhi = uniquePhi(j);
           simulationIndices = find(inputData(:, 2) == angleTheta & inputData(:, 3) == anglePhi);
           wavelengths = inputData(simulationIndices, 1)*Constants.UnitConversions.MicronstoNM; % convert from microns to nm
-          reflectionData=inputData(simulationIndices, 4);
-          transmissionData=inputData(simulationIndices, 5);
+          
+          transmissionData=inputData(simulationIndices, 4);
+          reflectionData=inputData(simulationIndices, 5);
           absorptionData=inputData(simulationIndices, 6);
           
           simResults(ind) = SimulationResults(wavelengths, reflectionData, transmissionData, absorptionData);
