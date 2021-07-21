@@ -53,11 +53,11 @@ end
 zValues = vertcat(monitor.Data);
 
 %set where absorption >= 1 as 1
-index = zValues>1;
-if ~isempty(find(index == 1))
-  zValues(index) = 1;
-  display('Warning: some values > 1')
-end
+% index = zValues>1;
+% if ~isempty(find(index == 1))
+%   zValues(index) = 1;
+%   display('Warning: some values > 1')
+% end
 %xlimit = max(max(x));
 axprop = {'DataAspectRatio',[1 1 8],'View', [0 90]};
 %  ,...
