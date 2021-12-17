@@ -6,7 +6,9 @@ function test6
 % Paul Leu
 % LAMP, University of Pittsburgh
   ss = SolarSpectrum.global_AM1p5;
-  ss.plot_limiting_efficiency_versus_energy()
+  %ss.plot_limiting_efficiency_versus_energy()
+  
+  ss.interpolate_data([300, 500]);
 
 end
 

@@ -54,7 +54,7 @@ classdef VariableArray < handle
     function [indVariable] = get_variable_ind(va, name)
       indVariable = find(strcmpi(char(name), va.Names)==1);
       if isempty(indVariable)
-        error(['Could not find', name, 'in variableArray']);
+        warning(['Could not find', name, 'in variableArray']);
       end
     end
     

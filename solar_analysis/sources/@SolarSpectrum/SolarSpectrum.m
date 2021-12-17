@@ -143,6 +143,8 @@ classdef SolarSpectrum < handle
     
     irradianceEnergy = convert_photon_flux_to_irradiance_energy(photonFlux, energy)
       
+    photonFlux = convert_irradiance_to_photon_flux(irradiance, energy)
+    
     irradiance = convert_irradiance_energy_to_irradiance(irradianceEnergy, energy)
 
     solarSpectrum = CIEphotopic()
@@ -219,6 +221,7 @@ classdef SolarSpectrum < handle
     test_ultimate_efficiency()
     
     test_limiting_efficiency()
+    
     
     test_limiting_efficiency_tandem()
     
