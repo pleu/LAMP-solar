@@ -82,14 +82,13 @@ else % no interpolation
     [X,Y] = meshgrid(xUnique,yUnique);
     % need to put in values here
     
-%     if length(zValues) == length(yUnique)*length(xUnique)
-%       Z = reshape(zValues, [length(yUnique), length(xUnique)]);
-%     else
-%       F = scatteredInterpolant(x, y, zValues, 'linear', 'none')
-%       Z = F(X, Y);
-%     end
-    [X,Y] = ndgrid(xUnique,yUnique);
-    Z = griddata(x, y, zValues, X, Y);
+    if length(zValues) == length(yUnique)*length(xUnique)
+      Z = reshape(zValues, [length(yUnique), length(xUnique)]);
+    else
+      F = scatteredInterpolant(x, y, zValues, 'linear', 'ExtrapolationMethod', 'none');
+      Z = F(X, Y);
+    end
+    
     if strncmp(plotType, 'cartesian', 4)
       [C, h] = contourf(X, Y, Z, numContourLines);
     else

@@ -10,6 +10,7 @@ classdef RadiationBeam < handle
     %BetaFraction; 
     Gammas;   % surface azimuth angles in degrees  
     Lambdas; % wavelengths in nm
+    SimArray;
     %
     %Ibn;  % beam insolation 
     IbD; % daily incident direct beam insolation (in kW-h/m^2/day); x-axis is for days, y-axis is for latitudes
@@ -89,7 +90,7 @@ classdef RadiationBeam < handle
   end
   
   methods
-    function rb = RadiationBeam(latitudes, days, betas, gammas, moduleType, betaFractionFlag, spectralFlag, lambdas)
+    function rb = RadiationBeam(latitudes, days, betas, gammas, moduleType, betaFractionFlag, spectralFlag, lambdas, simArray)
       rb.Latitudes = latitudes;
       rb.Days = days;
       rb.Betas = betas;
@@ -110,6 +111,12 @@ classdef RadiationBeam < handle
       else
         rb.SpectralFlag= spectralFlag;
         rb.Lambdas = lambdas;
+      end
+
+      if nargin < 9
+        rb.SimArray = []; 
+      else
+        rb.SimArray = simArray;
       end
         
       
@@ -310,14 +317,51 @@ classdef RadiationBeam < handle
         bd = bg - bb;
         %bd = Fd.*lambdaMat./Constants.LightConstants.HC./Constants.LightConstants.Q;
         
+        
+        % create matrix R that is same size as bb
+        % create matrix R that is same size as bd
+        % bb is size numOmega by numLatitude by numDelta by numBeta by
+        % numGamma by numWavelength
+        
+        % thetaZMat is same size
+        % R should be same sizee
+        % For each thetaZ determine R(lambda)
+        %R = interp1(theta, wavelength, Rspectrum, thetaZMat, lambdaMat);
+        
         phiB = trapz(ss0.Wavelength, bb, wavelengthIndex);
         phiD = trapz(ss0.Wavelength, bd, wavelengthIndex);
         % bn = Fbn.*ss0.Wavelength./
         
+        % cosThetaTiltMat is 6 entries long
+        % have R as function of theta; 
+        % multiply R by cosThetaTiltMat; R must be same size
+
         phiBtilt = phiB.*cosThetaTiltMat(:, :, :, :, :, 1);
         phiBtilt(phiBtilt<0) = 0;
         
         phiDtilt = (1+cos(betaMat(:, :, :, :, :, 1)))./2.*phiD;
+
+        if ~isempty(rb.SimArray)
+          thetaTiltMat = acos(cosThetaTiltMat);
+          thetaTiltMat(thetaTiltMat > pi/2) = pi/2;
+          
+          reflectionTheta = interp1(rb.SimArray(1,:), rb.SimArray(2,:), thetaTiltMat(:, :, :, :, :, 1));
+          phiBtilt = phiBtilt.*reflectionTheta;
+          phiDtilt = phiDtilt.*reflectionTheta;
+        end
+%         if ~isempty(rb.SimArray)
+%           ra = [sraAvg.Simulations.ReflectionResults];
+%           reflectionResults = cat(1,ra.Data);
+%           theta = sraAvg.VariableArray.Values;
+%           wavelength = ra(1).Wavelength;
+%           
+%           reflectionMat = interp2(wavelength, theta, reflectionResults, lambdaMat, thetaZMat);
+%           phiBtilt = phiBtilt.*reflectionMat;
+%           phiDtilt = phiDtilt.*reflectionMat;
+%         end
+        
+        
+        % R 
       end
       
       Ibtilt = Ib.*cosThetaTiltMat(:, :, :, :, :, 1);

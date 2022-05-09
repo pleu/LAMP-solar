@@ -233,6 +233,7 @@ p.polaraxiscolor    = 'black';    % default polar axis color
 p.tickcolor         = 'black';    % default polar tick color
 p.ticklabelcolor    = 'black';    % default polar tick label color
 p.radlabelcolor     = 'black';    % default radial label color
+%p.radlabelcolor     = 'white';    % default radial label color
 p.plotprops         = {};         % no additional plot properties
 p.xi = [];
 p.yi = [];
@@ -525,6 +526,8 @@ switch p.plottype
       'yaxislocation', 'left');
     set(gca, 'Box', 'off')
     set(gca, 'YTick',[], 'YTickLabel', []);
+    %set(gca, 'XTick',[], 'XTickLabel', []);
+    
     %set('YTick',[], 'YTickLabel', []);
     %     h = axes;
     %     pos = get(h,'Position');
@@ -532,16 +535,15 @@ switch p.plottype
     %     linkaxes([h new_h],'x');
     %     pos(4) = eps; %Edited here
     %     set(new_h,'Position',pos,'YTick',[],'YTickLabel',[]);
-    %     set(h,'Visible','off');
-    
-
+    %set(gca,'Visible','off');
+    set(gca, 'YColor','w');
     axis equal; 
     xlim(xlim*1.2); 
     %ylim(ylim*1.05);
     %set(gca,'visible','off');
-    set(get(gca,'xlabel'),'visible','on');
-    set(get(gca,'ylabel'),'visible','on');
-    set(get(gca,'title'), 'visible','on');    
+    %set(get(gca,'xlabel'),'visible','on');
+    %set(get(gca,'ylabel'),'visible','off');
+    %set(get(gca,'title'), 'visible','on');    
     
 end
 
@@ -565,7 +567,7 @@ if ~isequal(p.axislocation,'off')
       case 'max',    polax = max (Zi(end,:));
       case 'mean',   polax = mean(Zi(end,:));
       case 'top',    zlim  = get(gca,'zlim'); polax = zlim(2);
-      case 'bottom', zlim  = get(gca,'zlim'); polax = zlim(1);
+      case 'bottom', zlim  = get(gca,'zlim'); polax = zlim(1); set(gca, 'YColor','w');
    end
 
    % Z values for polar axis
@@ -610,6 +612,9 @@ if ~isequal(p.axislocation,'off')
 
       % Label every other tick mark
       nl = round(length(ta)/2);
+      
+      % Label every tick mark
+      %nl = length(ta);
 
       % Beginning and end of a full polar axis are identical, label once
       if abs(Tmin-Tmax) == 2*pi, nl = nl-1; end
@@ -624,10 +629,23 @@ if ~isequal(p.axislocation,'off')
       % Add tick labels
       %for k = 2 * (1:nl-1)
       zt = ones(2*nl+1, 1);
-      for k = 2 * (0:nl-1)+1
-         text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
+%       for k = 2 * (0:nl-1)+1
+%          text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
+%            'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
+%       end
+      for k = 2 * (1:nl-1)
+        text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
            'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
       end
+%       for k = (1:2:2*nl)
+%         text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
+%            'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
+%       end
+
+%       for k = 1:nl
+%          text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
+%            'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
+%       end
    end
    hold off;
 end
@@ -636,10 +654,12 @@ end
 % -- Add radial labels
 
 if p.radlabels > 0 && ~isequal(p.radlabellocation,'off')
-
+  Rmin = 0;
    % Find x,y locations of radial labels
    ta = azimuth_radax*pi/180;
-   tr = linspace(Rmin,Rmax,p.radlabels+2);
+   %tr = linspace(Rmin,Rmax,p.radlabels);
+   %tr = linspace(Rmin,Rmax,p.radlabels+2);
+   tr = [1 2 3 4 5];
    tr(1) = []; tr(end) = [];                     % delete inner,outer labels
    xt = tr * cos(ta) + p.cartorigin(1);
    yt = tr * sin(ta) + p.cartorigin(2);

@@ -147,6 +147,7 @@ else % no interpolation
   end
 end
 
+
 if strncmp(plotType, 'cartesian', 4)
   %set(ch, 'edgecolor', 'none');
   shading flat;

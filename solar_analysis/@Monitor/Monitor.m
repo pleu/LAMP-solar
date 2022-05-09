@@ -34,7 +34,13 @@ classdef Monitor < handle
             Photon(Photon.ConvertFrequencyToWavelength(frequency'));
           obj.Data = data';
         else
+          %[frequency, ind] = sort(frequency);
+          %obj.MonitorPhoton = ...
+%            Photon(Photon.convert_frequency_to_wavelength(frequency));
+          %obj.Data = data;
+          
           [frequency, ind] = sort(frequency);
+          %[frequency, ind] = sort(frequency);
           obj.MonitorPhoton = ...
             Photon(Photon.convert_frequency_to_wavelength(frequency));
           obj.Data = data(ind);

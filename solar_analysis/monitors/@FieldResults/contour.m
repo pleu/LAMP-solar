@@ -19,7 +19,8 @@ function contour(obj, field)
     data = obj.OutputObj.Value;        
     magnitude =1;
   end
-  contourf(obj.X, obj.Y, data', 100);
+  [C, h] = contourf(obj.X, obj.Y, data', 100);
+  set(h,'LineColor','none')
   shading flat;
   colorbar;
   title(field);

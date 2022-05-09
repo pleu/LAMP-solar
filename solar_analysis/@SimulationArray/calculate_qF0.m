@@ -24,6 +24,7 @@ absorptionGrid = zeros(length(energyVector), length(thetaVector), length(phiVect
 for ind = 1:va.NumValues
   thetaCurrent = va.Values(ind, indTheta);
   phiCurrent = va.Values(ind, indPhi);
+  % add an additional datapoint specifically at the bandgap energy
   absorptionGrid([1:bandgapInd-1 bandgapInd+1:end],thetaVector==thetaCurrent,phiVector==phiCurrent) = sa.Simulations(ind).AbsorptionResults.Data;
   absorptionGrid(bandgapInd, thetaVector==thetaCurrent, phiVector==phiCurrent) = interp1(sa.Simulations(ind).AbsorptionResults.Energy, sa.Simulations(ind).AbsorptionResults.Data, ma.BandGap);
 end
@@ -32,15 +33,18 @@ be = SolarSpectrum.calculate_bn(energyVector, n, 0, Constants.LightConstants.T_c
 beGrid = repmat(be', 1, length(thetaVector), length(phiVector));
 %beCheck = SolarSpectrum.calculate_bn(1.34, n, 0, Constants.LightConstants.T_a, Constants.LightConstants.F_a)
 
+figure(1);
+clf;
+hold on;
+plot(energyVector(energyVector >= ma.BandGap), absorptionGrid(energyVector >= ma.BandGap, 1, 1), 'g--');
+
+
+
 integrand = beGrid.*absorptionGrid.*cosd(thetaGrid).*sind(thetaGrid);
 
 %F0 = Constants.LightConstants.Q*trapz(deg2rad(phiVector), trapz(deg2rad(thetaVector), trapz(energyVector(energyVector >= ma.BandGap), integrand(:, energyVector >= ma.BandGap, :),2), 1), 3);
 F0spectralEnergy = Constants.LightConstants.Q*trapz(deg2rad(phiVector), trapz(deg2rad(thetaVector), integrand, 2), 3);
 %F0spectralEnergyCheck = Constants.LightConstants.Q*trapz(deg2rad(thetaVector), trapz(deg2rad(phiVector), integrand, 3), 2);
-% figure(1);
-% clf;
-% plot(energyVector, F0spectralEnergy, 'b-');
-%hold on;
 %plot(energyVector, F0spectralEnergyCheck, 'g--');
 F0 = trapz(energyVector(energyVector >= ma.BandGap), F0spectralEnergy(energyVector >= ma.BandGap));
 

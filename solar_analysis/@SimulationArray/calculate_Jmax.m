@@ -1,5 +1,6 @@
 function [Jmax] = calculate_Jmax(sa, ma, ss)
 % Calculate J_sc at theta = 0 and phi = 0
+% units of A/m^2?
 
 Jmax = zeros(length(sa), 1);
 for ind = 1:length(sa)

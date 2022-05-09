@@ -2,7 +2,7 @@ diameter = 100;
 filename = ['AgNW_TM_d', num2str(diameter), 'nm_p400nm_lambda600nm'];
 fr = FieldResults.create_vector(filename, 'H');
 clf;
-fr.contour('z');
+fr.contour('2');
 hold on;
 
 theta=0:pi/100:2*pi;

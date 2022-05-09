@@ -8,8 +8,8 @@ classdef Absorber
 
   properties(Abstract)
     AbsorptionResults; % this is monitor object
-    TransmissionResults;
-    ReflectionResults;
+%    TransmissionResults;
+%    ReflectionResults;
   end
   
   methods(Static)
