@@ -31,9 +31,9 @@ clf;
 sca.VariableArray.plot(sca.UltimateEfficiency, 'Ultimate Efficiency');
 grid on;
 
-figure(5)
+% figure(5)
 sr = FDTDSimulationResultsArray.create(va);
-sr.FDTDSimulations.plot_results_versus_wavelength(5);
+% sr.FDTDSimulations.plot_results_versus_wavelength(5);
 
 figure(8)
 sr.contour('Wavelength', 't', 'Absorption')
