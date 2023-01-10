@@ -10,7 +10,7 @@ else
 end
   title_or_legend({df.LegendString});
   ylabel('Transmission');
-  xlabel('Sheet Resisance');
+  xlabel('Sheet Resisance (\Omega/sq');
   grid on;
 end
 

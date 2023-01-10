@@ -11,6 +11,6 @@ end
 
 legendH = title_or_legend({df.LegendString});
 ylabel('Transmission (%)');
-xlabel('Sheet Resistance');
+xlabel('Sheet Resistance (\Omega/sq)');
 grid on;
 end

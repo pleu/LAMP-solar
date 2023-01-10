@@ -1,13 +1,13 @@
 go = ReGeometryTab;
-go.xMin = -3e-6;
-go.xMax = 3e-6;
-assert(go.x==0)
-assert(go.xSpan==6e-6)
+go.XMin = -3e-6;
+go.XMax = 3e-6;
+assert(go.X==0)
+assert(go.XSpan==6e-6)
 
-go.yMin = -5e-6;
-go.ySpan = 10e-6;
-assert(go.yMax == 5e-6); 
+go.YMin = -5e-6;
+go.YSpan = 10e-6;
+assert(go.YMax == 5e-6); 
 
-go.zSpan = 2.33e-6;
+go.ZSpan = 2.33e-6;
 
 go.write_lsf('test');

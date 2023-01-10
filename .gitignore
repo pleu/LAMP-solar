@@ -1,3 +1,14 @@
 *.DS_Store
 *.m~
 solar_analysis/examples/electric field profile for AgNW.zip
+solar_analysis/structures/.DS_Store
+solar_analysis/sources/.DS_Store
+solar_analysis/examples/.DS_Store
+solar_analysis/characterization/.DS_Store
+solar_analysis/structures/@ThinFilmLayer/ThinFilmNotes.aux
+solar_analysis/structures/@ThinFilmLayer/ThinFilmNotes.log
+solar_analysis/structures/@ThinFilmLayer/ThinFilmNotes.out
+solar_analysis/structures/@ThinFilmLayer/ThinFilmNotes.pdf
+solar_analysis/structures/@ThinFilmLayer/ThinFilmNotes.synctex.gz
+solar_analysis/structures/@ThinFilmLayer/ThinFilmNotes.toc
+solar_input/.DS_Store
