@@ -17,13 +17,17 @@ variableValues = [60 9960];
 variableNames = cellstr(variableStringArray);
 variableUnits = cellstr(variableUnitsArray);
 
+
 va = VariableArray(variableNames, variableUnits, variableValues);
 va.create_filenames('SiThinFilm');
+
 sa = FDTDSimulationResultsArray.create(va, 'frequency');
+
 
 ma = MaterialType.create(materialName);
 
-sca = SolarCellArray.create(ss, va, ma, 'frequency');
+%sca = SolarCellArray.create(ss, va, ma, 'frequency');
+sca = SolarCellArray.create(ss, sa.Simulations, va, ma);
 figure(1);
 sca.plot_RTA_results_versus_variable(1);
 
@@ -33,10 +37,9 @@ sca.VariableArray.plot(sca.UltimateEfficiency, 'Ultimate Efficiency');
 grid on;
 
 figure(5)
-sr = FDTDSimulationResultsArray.create(va);
-sr.FDTDSimulations.plot_results_versus_wavelength(4);
+sa.Simulations.plot_results_versus_wavelength(4);
 
 figure(7)
-sr.contour('Wavelength', 't', 'Absorption')
+sa.contour('Wavelength', 't', 'Absorption')
 
 %sc.plot_ultimate_efficiency_versus_independent_variable;
