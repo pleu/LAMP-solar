@@ -2,7 +2,7 @@
 %ANALYZE_THIN_FILM_ARRAY_RESULTS
 % Analyzes the results from a several FDTD simulation
 % filename = [filenamePrefix, variableArray, variableStringArray,
-% variableUnitsArray, filenameSuffix];
+% variableUnitsArray, filenameSuffix];stastartup_L
 % Change the filename in order to obtain different results
 % 
 % Copyright 2011
