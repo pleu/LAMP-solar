@@ -16,8 +16,8 @@ function [dataIntegrated, warning] = calculate_integrated_data(SS,energy,data)
     if max(energy)>max(SS.Energy)
       %     dataInterp = interp1(energy, data, SS.Energy,'linear','extrap');
       photonFluxInterp = interp1(SS.Energy, SS.PhotonFlux, energy, 'linear', 'extrap');
-      
-      disp('PLEASE CHECK THE FREQUENCY RANGE OF YOUR SIMULATION!');
+      irrInterp = interp1(SS.Energy,SS.IrradianceEnergy, energy, 'linear', 'extrap');
+      disp('PLEASE CHECK THE MAX FREQUENCY RANGE OF YOUR SIMULATION!');
       warning = 1;
     elseif min(energy)<min(SS.Energy)
       photonFluxInterp = interp1(SS.Energy, SS.PhotonFlux, energy, 'linear', 'extrap');
@@ -27,28 +27,33 @@ function [dataIntegrated, warning] = calculate_integrated_data(SS,energy,data)
       warning = 1;
     else
       photonFluxInterp = interp1(SS.Energy, SS.PhotonFlux, energy);
-      %dataInterp = interp1(energy,data, SS.Energy);
+      %irrInterp = interp1(energy,data, SS.Energy);
     end
     
     if size(SS.Energy) == 1
       dataIntegrated = dataInterp;
     else
       % Note: this is wrong!
-      %  dataIntegrated = -trapz(SS.Energy, ...
-      %    dataInterp.*SS.IrradianceEnergy)/SS.PowerDensity;
-      %  dataIntegrated = trapz(SS.Energy, ...
-      %      dataInterp.*SS.PhotonFlux)/trapz(SS.Energy, SS.PhotonFlux);
+       %dataIntegrated = -trapz(SS.Energy, ...
+%         dataInterp.*SS.IrradianceEnergy)/SS.PowerDensity;
+       %dataIntegrated = trapz(SS.Energy, ...
+%           dataInterp.*SS.PhotonFlux)/trapz(SS.Energy, SS.PhotonFlux);
       %dataIntegrated = trapz(SS.Energy, ...
       %    dataInterp.*SS.PhotonFlux)/SS.NumPhotonsUntruncated;
       %   dataIntegrated = trapz(energy, ...
       %      data.*photonFluxInterp)/SS.NumPhotonsUntruncated;
-      %dataIntegrated = trapz(energy, ...
-      %   data.*photonFluxInterp)/SS.NumPhotonsUntruncated;
-      [energySort, ind] = sort(energy);
-      dataIntegrated = trapz(energySort, ...
-        data(ind).*photonFluxInterp(ind))/SS.NumPhotons;
+      
+      %      dataIntegrated = trapz(energy, ...
+      %        data.*irrInterp)/SS.PowerDensity;
+      dataIntegrated = trapz(energy, ...
+        data.*photonFluxInterp)/SS.NumPhotons;
 %       dataIntegrated = trapz(energySort, ...
 %         data(ind, :).*(photonFluxInterp(ind)*ones(1, size(data, 2))))/SS.NumPhotons;
+      
+      % This was used previously
+%      [energySort, ind] = sort(energy);
+%      dataIntegrated = trapz(energySort, ...
+%        data(ind).*photonFluxInterp(ind))/SS.NumPhotons;
     end
   end
 end

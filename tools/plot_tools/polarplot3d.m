@@ -227,7 +227,7 @@ p.polardirection    = 'ccw';      % default polar axis direction
 p.interpmethod      = 'cubic';    % bicubic interpolation
 p.colordata         = [];         % default coloring according to Zp values
 p.contourlines      = '';         % default contour specification
-p.gridcolor         = 'black';    % default overlay grid line color
+p.gridcolor         = 'white';    % default overlay grid line color
 p.gridstyle         = '';         % style of grid lines: '-' ':' '-.' '--'
 p.polaraxiscolor    = 'black';    % default polar axis color
 p.tickcolor         = 'black';    % default polar tick color
@@ -538,7 +538,8 @@ switch p.plottype
     %set(gca,'Visible','off');
     set(gca, 'YColor','w');
     axis equal; 
-    xlim(xlim*1.2); 
+    xlim(xlim); 
+    %xlim(xlim*1.2); 
     %ylim(ylim*1.05);
     %set(gca,'visible','off');
     %set(get(gca,'xlabel'),'visible','on');
@@ -633,14 +634,16 @@ if ~isequal(p.axislocation,'off')
 %          text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
 %            'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
 %       end
-      for k = 2 * (1:nl-1)
-        text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
-           'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
-      end
-%       for k = (1:2:2*nl)
+%       for k = 2 * (1:nl-1)
 %         text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
 %            'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
 %       end
+%       
+      
+      for k = (2:1:2*nl-2)
+        text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
+           'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
+      end
 
 %       for k = 1:nl
 %          text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
