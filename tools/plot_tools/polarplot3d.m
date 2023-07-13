@@ -235,6 +235,7 @@ p.ticklabelcolor    = 'black';    % default polar tick label color
 p.radlabelcolor     = 'black';    % default radial label color
 %p.radlabelcolor     = 'white';    % default radial label color
 p.plotprops         = {};         % no additional plot properties
+p.compass           = 'no'; % use numbers instead of directions
 p.xi = [];
 p.yi = [];
 p.radialtickspacing = {};
@@ -537,10 +538,11 @@ switch p.plottype
     %     set(new_h,'Position',pos,'YTick',[],'YTickLabel',[]);
     %set(gca,'Visible','off');
     set(gca, 'YColor','w');
+    %set(gca, 'XColor','w');
     axis equal; 
-    xlim(xlim); 
-    %xlim(xlim*1.2); 
-    %ylim(ylim*1.05);
+    %xlim(xlim); 
+    xlim(xlim*1.05); 
+    ylim(ylim*1.05);
     %set(gca,'visible','off');
     %set(get(gca,'xlabel'),'visible','on');
     %set(get(gca,'ylabel'),'visible','off');
@@ -588,7 +590,7 @@ if ~isequal(p.axislocation,'off')
    if isequal(p.polardirection,'180'), [xa,ya] = deal(ya,xa); [ya, xa] = deal(-ya, -xa); end
    % Plot the polar axis
    hold on;
-   line(xa,ya,za,'Color',p.polaraxiscolor,'LineWidth',1);
+   line(xa,ya,za,'Color',p.polaraxiscolor,'LineWidth',2.5);
 
    % Add tick marks and labels
    if ~isempty(p.tickspacing) && p.tickspacing > 0 && p.tickspacing <= 180
@@ -640,9 +642,19 @@ if ~isequal(p.axislocation,'off')
 %       end
 %       
       
-      for k = (2:1:2*nl-2)
-        text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
-           'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
+      %for k = (2:1:2*nl-2)
+      if isequal(p.compass, 'yes')
+        tr = {'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'};
+        for k = 1:length(tr)
+          text(xt(3,k),yt(3,k),zt(k),tr(k),...
+            'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
+        end
+        hold off;
+      else
+        for k = (1:1:2*nl)
+          text(xt(3,k),yt(3,k),zt(k),num2str(ta(k)*180/pi),...
+            'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
+        end
       end
 
 %       for k = 1:nl
@@ -660,9 +672,9 @@ if p.radlabels > 0 && ~isequal(p.radlabellocation,'off')
   Rmin = 0;
    % Find x,y locations of radial labels
    ta = azimuth_radax*pi/180;
-   %tr = linspace(Rmin,Rmax,p.radlabels);
+   tr = linspace(Rmin,Rmax,p.radlabels);
    %tr = linspace(Rmin,Rmax,p.radlabels+2);
-   tr = [1 2 3 4 5];
+   %tr = [1 2 3 4 5];
    tr(1) = []; tr(end) = [];                     % delete inner,outer labels
    xt = tr * cos(ta) + p.cartorigin(1);
    yt = tr * sin(ta) + p.cartorigin(2);
@@ -692,10 +704,10 @@ if p.radlabels > 0 && ~isequal(p.radlabellocation,'off')
    % Add radial labels to the plot
    hold on;
    for k = 1:length(tr)
-      text(xt(k),yt(k),zt(k),num2str(tr(k)),...
-         'HorizontalAlignment','Center',fontargs{:},'Color',p.radlabelcolor);
+     text(xt(k),yt(k),zt(k),num2str(tr(k)),...
+       'HorizontalAlignment','Center',fontargs{:},'Color',p.radlabelcolor);
+     hold off;
    end
-   hold off;
 end
 
 
@@ -754,12 +766,12 @@ if r > 1 || m > 1
 %       zm = zi(1:v:end,:);
 %       plot3(xm',ym',zm',p.gridstyle,'Color',p.gridcolor,'LineWidth',1);
 %    end
-   if length(radgrid) > 2
-      xm = xi([1,end],:);
-      ym = yi([1,end],:);
-      zm = zi([1,end],:);
-      plot3(xm',ym',zm',p.gridstyle,'Color',p.gridcolor,'LineWidth',1);
-   end
+%    if length(radgrid) > 2
+%       xm = xi([1,end],:);
+%       ym = yi([1,end],:);
+%       zm = zi([1,end],:);
+%       plot3(xm',ym',zm',p.gridstyle,'Color',p.gridcolor,'LineWidth',1);
+%    end
    
    
    
