@@ -644,7 +644,15 @@ if ~isequal(p.axislocation,'off')
       
       %for k = (2:1:2*nl-2)
       if isequal(p.compass, 'yes')
-        tr = {'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'};
+        directions = ["W", "NW", "N", "NE", "E", "SE", "S", "SW", "W"];
+        radians = (-pi/2:pi/4:3/2*pi)';
+        idx = dsearchn(radians, ta');
+        %idx = dsearchn(ta', radians);
+        %idx = max(find(ta >= [lookupTable{:, 1}]));
+        %dir = lookupTable{idx, 2};
+        tr = {directions{idx}};
+
+%        tr = {'N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'};
         for k = 1:length(tr)
           text(xt(3,k),yt(3,k),zt(k),tr(k),...
             'HorizontalAlignment','Center',fontargs{:},'Color',p.ticklabelcolor);
