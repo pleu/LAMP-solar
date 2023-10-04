@@ -598,7 +598,7 @@ if ~isequal(p.axislocation,'off')
       % Create polar axis tic marks at p.tickspacing intervals
       ts = 180/p.tickspacing;
       ta = pi/ts * (round(Tmin*ts/pi):1:round(Tmax*ts/pi));
-      tr = Rmax  * [1.005; 1.03; 1.15];
+      tr = Rmax  * [1.005; 1.03; 1.09];
       xt = tr * cos(ta) + p.cartorigin(1);
       yt = tr * sin(ta) + p.cartorigin(2);
 
